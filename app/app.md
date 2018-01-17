@@ -79,6 +79,7 @@ informative:
       Zenodo: Software
       DOI: 10.5281/zenodo.823534
     title: 'Common-Workflow-Language/CWLviewer: CWL Viewer'
+    target: https://view.commonwl.org/
     author:
     - name: Mark Robinson
       ins: M. Robinson
