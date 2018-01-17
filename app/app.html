@@ -389,6 +389,10 @@
 <link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References"/>
 <link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References"/>
 <link href="#rfc.appendix.A" rel="Chapter" title="A Examples"/>
+<link href="#rfc.appendix.A.1" rel="Chapter" title="A.1 Sandboxing"/>
+<link href="#rfc.appendix.A.2" rel="Chapter" title="A.2 Origin-based"/>
+<link href="#rfc.appendix.A.3" rel="Chapter" title="A.3 Hash-based"/>
+<link href="#rfc.appendix.A.4" rel="Chapter" title="A.4 Resolution of packaged resources"/>
 <link href="#rfc.appendix.B" rel="Chapter" title="B History"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
@@ -473,7 +477,11 @@
 <ul><li>8.1.   <a href="#rfc.references.1">Normative References</a></li>
 <li>8.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li>Appendix A.   <a href="#rfc.appendix.A">Examples</a></li>
-<li>Appendix B.   <a href="#rfc.appendix.B">History</a></li>
+<ul><li>A.1.   <a href="#rfc.appendix.A.1">Sandboxing</a></li>
+<li>A.2.   <a href="#rfc.appendix.A.2">Origin-based</a></li>
+<li>A.3.   <a href="#rfc.appendix.A.3">Hash-based</a></li>
+<li>A.4.   <a href="#rfc.appendix.A.4">Resolution of packaged resources</a></li>
+</ul><li>Appendix B.   <a href="#rfc.appendix.B">History</a></li>
 <li><a href="#rfc.authors">Author's Address</a></li>
 
 
@@ -486,7 +494,8 @@
 <p id="rfc.section.1.p.4">An archive containing multiple HTML or Linked Data resources, such as in a BagIt archive <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>, may be using relative URIs to cross-reference constituent files.</p>
 <p id="rfc.section.1.p.5">Consumptions of archives might be performed in memory or through a common framework, abstracting away any local file location.</p>
 <p id="rfc.section.1.p.6">Consumption of an archive with a consistent base URL should be possible no matter from which location it was retrieved, or on which device it is inspected.</p>
-<p id="rfc.section.1.p.7">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
+<p id="rfc.section.1.p.7">When consuming multiple archives from untrusted sources it would be beneficial to have a Same Origin policy <a href="#RFC6454">[RFC6454]</a> so that relative hyperlinks can&#8217;t escape the particular archive.</p>
+<p id="rfc.section.1.p.8">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#syntax" id="syntax">Scheme syntax</a></h1>
 <p id="rfc.section.2.p.1">The <samp>app</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following production:</p>
 <pre>
@@ -510,9 +519,8 @@ app-authority    = UUID | alg-val | authority
 <p/>
 
 <ol>
-  <li>For security/sandboxing when independently interpreting resources in an archive, the authority SHOULD be a UUID v4 <a href="#RFC4122">[RFC4122]</a> created with a suitable random number generator <a href="#RFC4086">[RFC4086]</a>.  This ensures with high probablity that the app base URI is globally unique. An application MAY choose to reuse a previously assigned UUID that is associated with the archive.</li>
-  <li>For referencing resources in an archive accessed at a particular URL, the authority SHOULD be generated as a name-based UUID v5 <a href="#RFC4122">[RFC4122]</a>; that is based on the SHA1 concatination of the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> (as UUID bytes) and the ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach with a file URI <a href="#RFC8089">[RFC8089]</a> without a fully qualified <samp>host</samp> name.</li>
-  <li>For referencing resources in an archive as a particular bytestream, independent of its location, the authority SHOULD be a checksum of the archive bytes. The checksum MUST be expressed according to <a href="#RFC6920">[RFC6920]</a>&#8217;s <samp>alg-val</samp> production, and SHOULD use the <samp>sha-256</samp> algorithm. It is NOT RECOMMENDED to use truncated hash methods.</li>
+  <li><em>Sandboxing</em>, when independently interpreting resources in an archive, the authority SHOULD be a UUID v4 <a href="#RFC4122">[RFC4122]</a> created with a suitable random number generator <a href="#RFC4086">[RFC4086]</a>.  This ensures with high probablity that the app base URI is globally unique. An application MAY choose to reuse a previously assigned UUID that is associated with the archive.</li>
+  <li><em>Location-based</em>, for referencing resources in an archive accessed at a particular URL, the authority SHOULD be generated as a name-based UUID v5 <a href="#RFC4122">[RFC4122]</a>; that is based on the SHA1 concatination of the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> (as UUID bytes) and the ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach with a file URI <a href="#RFC8089">[RFC8089]</a> without a fully qualified <samp>host</samp> name.  3.<em>Hash-based</em>, for referencing resources in an archive as a particular bytestream, independent of its location, the authority SHOULD be a checksum of the archive bytes. The checksum MUST be expressed according to <a href="#RFC6920">[RFC6920]</a>&#8217;s <samp>alg-val</samp> production, and SHOULD use the <samp>sha-256</samp> algorithm. It is NOT RECOMMENDED to use truncated hash methods.</li>
 </ol>
 <p id="rfc.section.2.1.p.8">The generic <samp>authority</samp> production MAY be used for extensions if the above mechanisms are not suitable.  Care should be taken so that the custom <samp>authority</samp> do not match the <samp>UUID</samp> nor <samp>alg-val</samp> productions.</p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#path" id="path">Path</a></h1>
@@ -577,6 +585,7 @@ segment-nz    = 1*pchar
 <p id="rfc.section.6.p.5">An archive might contain symbolic links that, if extracted to a local file system, might address files outside the archive&#8217;s directory structure.</p>
 <p id="rfc.section.6.p.6">An maliciously crafted app URI might contain <samp>../</samp> segments, which if naively converted to a <samp>file:///</samp> URI might address files outside the archive&#8217;s directory structure.</p>
 <p id="rfc.section.6.p.7">In particular for IRIs, an archive might contain multiple paths with similar-looking characters or with different Unicode combine sequences, which could be facilitated to mislead users.</p>
+<p id="rfc.section.6.p.8">An URI hyperlink might use or guess an app URI authority to attempt to climb into a different archive for malicious purposes. Applications SHOULD employ a same-orgin policy <a href="#RFC6454">[RFC6454]</a>.</p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#iana" id="iana">IANA Considerations</a></h1>
 <p id="rfc.section.7.p.1">This Internet-Draft contains the Provisional IANA registration of the app URI scheme according to <a href="#RFC7595">[RFC7595]</a>.</p>
 <p id="rfc.section.7.p.2">Scheme name: uri</p>
@@ -641,6 +650,12 @@ segment-nz    = 1*pchar
         <b id="RFC5785">[RFC5785]</b>
       </td>
       <td class="top"><a>Nottingham, M.</a> and <a>E. Hammer-Lahav</a>, "<a href="http://tools.ietf.org/html/rfc5785">Defining Well-Known Uniform Resource Identifiers (URIs)</a>", RFC 5785, DOI 10.17487/RFC5785, April 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6454">[RFC6454]</b>
+      </td>
+      <td class="top"><a>Barth, A.</a>, "<a href="http://tools.ietf.org/html/rfc6454">The Web Origin Concept</a>", RFC 6454, DOI 10.17487/RFC6454, December 2011.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -710,6 +725,66 @@ segment-nz    = 1*pchar
   </tbody>
 </table>
 <h1 id="rfc.appendix.A"><a href="#rfc.appendix.A">Appendix A.</a> <a href="#examples" id="examples">Examples</a></h1>
+<h1 id="rfc.appendix.A.1"><a href="#rfc.appendix.A.1">A.1.</a> <a href="#sandboxing" id="sandboxing">Sandboxing</a></h1>
+<p id="rfc.section.A.1.p.1">An document store application has received a file <samp>document.tar.gz</samp> which content will be checked for consistency.</p>
+<p id="rfc.section.A.1.p.2">For sandboxing purposes it generates a UUID v4 <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp> using a pseudo-random generator.  The app base URI is thus <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/</samp></p>
+<p id="rfc.section.A.1.p.3">The archive contains the files:</p>
+<p/>
+
+<ul>
+  <li><samp>./doc.html</samp>  which links to <samp>css/base.css</samp></li>
+  <li><samp>./css/base.css</samp>  which links to <samp>../fonts/Coolie.woff</samp></li>
+  <li>
+    <samp>./fonts/Coolie.woff</samp>
+  </li>
+</ul>
+<p id="rfc.section.A.1.p.5">The application generates the corresponding app URIs and uses those for URI resolutions:</p>
+<p/>
+
+<ul>
+  <li><samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html</samp> links to <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css</samp></li>
+  <li><samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css</samp> links to <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff</samp>`</li>
+  <li><samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/</samp>fonts/Coolie.woff</li>
+</ul>
+<p id="rfc.section.A.1.p.7">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which ZIP file corresponds to <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
+<p id="rfc.section.A.1.p.8">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI ``app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt<samp>and conclude from "Not Found" that the path </samp>/outside.txt` was not present in the archive.</p>
+<h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> <a href="#origin-based" id="origin-based">Origin-based</a></h1>
+<p id="rfc.section.A.2.p.1">A web crawler is about to index the content of the URL <samp>http://example.com/data.zip</samp> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
+<p id="rfc.section.A.2.p.2">The application generates a UUID v5 based on the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and the URL to the zip file:</p>
+<pre>
+&gt;&gt;&gt; uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
+UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
+</pre>
+<p id="rfc.section.A.2.p.3">Thus the base app URI is <samp>app://b7749d0b-0e47-5fc4-999d-f154abe68065/</samp> for indexing the ZIP content, after which the crawler finds:</p>
+<p/>
+
+<ul>
+  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/</li>
+  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/</li>
+  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg</li>
+</ul>
+<p id="rfc.section.A.2.p.5">When the application encounters <samp>http://example.com/data.zip</samp> some time later it can recalculate the same base app URI. This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
+<p/>
+
+<ul>
+  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg</li>
+</ul>
+<p id="rfc.section.A.2.p.7">If files had disappeared from the ZIP file this would be trivial for the crawler to clear from its database, as it used the same base URI.</p>
+<h1 id="rfc.appendix.A.3"><a href="#rfc.appendix.A.3">A.3.</a> <a href="#hash-based" id="hash-based">Hash-based</a></h1>
+<p id="rfc.section.A.3.p.1">An application where users can upload software distributions for virus checking needs to avoid duplication as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
+<p id="rfc.section.A.3.p.2">The application calculates the <em>sha-256</em> checksum of the uploaded file to be <samp>17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd</samp> in hexadecimal. The <em>base64url</em> encoding of the binary version of the checksum is <samp>F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0</samp>.</p>
+<p id="rfc.section.A.3.p.3">The corresponding <samp>alg-val</samp> authority is thus <samp>sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0</samp> meaning the base app URL is <samp>app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/</samp></p>
+<p id="rfc.section.A.3.p.4">The crawler finds that it&#8217;s virus database already contain entries for:</p>
+<p/>
+
+<ul>
+  <li>app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil</li>
+</ul>
+<p id="rfc.section.A.3.p.6">and flags the upload as malicious without having to scan it again.</p>
+<h1 id="rfc.appendix.A.4"><a href="#rfc.appendix.A.4">A.4.</a> <a href="#resolution-of-packaged-resources" id="resolution-of-packaged-resources">Resolution of packaged resources</a></h1>
+<p id="rfc.section.A.4.p.1">A virtual file system driver on a mobile operating system has mounted several packaged application for resolving common resources. An application requests the rendering framework to resolve a picture from <samp>app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png</samp> to show it within a user interface.</p>
+<p id="rfc.section.A.4.p.2">The framework first checks that the authority <samp>eb1edec9-d2eb-4736-a875-eb97b37c690e</samp> is valid to access according to the Same Origin policies or permissions of the running application. It then matches the authority to the corresponding application package.</p>
+<p id="rfc.section.A.4.p.3">The framework then resolves <samp>/img/logo.png</samp> from within that package, and returns an image buffer it already had cached in memory.</p>
 <h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#history" id="history">History</a></h1>
 <p id="rfc.section.B.p.1">This Internet-Draft proposes the URI scheme <samp>app</samp>, which was originally proposed by <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a> but never registered with IANA.  This Note was evolved from <a href="#W3C.NOTE-widgets-uri-20120313">[W3C.NOTE-widgets-uri-20120313]</a> which proposed the URI scheme <samp>widget</samp>.</p>
 <p id="rfc.section.B.p.2">The W3C Notes did not progress further as Recommendation track documents.</p>

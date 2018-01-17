@@ -41,6 +41,8 @@ normative:
   RFC4122:
   # .well-known
   RFC5785:
+  # Same origin
+  RFC6454:
   # ni hashes
   RFC6920:
   # URI design
@@ -149,6 +151,10 @@ Consumption of an archive with a consistent base URL
 should be possible no matter from which location it was retrieved,
 or on which device it is inspected.
 
+When consuming multiple archives from untrusted sources 
+it would be beneficial to have a Same Origin policy {{RFC6454}} 
+so that relative hyperlinks can't escape the particular archive.
+
 The `file:` URI scheme {{RFC8089}} 
 can be ill-suited for purposes such as above, where a
 location-independent URI scheme is more flexible, 
@@ -213,19 +219,19 @@ For instance, a vendor owning `example.com` may specify that
 The choice of authority depends on the purpose of the app URI within the implementation.
 Below are some recommendations:
 
-1. For security/sandboxing when independently interpreting resources in 
+1. _Sandboxing_, when independently interpreting resources in 
   an archive, the authority SHOULD be a 
   UUID v4 {{RFC4122}} created with a suitable random number generator {{RFC4086}}.
   This ensures with high probablity that 
   the app base URI is globally unique. An application MAY choose to 
   reuse a previously assigned UUID that is associated with the archive.
-2. For referencing resources in an archive accessed at a particular URL, the
-  authority SHOULD be generated as a name-based UUID v5 {{RFC4122}}; that is 
+2. _Location-based_, for referencing resources in an archive accessed at a 
+  particular URL, the authority SHOULD be generated as a name-based UUID v5 {{RFC4122}}; that is 
   based on the SHA1 concatination of the URL namespace 
   `6ba7b811-9dad-11d1-80b4-00c04fd430c8` (as UUID bytes) and the 
   ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach 
   with a file URI {{RFC8089}} without a fully qualified `host` name.
-3. For referencing resources in an archive as a 
+3._Hash-based_, for referencing resources in an archive as a 
   particular bytestream, independent of its location, the authority SHOULD be 
   a checksum of the archive bytes. The checksum MUST be expressed 
   according to {{RFC6920}}'s `alg-val` production, and SHOULD use the
@@ -434,6 +440,12 @@ paths with similar-looking characters or with different
 Unicode combine sequences, which could be facilitated
 to mislead users.
 
+An URI hyperlink might use or guess an app URI authority 
+to attempt to climb into a different archive for 
+malicious purposes. Applications SHOULD employ a 
+same-orgin policy {{RFC6454}}.
+
+
 
 IANA Considerations  {#iana}
 ===================
@@ -460,6 +472,113 @@ Change controller: Stian Soiland-Reyes
 Examples  {#examples}
 ========
 
+Sandboxing
+----------
+
+An document store application has received a file 
+`document.tar.gz` which content will be checked for consistency. 
+
+For sandboxing purposes it generates a UUID v4 
+`32a423d6-52ab-47e3-a9cd-54f418a48571` using a pseudo-random generator.
+The app base URI is thus `app://32a423d6-52ab-47e3-a9cd-54f418a48571/`
+
+The archive contains the files:
+
+* `./doc.html`  which links to `css/base.css`
+* `./css/base.css`  which links to `../fonts/Coolie.woff`
+* `./fonts/Coolie.woff`
+
+The application generates the corresponding app URIs and uses those for URI resolutions:
+
+* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html` links 
+  to ``app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css``
+* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css` links to `app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff``
+* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/`fonts/Coolie.woff
+
+The application is now confident that all hyperlinked files are
+indeed present in the archive. In its database it notes which ZIP file 
+corresponds to `32a423d6-52ab-47e3-a9cd-54f418a48571`.
+
+If the application had encountered a malicious hyperlink 
+`../../../outside.txt` it would first resolve it to 
+the absolute URI ``app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt`
+and conclude from "Not Found" that the path `/outside.txt` was not 
+present in the archive.
+
+
+Origin-based
+------------
+
+A web crawler is about to index the content of the URL
+`http://example.com/data.zip` and need to generate absolute URIs
+as it continues crawling inside the individual resources of the archive.
+
+The application generates a UUID v5 based on the 
+URL namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8` and
+the URL to the zip file:
+
+    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
+    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
+
+Thus the base app URI is `app://b7749d0b-0e47-5fc4-999d-f154abe68065/` for 
+indexing the ZIP content, after which the crawler finds:
+
+* app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+* app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+* app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+
+When the application encounters `http://example.com/data.zip` some time later
+it can recalculate the same base app URI. This time the ZIP file has been modified
+upstream and the crawler finds additionally:
+
+* app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+
+If files had disappeared from the ZIP file this would be trivial
+for the crawler to clear from its database, as it used the same
+base URI.
+
+Hash-based
+----------
+
+An application where users can upload software distributions
+for virus checking needs to avoid duplication as users
+tend to upload `foo-1.2.tar` multiple times.
+
+The application calculates the _sha-256_ checksum of the uploaded
+file to be `17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd` 
+in hexadecimal. The _base64url_ encoding of the binary version of the checksum is 
+`F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0`. 
+
+The corresponding `alg-val` authority is thus 
+`sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0` meaning the 
+base app URL is `app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/`
+
+The crawler finds that it's virus database already contain entries
+for:
+
+* app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+
+and flags the upload as malicious without having to scan it again.
+
+Resolution of packaged resources
+--------------------------------
+
+A virtual file system driver on a mobile operating system 
+has mounted several packaged application for resolving 
+common resources. An application requests the rendering 
+framework to resolve a picture from
+`app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
+to show it within a user interface.
+
+The framework first checks that the authority 
+`eb1edec9-d2eb-4736-a875-eb97b37c690e` is valid to access
+according to the Same Origin policies or permissions of the
+running application. It then matches the
+authority to the corresponding application package.
+
+The framework then resolves `/img/logo.png` from within
+that package, and returns an image buffer it already had
+cached in memory.
 
 
 History   {#history}
