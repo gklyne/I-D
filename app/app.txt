@@ -8,13 +8,13 @@ Intended status: Informational                          January 17, 2018
 Expires: July 21, 2018
 
 
-                           The app URI scheme
+                The Archive and Packaging Pointer system
                    draft-soilandreyes-app-01-SNAPSHOT
 
 Abstract
 
-   This Internet-Draft proposes the "app" URI scheme for the Archive and
-   Packaging Protocol.
+   This Internet-Draft proposes the Archive and Packaging Pointer system
+   with the URI scheme "app".
 
    app URIs can be used to consume or reference hypermedia resources
    bundled inside a file archive or a mobile application package, as

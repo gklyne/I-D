@@ -1,5 +1,5 @@
 ---
-title: The app URI scheme
+title: The Archive and Packaging Pointer system
 abbrev: app
 docname: draft-soilandreyes-app-01-SNAPSHOT
 date: 2018-01-17
@@ -96,8 +96,9 @@ informative:
 
 --- abstract
 
-This Internet-Draft proposes the `app` URI scheme for the 
-Archive and Packaging Protocol. 
+This Internet-Draft proposes the 
+Archive and Packaging Pointer system with the URI
+scheme `app`.
 
 app URIs can be used to consume or reference hypermedia 
 resources bundled inside a file archive or a mobile 
