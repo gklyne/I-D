@@ -96,9 +96,13 @@ informative:
 
 --- abstract
 
-This Internet-Draft proposes the `app:` URI scheme, which can be used 
-to consume or reference hypermedia resources bundled inside 
-a file archive or a mobile application package. 
+This Internet-Draft proposes the `app` URI scheme for the 
+Archive and Packaging Protocol. 
+
+app URIs can be used to consume or reference hypermedia 
+resources bundled inside a file archive or a mobile 
+application package, as well as to resolve URIs for 
+archive resources within a programmatic framework.
 
 This URI scheme provides mechanisms to generate a 
 unique base URI to represent the root of the archive, 
@@ -306,15 +310,14 @@ Assuming an appropriate resolution mechanism which have
 knowledge of the corresponding archive, an app URI
 can also be used for resolution.
 
-Resolution   {#resolution}
-----------
+Resolution protocol  {#resolution}
+-------------------
 
-This Internet-Draft do not specify the protocol to 
+This Internet-Draft do not specify directly the protocol to 
 resolve resources according to the app URI scheme. 
 For instance, one implementation might rewrite app URIs to 
 localized `file:///` paths in a temporary directory, while
 another implementation might use an embedded HTTP server.
-
 
 It is envisioned that an implementation will 
 have extracted or opened an archive in 
@@ -324,7 +327,7 @@ can then resolve app URIs programmatically, e.g. by using
 in-memory access or mapping paths to the extracted archive on 
 the local file system.
 
-Resolution of an app URI within an implementation SHOULD:
+Implementations that support resolving app URIs SHOULD:
 
 1. Fail with the equivalent of _Not Found_ if the authority is unknown.
 2. Fail with the equivalent of _Gone_ if the authority is known, but the content of the archive is no longer available.
@@ -351,6 +354,9 @@ Some archive formats might support resources which are
 neither directories nor regular files (e.g. device files, 
 symbolic links). This Internet-Draft does not specify the 
 semantics of attempting to resolve such resources.
+
+This Internet-Draft does not specify how to change an archive
+or its content using app URIs.
 
 
 Resolving from a .well-known endpoint  {#well-known}
