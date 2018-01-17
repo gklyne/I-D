@@ -471,7 +471,7 @@ Internet-Draft                     app                      January 2018
    This Internet-Draft contains the Provisional IANA registration of the
    app URI scheme according to [RFC7595].
 
-   Scheme name: uri
+   Scheme name: app
 
    Status: provisional
 

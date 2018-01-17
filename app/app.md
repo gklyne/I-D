@@ -453,7 +453,7 @@ IANA Considerations  {#iana}
 This Internet-Draft contains the Provisional IANA 
 registration of the app URI scheme according to {{RFC7595}}.
 
-Scheme name: uri
+Scheme name: app
 
 Status: provisional
 
