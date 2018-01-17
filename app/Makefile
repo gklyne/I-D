@@ -3,6 +3,9 @@ SOURCES?=${wildcard *.md}
 TEXT=${SOURCES:.md=.txt}
 HTML=${SOURCES:.md=.html}
 
+
+all: app.html app.txt
+
 text:	$(TEXT)
 html:   $(HTML)
 
