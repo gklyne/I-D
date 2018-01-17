@@ -120,9 +120,9 @@ Internet-Draft                     app                      January 2018
    could be vulnerable to attacks such as "climbing out" of the root
    directory.
 
-   Mobile applications that are distributed as a package may bundle
-   resources such as stylesheets with relative URI references to images
-   and fonts.
+   Mobile and Web applications that are distributed as packages may
+   bundle resources such as stylesheets with relative URI references to
+   images and fonts.
 
    An archive containing multiple HTML or Linked Data resources, such as
    in a BagIt archive [I-D.draft-kunze-bagit-14], may be using relative
@@ -196,7 +196,7 @@ Internet-Draft                     app                      January 2018
    "example.com".  As this production necessarily also match the "UUID"
    and "alg-val" productions, consumers of app URIs should attempt to
    match those first.  While [RFC7320] section 2.2 says an extension may
-   not _"define the structure or the semantics for URI authorities", any
+   not "define the structure or the semantics for URI authorities",
    extensions of this Internet-Draft *are* permitted to do so, if using
    a DNS domain name under their control.  For instance, a vendor owning
    "example.com" may specify that "{OID}" in "{OID}.oid.example.com" has
@@ -217,7 +217,7 @@ Internet-Draft                     app                      January 2018
        as a name-based UUID v5 [RFC4122]; that is based on the SHA1
        concatination of the URL namespace "6ba7b811-9dad-
        11d1-80b4-00c04fd430c8" (as UUID bytes) and the ASCII bytes of
-       the particular URL.  It is NOT RECOMMENDED to use this approach
+
 
 
 
@@ -226,8 +226,10 @@ Soiland-Reyes            Expires August 4, 2018                 [Page 4]
 Internet-Draft                     app                      January 2018
 
 
+       the particular URL.  It is NOT RECOMMENDED to use this approach
        with a file URI [RFC8089] without a fully qualified "host" name.
-       3._Hash-based_, for referencing resources in an archive as a
+
+   3.  _Hash-based_, for referencing resources in an archive as a
        particular bytestream, independent of its location, the authority
        SHOULD be a checksum of the archive bytes.  The checksum MUST be
        expressed according to [RFC6920]'s "alg-val" production, and
@@ -272,8 +274,6 @@ Internet-Draft                     app                      January 2018
    vnd.android.package-archive", "application/x-tar", "application/
    x-gtar" and "application/x-7z-compressed".
 
-   The _path_ of an app URI identify individual resources within a
-   particular archive, typically a _directory_ or _file_.
 
 
 
@@ -281,6 +281,9 @@ Soiland-Reyes            Expires August 4, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
+
+   The _path_ of an app URI identify individual resources within a
+   particular archive, typically a _directory_ or _file_.
 
    The app URIs can be used for uniquely identifying the resources
    independent of the location of the archive, such as within an
@@ -328,9 +331,6 @@ Internet-Draft                     app                      January 2018
    directory listing, in which case the directory listing SHOULD fail
    with the equivalent of "Not Implemented".
 
-   It is not specified in this Internet-Draft how an implementation can
-   determine the media type of a file within an archive.  This may be
-
 
 
 Soiland-Reyes            Expires August 4, 2018                 [Page 6]
@@ -338,6 +338,8 @@ Soiland-Reyes            Expires August 4, 2018                 [Page 6]
 Internet-Draft                     app                      January 2018
 
 
+   It is not specified in this Internet-Draft how an implementation can
+   determine the media type of a file within an archive.  This may be
    expressed in secondary resources (such as a manifest), be determined
    by file extensions or magic bytes.
 
@@ -384,8 +386,6 @@ Internet-Draft                     app                      January 2018
    As multiple authorities are possible (Section 2.1), there could be
    interoperability challenges when exchanging app URIs between
    implementations.  For instance:
-
-
 
 
 

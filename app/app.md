@@ -134,7 +134,7 @@ to represent the root of the archive. Such URIs are fluctual,
 might not be globally unique, and could be vulnerable to
 attacks such as "climbing out" of the root directory.
 
-Mobile applications that are distributed as a package 
+Mobile and Web applications that are distributed as packages 
 may bundle resources such as stylesheets with 
 relative URI references to images and fonts. 
 
@@ -210,8 +210,8 @@ The `authority` production match its definition in {{RFC3986}}, e.g. `example.co
 As this production necessarily also match the `UUID` and `alg-val`
 productions, consumers of app URIs should attempt to match those first.
 While {{RFC7320}} section 2.2 says an extension may not 
-_"define the structure or the semantics for URI authorities", 
-any extensions of this Internet-Draft **are** permitted to do so, 
+"define the structure or the semantics for URI authorities", 
+extensions of this Internet-Draft **are** permitted to do so, 
 if using a DNS domain name under their control. 
 For instance, a vendor owning `example.com` may specify that 
 `{OID}` in `{OID}.oid.example.com` has special semantics.
@@ -220,22 +220,22 @@ The choice of authority depends on the purpose of the app URI within the impleme
 Below are some recommendations:
 
 1. _Sandboxing_, when independently interpreting resources in 
-  an archive, the authority SHOULD be a 
-  UUID v4 {{RFC4122}} created with a suitable random number generator {{RFC4086}}.
-  This ensures with high probablity that 
-  the app base URI is globally unique. An application MAY choose to 
-  reuse a previously assigned UUID that is associated with the archive.
+ an archive, the authority SHOULD be a 
+ UUID v4 {{RFC4122}} created with a suitable random number generator {{RFC4086}}.
+ This ensures with high probablity that 
+ the app base URI is globally unique. An application MAY choose to 
+ reuse a previously assigned UUID that is associated with the archive.
 2. _Location-based_, for referencing resources in an archive accessed at a 
-  particular URL, the authority SHOULD be generated as a name-based UUID v5 {{RFC4122}}; that is 
-  based on the SHA1 concatination of the URL namespace 
-  `6ba7b811-9dad-11d1-80b4-00c04fd430c8` (as UUID bytes) and the 
-  ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach 
-  with a file URI {{RFC8089}} without a fully qualified `host` name.
-3._Hash-based_, for referencing resources in an archive as a 
-  particular bytestream, independent of its location, the authority SHOULD be 
-  a checksum of the archive bytes. The checksum MUST be expressed 
-  according to {{RFC6920}}'s `alg-val` production, and SHOULD use the
-  `sha-256` algorithm. It is NOT RECOMMENDED to use truncated hash methods.
+ particular URL, the authority SHOULD be generated as a name-based UUID v5 {{RFC4122}}; that is 
+ based on the SHA1 concatination of the URL namespace 
+ `6ba7b811-9dad-11d1-80b4-00c04fd430c8` (as UUID bytes) and the 
+ ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach 
+ with a file URI {{RFC8089}} without a fully qualified `host` name.
+3. _Hash-based_, for referencing resources in an archive as a 
+ particular bytestream, independent of its location, the authority SHOULD be 
+ a checksum of the archive bytes. The checksum MUST be expressed 
+ according to {{RFC6920}}'s `alg-val` production, and SHOULD use the
+ `sha-256` algorithm. It is NOT RECOMMENDED to use truncated hash methods.
 
 The generic `authority` production MAY be used 
 for extensions if the above mechanisms are not suitable. 
