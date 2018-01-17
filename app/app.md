@@ -204,7 +204,7 @@ The `UUID` production match its definition in {{RFC4122}}, e.g.
 `2a47c495-ac70-4ed1-850b-8800a57618cf`
 
 The `alg-val` production match its definition in {{RFC6920}}, e.g.
-``sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
+`sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
 
 The `authority` production match its definition in {{RFC3986}}, e.g. `example.com`. 
 As this production necessarily also match the `UUID` and `alg-val`
@@ -442,8 +442,8 @@ to mislead users.
 
 An URI hyperlink might use or guess an app URI authority 
 to attempt to climb into a different archive for 
-malicious purposes. Applications SHOULD employ a 
-same-orgin policy {{RFC6454}}.
+malicious purposes. Applications SHOULD employ 
+Same Orgin policy {{RFC6454}} checks.
 
 
 
@@ -490,10 +490,10 @@ The archive contains the files:
 
 The application generates the corresponding app URIs and uses those for URI resolutions:
 
-* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html` links 
-  to ``app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css``
-* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css` links to `app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff``
-* `app://32a423d6-52ab-47e3-a9cd-54f418a48571/`fonts/Coolie.woff
+* app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html links 
+  to app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+* app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css` links to app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+* app://32a423d6-52ab-47e3-a9cd-54f418a48571/`fonts/Coolie.woff
 
 The application is now confident that all hyperlinked files are
 indeed present in the archive. In its database it notes which ZIP file 
@@ -501,8 +501,8 @@ corresponds to `32a423d6-52ab-47e3-a9cd-54f418a48571`.
 
 If the application had encountered a malicious hyperlink 
 `../../../outside.txt` it would first resolve it to 
-the absolute URI ``app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt`
-and conclude from "Not Found" that the path `/outside.txt` was not 
+the absolute URI `app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
+conclude from the _"Not Found"_ error that the path `/outside.txt` was not 
 present in the archive.
 
 
@@ -533,9 +533,9 @@ upstream and the crawler finds additionally:
 
 * app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
-If files had disappeared from the ZIP file this would be trivial
-for the crawler to clear from its database, as it used the same
-base URI.
+If files had been removed from the updated ZIP file this 
+would be trivial for the crawler to clear from its database, 
+as it used the same base URI as in last crawl.
 
 Hash-based
 ----------
@@ -546,7 +546,8 @@ tend to upload `foo-1.2.tar` multiple times.
 
 The application calculates the _sha-256_ checksum of the uploaded
 file to be `17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd` 
-in hexadecimal. The _base64url_ encoding of the binary version of the checksum is 
+in hexadecimal. The _base64url_ encoding {{RFC4648}} of the 
+binary version of the checksum is 
 `F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0`. 
 
 The corresponding `alg-val` authority is thus 
@@ -559,6 +560,31 @@ for:
 * app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
 and flags the upload as malicious without having to scan it again.
+
+
+Archives that are not files
+---------------------------
+
+An application is relating BagIt archives 
+{{I-D.draft-kunze-bagit-14}} on a shared file system, using structured
+folders and manifests rather than individual archive files.
+
+The BagIt payload manifest `/gfs/bags/scan15/manifest-md5.txt` lists the files:
+
+    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
+    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
+
+The application generates a random UUID v4 
+`ff2d5a82-7142-4d3f-b8cc-3e662d6de756` which it adds to 
+the bag metadata file `/gfs/bags/scan15/bag-info.txt`
+
+    External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
+
+It then generates app URIs for the files listed in the manifest:
+
+    app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
+    app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+
 
 Resolution of packaged resources
 --------------------------------
@@ -586,17 +612,17 @@ History   {#history}
 
 This Internet-Draft proposes the URI scheme `app`, which was originally 
 proposed by {{W3C.NOTE-app-uri-20150723}} but never registered with IANA.
-This Note was evolved from {{W3C.NOTE-widgets-uri-20120313}} which 
+That W3C Note evolved from {{W3C.NOTE-widgets-uri-20120313}} which 
 proposed the URI scheme `widget`.
 
-The W3C Notes did not progress further as Recommendation track documents.
+Neither W3C Notes did progress further as Recommendation track documents.
 
 While the focus of W3C Notes was to specify how to resolve resources from
 within a packaged application, this Internet-Draft generalize 
-the URI scheme to support addressing and identifying resources within
-any archive, and de-emphasize the resolution mechanism.
+the `app` URI scheme to support referencing and identifying resources
+within any archive, and de-emphasize the retrieval mechanism.
 
 For compatibility with existing adaptations of the `app` URI scheme, 
 e.g. {{ROBundle}} and {{CWLViewer}}, this Internet-Draft reuse the same
 scheme name and remains compatible with the intentions of
-{{W3C.NOTE-app-uri-20150723}}.
+{{W3C.NOTE-app-uri-20150723}}. 
