@@ -562,9 +562,9 @@ upstream and the crawler finds additionally:
 
 * app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
-If files had been removed from the updated ZIP file this 
-would be trivial for the crawler to clear from its database, 
-as it used the same base URI as in last crawl.
+If files had been removed from the updated ZIP file the
+crawler can simply remove those from its database, 
+as it used the same app base URI as in last crawl.
 
 Hash-based
 ----------

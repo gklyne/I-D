@@ -784,7 +784,7 @@ UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 <ul>
   <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg</li>
 </ul>
-<p id="rfc.section.A.2.p.7">If files had been removed from the updated ZIP file this would be trivial for the crawler to clear from its database, as it used the same base URI as in last crawl.</p>
+<p id="rfc.section.A.2.p.7">If files had been removed from the updated ZIP file the crawler can simply remove those from its database, as it used the same app base URI as in last crawl.</p>
 <h1 id="rfc.appendix.A.3"><a href="#rfc.appendix.A.3">A.3.</a> <a href="#hash-based" id="hash-based">Hash-based</a></h1>
 <p id="rfc.section.A.3.p.1">An application where users can upload software distributions for virus checking needs to avoid duplication as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
 <p id="rfc.section.A.3.p.2">The application calculates the <em>sha-256</em> checksum of the uploaded file to be <samp>17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd</samp> in hexadecimal. The <em>base64url</em> encoding <a href="#RFC4648">[RFC4648]</a> of the binary version of the checksum is <samp>F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0</samp>.</p>
