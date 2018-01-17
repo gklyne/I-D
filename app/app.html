@@ -501,7 +501,7 @@
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#syntax" id="syntax">Scheme syntax</a></h1>
 <p id="rfc.section.2.p.1">The <samp>app</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following production:</p>
 <pre>
-appURI    =  "app://" app-authority path-absolute
+appURI    =  "app://" app-authority [ path-absolute ]
                [ "?" query ] [ "#" fragment ]
 </pre>
 <p id="rfc.section.2.p.2">The <samp>app-authority</samp> component provides a unique identifier for the opened archive.  See <a href="#authority">Section 2.1</a> for details.</p>
@@ -539,9 +539,17 @@ segment-nz    = 1*pchar
 <p id="rfc.section.2.2.p.5">It is RECOMMENDED to include the trailing <samp>/</samp> if it is known the path represents a directory.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#semantics" id="semantics">Scheme semantics</a></h1>
 <p id="rfc.section.3.p.1">This Internet-Draft does not constrain what particular format might constitute an <em>archive</em>, and neither does it require that the archive is retrievable as a single bytestream or file.  Examples of archive media types include <samp>application/zip</samp>, <samp>application/vnd.android.package-archive</samp>, <samp>application/x-tar</samp>, <samp>application/x-gtar</samp> and <samp>application/x-7z-compressed</samp>.</p>
-<p id="rfc.section.3.p.2">The <em>path</em> of an app URI identify individual resources within a particular archive, typically a <em>directory</em> or <em>file</em>.</p>
-<p id="rfc.section.3.p.3">The app URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
-<p id="rfc.section.3.p.4">Assuming an appropriate resolution mechanism which have knowledge of the corresponding archive, an app URI can also be used for resolution.</p>
+<p id="rfc.section.3.p.2">The <em>authority</em> component identifies the archive file.</p>
+<p id="rfc.section.3.p.3">The <em>path</em> component of an app URI identify individual resources within a particular archive, typically a <em>directory</em> or <em>file</em>.</p>
+<p/>
+
+<ul>
+  <li>If the <em>path</em> is missing/empty - e.g.  <samp>app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22</samp> - then the app URI represent the whole archive file.</li>
+  <li>If the <em>path</em> is <samp>/</samp> - e.g.  <samp>app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/</samp> - then the app URI represent the root directory of the archive.</li>
+  <li>If the path ends with <samp>/</samp> then the path represents a directory in the archive</li>
+</ul>
+<p id="rfc.section.3.p.5">The app URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
+<p id="rfc.section.3.p.6">Assuming an appropriate resolution mechanism which have knowledge of the corresponding archive, an app URI can also be used for resolution.</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#resolution" id="resolution">Resolution</a></h1>
 <p id="rfc.section.3.1.p.1">This Internet-Draft do not specify the protocol to resolve resources according to the app URI scheme.  For instance, one implementation might rewrite app URIs to localized <samp>file:///</samp> paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
 <p id="rfc.section.3.1.p.2">It is envisioned that an implementation will have extracted or opened an archive in advance, and assigned it an appropriate authority according to <a href="#authority">Section 2.1</a>. Such an implementation can then resolve app URIs programmatically, e.g. by using in-memory access or mapping paths to the extracted archive on the local file system.</p>
@@ -555,6 +563,7 @@ segment-nz    = 1*pchar
   <li>Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.</li>
   <li>Return an appropriate directory listing if the path maps to a directory within the archive.</li>
   <li>Return an appropriate directory listing of the archive&#8217;s root directory if the path is <samp>/</samp></li>
+  <li>Return the archive file if the path component is missing/empty.</li>
 </ol>
 <p id="rfc.section.3.1.p.5">Not all archive formats or implementations will have the concept of a directory listing, in which case the directory listing SHOULD fail with the equivalent of &#8220;Not Implemented&#8221;.</p>
 <p id="rfc.section.3.1.p.6">It is not specified in this Internet-Draft how an implementation can determine the media type of a file within an archive. This may be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
@@ -566,10 +575,10 @@ segment-nz    = 1*pchar
 <p id="rfc.section.4.p.1">The production for <samp>UUID</samp> and <samp>alg-val</samp> are restricted to ASCII and should not require any encoding considerations.</p>
 <p id="rfc.section.4.p.2">Care should be taken to %-encode the directory and file segments of <samp>path-absolute</samp> according to <a href="#RFC3986">[RFC3986]</a> (for URIs) or <a href="#RFC3987">[RFC3987]</a> (for IRIs).</p>
 <p id="rfc.section.4.p.3">When used as part an IRI, paths SHOULD be expressed using international Unicode characters instead of %-encoding as ASCII.</p>
-<p id="rfc.section.4.p.4">Not all archive media types have an explicit character encoding specified for their paths.  If no such information is available, implementations SHOULD assume that the path is encoded with UTF-8 <a href="#RFC2279">[RFC2279]</a>.</p>
+<p id="rfc.section.4.p.4">Not all archive media types have an explicit character encoding specified for their paths.  If no such information is available for the archive format, implementations MAY assume that the path component is encoded with UTF-8 <a href="#RFC2279">[RFC2279]</a>.</p>
 <p id="rfc.section.4.p.5">Some archive media types are case-insensitive, in which cases it is RECOMMENDED to preserve the casing as expressed in the archive.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#interoperability" id="interoperability">Interoperability considerations</a></h1>
-<p id="rfc.section.5.p.1">As multiple authorities are possible (<a href="#authority">Section 2.1</a>), there could be interoperability challenges when exchanging app URIs between implementations. For instance:</p>
+<p id="rfc.section.5.p.1">As multiple authorities are possible (<a href="#authority">Section 2.1</a>), there could be interoperability challenges when exchanging app URIs between implementations. Some considerations:</p>
 <p/>
 
 <ol>
@@ -579,6 +588,7 @@ segment-nz    = 1*pchar
   <li>Two implementations describe the same archive bytestream using the <samp>alg-val</samp> production, but they have used two different hash algorithms. The implementations may need to negotiate to a common hash algorithm.</li>
   <li>An implementation describe an archive using the <samp>alg-val</samp> production, but a second implementation concurrently modifies the archive&#8217;s content.  The first implementation may need to detect changes to the archive or verify the checksum at the end of its operations.</li>
   <li>Two implementations might have different views of the content of the same archive if the format permits multiple entries with the same path. Care should be taken to follow the convention and specification of the particular archive format.</li>
+  <li>Two implementations that access the same archive which contain file paths with Unicode characters, but they extract to two different file systems. Limitations and conventions for file names in the local file system (e.g. Unicode normalization, case insensitivity, total path length) may result in the implementations having inconsistent or inaccessible paths.</li>
 </ol>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#security" id="security">Security Considerations</a></h1>
 <p id="rfc.section.6.p.1">As when handling any content, extra care should be taken when consuming archives and app URIs from unknown sources.</p>

@@ -167,7 +167,7 @@ Scheme syntax    {#syntax}
 The `app` URI scheme follows the {{RFC3986}} syntax for hierarchical
 URIs according to the following production:
 
-    appURI    =  "app://" app-authority path-absolute
+    appURI    =  "app://" app-authority [ path-absolute ]
                    [ "?" query ] [ "#" fragment ]
 
 The `app-authority` component provides a unique identifier for the opened archive. 
@@ -281,8 +281,22 @@ Examples of archive media types include
 `application/x-tar`, `application/x-gtar` and 
 `application/x-7z-compressed`.
 
-The _path_ of an app URI identify individual resources within a
-particular archive, typically a *directory* or *file*.
+The _authority_ component identifies the archive file. 
+
+The _path_ component of an app URI identify individual 
+resources within a particular archive, typically 
+a *directory* or *file*.
+
+* If the _path_ is missing/empty - e.g.
+`app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22` - then 
+the app URI represent the whole archive file.
+* If the _path_ is `/` - e.g. 
+`app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` - 
+then the app URI represent the root directory
+of the archive.
+* If the path ends with `/` then the path represents
+a directory in the archive
+
 
 The app URIs can be used for uniquely identifying 
 the resources independent of the location of the archive,
@@ -318,6 +332,7 @@ Resolution of an app URI within an implementation SHOULD:
 4. Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.
 5. Return an appropriate directory listing if the path maps to a directory within the archive.
 6. Return an appropriate directory listing of the archive's root directory if the path is `/`
+7. Return the archive file if the path component is missing/empty.
 
 Not all archive formats or implementations will have the 
 concept of a directory listing, in which case the directory listing 
@@ -364,9 +379,9 @@ international Unicode characters instead of %-encoding as ASCII.
 
 Not all archive media types have an explicit 
 character encoding specified for their paths. 
-If no such information is available, 
-implementations SHOULD assume 
-that the path is encoded with UTF-8 {{RFC2279}}.
+If no such information is available for the archive format, 
+implementations MAY assume that the path component 
+is encoded with UTF-8 {{RFC2279}}.
 
 Some archive media types are case-insensitive, in 
 which cases it is RECOMMENDED to preserve the casing 
@@ -378,7 +393,7 @@ Interoperability considerations   {#interoperability}
 
 As multiple authorities are possible ([Authority](#authority)), 
 there could be interoperability challenges when exchanging app URIs
-between implementations. For instance:
+between implementations. Some considerations:
 
 1. Two implementations describe the same archive 
   (e.g. stored in the same local file path), but using 
@@ -407,6 +422,13 @@ between implementations. For instance:
   multiple entries with the same path. Care should
   be taken to follow the convention and specification 
   of the particular archive format.
+7. Two implementations that access the same archive
+  which contain file paths with Unicode characters,
+  but they extract to two different file systems. Limitations
+  and conventions for file names in the local file system 
+  (e.g. Unicode normalization, case insensitivity, total path length)
+  may result in the implementations having 
+  inconsistent or inaccessible paths. 
 
 
 Security Considerations {#security}
