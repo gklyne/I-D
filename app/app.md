@@ -646,12 +646,14 @@ proposed the URI scheme `widget`.
 
 Neither W3C Notes did progress further as Recommendation track documents.
 
-While the focus of W3C Notes was to specify how to resolve resources from
-within a packaged application, this Internet-Draft generalize 
-the `app` URI scheme to support referencing and identifying resources
-within any archive, and de-emphasize the retrieval mechanism.
+While the focus of those W3C Notes was to specify how to resolve resources from
+within a packaged application, this Internet-Draft generalize the `app` URI
+scheme to support referencing and identifying resources within any archive, and
+de-emphasize the retrieval mechanism.
 
 For compatibility with existing adaptations of the `app` URI scheme, 
 e.g. {{ROBundle}} and {{CWLViewer}}, this Internet-Draft reuse the same
 scheme name and remains compatible with the intentions of
-{{W3C.NOTE-app-uri-20150723}}. 
+{{W3C.NOTE-app-uri-20150723}}, but renames "app" to mean 
+"Archive and Packaging Pointer" instead of "Application".
+
