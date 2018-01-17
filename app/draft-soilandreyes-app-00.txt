@@ -9,7 +9,7 @@ Expires: July 21, 2018
 
 
                            The app URI scheme
-                   draft-soilandreyes-app-01-SNAPSHOT
+                       draft-soilandreyes-app-00
 
 Abstract
 

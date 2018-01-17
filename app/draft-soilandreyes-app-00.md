@@ -1,7 +1,7 @@
 ---
 title: The app URI scheme
 abbrev: app
-docname: draft-soilandreyes-app-01-SNAPSHOT
+docname: draft-soilandreyes-app-00
 date: 2018-01-17
 category: info
 
