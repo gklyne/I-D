@@ -1,7 +1,7 @@
 ---
-title: The Archive and Packaging Pointer system
+title: The Archive and Packaging Pointer (app) URI scheme
 abbrev: app
-docname: draft-soilandreyes-app-01-SNAPSHOT
+docname: draft-soilandreyes-app-02-SNAPSHOT
 date: 2018-01-18
 category: info
 
@@ -102,8 +102,7 @@ informative:
 --- abstract
 
 This Internet-Draft proposes the 
-Archive and Packaging Pointer system with the URI
-scheme `app`.
+Archive and Packaging Pointer URI scheme `app`.
 
 app URIs can be used to consume or reference hypermedia 
 resources bundled inside a file archive or a mobile 
@@ -492,7 +491,8 @@ Scheme name: app
 Status: provisional
 
 Applications/protocols that use this protocol:
-  Hypermedia-consuming application that handle archives.
+  Hypermedia-consuming application that handle archives
+  or packages.
 
 
 Contact: Stian Soiland-Reyes <stain@apache.org>

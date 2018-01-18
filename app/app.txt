@@ -9,13 +9,13 @@ Expires: July 22, 2018                               Mozilla Corporation
                                                         January 18, 2018
 
 
-                The Archive and Packaging Pointer system
-                   draft-soilandreyes-app-01-SNAPSHOT
+           The Archive and Packaging Pointer (app) URI scheme
+                   draft-soilandreyes-app-02-SNAPSHOT
 
 Abstract
 
-   This Internet-Draft proposes the Archive and Packaging Pointer system
-   with the URI scheme "app".
+   This Internet-Draft proposes the Archive and Packaging Pointer URI
+   scheme "app".
 
    app URIs can be used to consume or reference hypermedia resources
    bundled inside a file archive or a mobile application package, as
@@ -520,7 +520,7 @@ Internet-Draft                     app                      January 2018
    Status: provisional
 
    Applications/protocols that use this protocol: Hypermedia-consuming
-   application that handle archives.
+   application that handle archives or packages.
 
    Contact: Stian Soiland-Reyes stain@apache.org [1]
 

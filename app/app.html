@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>The Archive and Packaging Pointer system</title>
+  <title>The Archive and Packaging Pointer (app) URI scheme</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -402,10 +402,10 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-app-01-SNAPSHOT" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-app-02-SNAPSHOT" />
   <meta name="dct.issued" scheme="ISO8601" content="2018-1-18" />
-  <meta name="dct.abstract" content="This Internet-Draft proposes the Archive and Packaging Pointer system with the URI scheme " />
-  <meta name="description" content="This Internet-Draft proposes the Archive and Packaging Pointer system with the URI scheme " />
+  <meta name="dct.abstract" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
+  <meta name="description" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
 
 </head>
 
@@ -439,13 +439,13 @@
     </tbody>
   </table>
 
-  <p class="title">The Archive and Packaging Pointer system<br />
-  <span class="filename">draft-soilandreyes-app-01-SNAPSHOT</span></p>
+  <p class="title">The Archive and Packaging Pointer (app) URI scheme<br />
+  <span class="filename">draft-soilandreyes-app-02-SNAPSHOT</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This Internet-Draft proposes the Archive and Packaging Pointer system with the URI scheme <samp>app</samp>.</p>
+<p>This Internet-Draft proposes the Archive and Packaging Pointer URI scheme <samp>app</samp>.</p>
 <p>app URIs can be used to consume or reference hypermedia resources bundled inside a file archive or a mobile application package, as well as to resolve URIs for archive resources within a programmatic framework.</p>
 <p>This URI scheme provides mechanisms to generate a unique base URI to represent the root of the archive, so that relative URI references in a bundled resource can be resolved within the archive without having to extract the archive content on the local file system.</p>
 <p>An app URI can be used for purposes of isolation (e.g. when consuming multiple archives), security constraints (avoiding &#8220;climb out&#8221; from the archive), or for externally identiyfing sub-resources in other hypermedia formats.</p>
@@ -609,7 +609,7 @@ segment-nz    = 1*pchar
 <p id="rfc.section.7.p.1">This Internet-Draft contains the Provisional IANA registration of the app URI scheme according to <a href="#RFC7595">[RFC7595]</a>.</p>
 <p id="rfc.section.7.p.2">Scheme name: app</p>
 <p id="rfc.section.7.p.3">Status: provisional</p>
-<p id="rfc.section.7.p.4">Applications/protocols that use this protocol: Hypermedia-consuming application that handle archives.</p>
+<p id="rfc.section.7.p.4">Applications/protocols that use this protocol: Hypermedia-consuming application that handle archives or packages.</p>
 <p id="rfc.section.7.p.5">Contact: Stian Soiland-Reyes <a href="mailto:stain@apache.org">stain@apache.org</a></p>
 <p id="rfc.section.7.p.6">Change controller: Stian Soiland-Reyes</p>
 <h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
