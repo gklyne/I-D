@@ -4,8 +4,9 @@
 
 Network Working Group                                   S. Soiland-Reyes
 Internet-Draft                              The University of Manchester
-Intended status: Informational                          January 17, 2018
-Expires: July 21, 2018
+Intended status: Informational                                M. Caceres
+Expires: July 22, 2018                               Mozilla Corporation
+                                                        January 18, 2018
 
 
                 The Archive and Packaging Pointer system
@@ -52,13 +53,12 @@ Status of This Memo
 
 
 
-
-Soiland-Reyes             Expires July 21, 2018                 [Page 1]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
 
-   This Internet-Draft will expire on July 21, 2018.
+   This Internet-Draft will expire on July 22, 2018.
 
 Copyright Notice
 
@@ -99,7 +99,7 @@ Table of Contents
      A.4.  Archives that are not files . . . . . . . . . . . . . . .  14
      A.5.  Resolution of packaged resources  . . . . . . . . . . . .  15
    Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  15
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  16
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Background
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 2]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 2]
 
 Internet-Draft                     app                      January 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 3]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 3]
 
 Internet-Draft                     app                      January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 4]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 4]
 
 Internet-Draft                     app                      January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 5]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 6]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 6]
 
 Internet-Draft                     app                      January 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 7]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 8]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                 [Page 9]
+Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 9]
 
 Internet-Draft                     app                      January 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 10]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 10]
 
 Internet-Draft                     app                      January 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 11]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 11]
 
 Internet-Draft                     app                      January 2018
 
@@ -669,7 +669,7 @@ A.1.  Sandboxing
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 12]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
@@ -725,7 +725,7 @@ A.2.  Origin-based
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 13]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 13]
 
 Internet-Draft                     app                      January 2018
 
@@ -781,7 +781,7 @@ A.4.  Archives that are not files
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 14]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 14]
 
 Internet-Draft                     app                      January 2018
 
@@ -837,12 +837,12 @@ Appendix B.  History
 
 
 
-Soiland-Reyes             Expires July 21, 2018                [Page 15]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 15]
 
 Internet-Draft                     app                      January 2018
 
 
-Author's Address
+Authors' Addresses
 
    Stian Soiland-Reyes
    The University of Manchester
@@ -853,6 +853,10 @@ Author's Address
    Email: stain@apache.org
 
 
+   Marcos Caceres
+   Mozilla Corporation
+
+   Email: marcos@marcosc.com
 
 
 
@@ -889,8 +893,4 @@ Author's Address
 
 
 
-
-
-
-
-Soiland-Reyes             Expires July 21, 2018                [Page 16]
+Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 16]

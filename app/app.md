@@ -2,7 +2,7 @@
 title: The Archive and Packaging Pointer system
 abbrev: app
 docname: draft-soilandreyes-app-01-SNAPSHOT
-date: 2018-01-17
+date: 2018-01-18
 category: info
 
 ipr: trust200902
@@ -21,7 +21,12 @@ author:
     city: Manchester
     country: United Kingdom
     email: stain@apache.org
- 
+ -
+    ins: M. Cáceres
+    name: Marcos Cáceres
+    organization: Mozilla Corporation
+    email: marcos@marcosc.com
+
 normative:
   # Media types
   RFC2046:
