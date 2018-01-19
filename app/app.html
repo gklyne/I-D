@@ -495,7 +495,7 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#background" id="background">Background</a></h1>
-<p id="rfc.section.1.p.1">Applications that are accessing resources bundled inside a file archive (e.g. zip or tar.gz) can struggle to consume hypermedia content types that use relative URI references <a href="#RFC3986">[RFC3986]</a>, as it is challenging to determine the base URI in a consistent fashion.</p>
+<p id="rfc.section.1.p.1">Applications that are accessing resources bundled inside a archive (e.g. <samp>zip</samp> or <samp>tar.gz</samp> file) can struggle to consume hypermedia content types that use relative URI references <a href="#RFC3986">[RFC3986]</a> such as <samp>../css/</samp>, as it is challenging to determine the base URI in a consistent fashion.</p>
 <p id="rfc.section.1.p.2">Frequently the archive must be unpacked locally to synthesize base URIs like <samp>file:///tmp/a1b27ae03865/</samp> to represent the root of the archive. Such URIs are temporary, might not be globally unique, and could be vulnerable to attacks such as &#8220;climbing out&#8221; of the root directory.</p>
 <p id="rfc.section.1.p.3">Mobile and Web applications that are distributed as packages may bundle resources such as stylesheets with relative URI references to images and fonts.</p>
 <p id="rfc.section.1.p.4">An archive containing multiple HTML or Linked Data resources, such as in a BagIt archive <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>, may be using relative URIs to cross-reference constituent files.</p>
@@ -509,7 +509,7 @@
 appURI    =  "app://" app-authority [ path-absolute ]
                [ "?" query ] [ "#" fragment ]
 </pre>
-<p id="rfc.section.2.p.2">The <samp>app-authority</samp> component provides a unique identifier for the opened archive.  See <a href="#authority">Section 2.1</a> for details.</p>
+<p id="rfc.section.2.p.2">The <samp>app-authority</samp> component provides a unique identifier for the opened archive. See <a href="#authority">Section 2.1</a> for details.</p>
 <p id="rfc.section.2.p.3">The <samp>path-absolute</samp> component provides the absolute path of a resource (e.g. a file or directory) within the archive. See <a href="#path">Section 2.2</a> for details.</p>
 <p id="rfc.section.2.p.4">The semantics of the <samp>query</samp> component is undefined by this Internet-Draft.  Implementations SHOULD NOT generate a query component for app URIs.</p>
 <p id="rfc.section.2.p.5">The &#8220;fragment&#8221; component MAY be used by implementations according to <a href="#RFC3986">[RFC3986]</a> and the implied media type <a href="#RFC2046">[RFC2046]</a> of the resource at the path. This Internet-Draft does not specify how to determine the media type.</p>
@@ -549,14 +549,14 @@ segment-nz    = 1*pchar
 <p/>
 
 <ul>
-  <li>If the <em>path</em> is missing/empty - e.g.  <samp>app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22</samp> - then the app URI represent the whole archive file.</li>
+  <li>If the <em>path</em> is missing/empty - e.g.  <samp>app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22</samp> - then the app URI represent the whole archive (e.g. the ZIP file).</li>
   <li>If the <em>path</em> is <samp>/</samp> - e.g.  <samp>app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/</samp> - then the app URI represent the root directory of the archive.</li>
   <li>If the path ends with <samp>/</samp> then the path represents a directory in the archive</li>
 </ul>
 <p id="rfc.section.3.p.5">The app URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
 <p id="rfc.section.3.p.6">Assuming an appropriate resolution mechanism which have knowledge of the corresponding archive, an app URI can also be used for resolution.</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#resolution" id="resolution">Resolution protocol</a></h1>
-<p id="rfc.section.3.1.p.1">This Internet-Draft do not specify directly the protocol to resolve resources according to the app URI scheme.  For instance, one implementation might rewrite app URIs to localized <samp>file:///</samp> paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
+<p id="rfc.section.3.1.p.1">This Internet-Draft do not specify directly the protocol to resolve resources according to the app URI scheme.  For instance, one implementation might rewrite app URIs to localized paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
 <p id="rfc.section.3.1.p.2">It is envisioned that an implementation will have extracted or opened an archive in advance, and assigned it an appropriate authority according to <a href="#authority">Section 2.1</a>. Such an implementation can then resolve app URIs programmatically, e.g. by using in-memory access or mapping paths to the extracted archive on the local file system.</p>
 <p id="rfc.section.3.1.p.3">Implementations that support resolving app URIs SHOULD:</p>
 <p/>
@@ -567,24 +567,24 @@ segment-nz    = 1*pchar
   <li>Fail with the equivalent of <em>Not Found</em> if the path does not map to a file or directory within the archive.</li>
   <li>Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.</li>
   <li>Return an appropriate directory listing if the path maps to a directory within the archive.</li>
-  <li>Return an appropriate directory listing of the archive&#8217;s root directory if the path is <samp>/</samp></li>
+  <li>Return an appropriate directory listing of the archive&#8217;s root directory if the path is <samp>/</samp>.</li>
   <li>Return the archive file if the path component is missing/empty.</li>
 </ol>
-<p id="rfc.section.3.1.p.5">Not all archive formats or implementations will have the concept of a directory listing, in which case the directory listing SHOULD fail with the equivalent of &#8220;Not Implemented&#8221;.</p>
-<p id="rfc.section.3.1.p.6">It is not specified in this Internet-Draft how an implementation can determine the media type of a file within an archive. This may be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
+<p id="rfc.section.3.1.p.5">Not all archive formats or implementations will have the concept of a directory listing or archive file, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
+<p id="rfc.section.3.1.p.6">It is not specified in this Internet-Draft how an implementation can determine the media type of a file within an archive. This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
 <p id="rfc.section.3.1.p.7">The media type <samp>text/uri-list</samp> <a href="#RFC2483">[RFC2483]</a> MAY be used to represent a directory listing, in which case it SHOULD contain only URIs that start with the app URI of the directory.</p>
 <p id="rfc.section.3.1.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This Internet-Draft does not specify the semantics of attempting to resolve such resources.</p>
 <p id="rfc.section.3.1.p.9">This Internet-Draft does not specify how to change an archive or its content using app URIs.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#well-known" id="well-known">Resolving from a .well-known endpoint</a></h1>
 <p id="rfc.section.3.2.p.1">If the <samp>authority</samp> component of an app URI matches the <samp>alg-val</samp> production, an application MAY attempt to resolve the authority from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> section 4, in order to retrieve the complete archive. Applications SHOULD verify the checksum of the retrieved archive before resolving the individual path.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#encoding" id="encoding">Encoding considerations</a></h1>
-<p id="rfc.section.4.p.1">The production for <samp>UUID</samp> and <samp>alg-val</samp> are restricted to ASCII and should not require any encoding considerations.</p>
+<p id="rfc.section.4.p.1">The productions for <samp>UUID</samp> and <samp>alg-val</samp> are restricted to URI safe ASCII and should not require any encoding considerations.</p>
 <p id="rfc.section.4.p.2">Care should be taken to %-encode the directory and file segments of <samp>path-absolute</samp> according to <a href="#RFC3986">[RFC3986]</a> (for URIs) or <a href="#RFC3987">[RFC3987]</a> (for IRIs).</p>
 <p id="rfc.section.4.p.3">When used as part an IRI, paths SHOULD be expressed using international Unicode characters instead of %-encoding as ASCII.</p>
-<p id="rfc.section.4.p.4">Not all archive media types have an explicit character encoding specified for their paths.  If no such information is available for the archive format, implementations MAY assume that the path component is encoded with UTF-8 <a href="#RFC2279">[RFC2279]</a>.</p>
-<p id="rfc.section.4.p.5">Some archive media types are case-insensitive, in which cases it is RECOMMENDED to preserve the casing as expressed in the archive.</p>
+<p id="rfc.section.4.p.4">Not all archive formats have an explicit character encoding specified for their paths.  If no such information is available for the archive format, implementations MAY assume that the path component is encoded with UTF-8 <a href="#RFC2279">[RFC2279]</a>.</p>
+<p id="rfc.section.4.p.5">Some archive formats have case-insensitive paths, in which cases it is RECOMMENDED to preserve the casing as expressed in the archive.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#interoperability" id="interoperability">Interoperability considerations</a></h1>
-<p id="rfc.section.5.p.1">As multiple authorities are possible (<a href="#authority">Section 2.1</a>), there could be interoperability challenges when exchanging app URIs between implementations. Some considerations:</p>
+<p id="rfc.section.5.p.1">As multiple authorities are possible for the same archive (<a href="#authority">Section 2.1</a>), and path interpretation might vary, there can be interoperability challenges when exchanging app URIs between implementations. Some considerations:</p>
 <p/>
 
 <ol>
@@ -592,19 +592,20 @@ segment-nz    = 1*pchar
   <li>Two implementations describe an archive retrieved from the same URL, with the same v5 UUIDs, but retrieved at different times. The implementations might disagree about the content of the archive.</li>
   <li>Two implementations describe an archive retrieved from the same URL, with the same v5 UUIDs, but retrieved using different content negotiation resulting in different archive representations. The implementations may disagree about path encoding, file name casing or hierarchy.</li>
   <li>Two implementations describe the same archive bytestream using the <samp>alg-val</samp> production, but they have used two different hash algorithms. The implementations may need to negotiate to a common hash algorithm.</li>
-  <li>An implementation describe an archive using the <samp>alg-val</samp> production, but a second implementation concurrently modifies the archive&#8217;s content.  The first implementation may need to detect changes to the archive or verify the checksum at the end of its operations.</li>
+  <li>An implementation describe an archive using the <samp>alg-val</samp> production, but a second implementation concurrently modifies the archive&#8217;s content.  The first implementation may need to detect changes to the archive file stamp or re-calculate the checksum at the end of its operations.</li>
   <li>Two implementations might have different views of the content of the same archive if the format permits multiple entries with the same path. Care should be taken to follow the convention and specification of the particular archive format.</li>
-  <li>Two implementations that access the same archive which contain file paths with Unicode characters, but they extract to two different file systems. Limitations and conventions for file names in the local file system (e.g. Unicode normalization, case insensitivity, total path length) may result in the implementations having inconsistent or inaccessible paths.</li>
+  <li>Two implementations access the same archive, which contain file paths with Unicode characters, but extracted to two different file systems. Limitations and conventions for file names in the local file system (such as Unicode normalization, case insensitivity, total path length) may result in the implementations having inconsistent or inaccessible paths.</li>
 </ol>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#security" id="security">Security Considerations</a></h1>
 <p id="rfc.section.6.p.1">As when handling any content, extra care should be taken when consuming archives and app URIs from unknown sources.</p>
 <p id="rfc.section.6.p.2">An archive could contain compressed files that expand to fill all available disk space.</p>
 <p id="rfc.section.6.p.3">A maliciously crafted archive could contain paths with characters (e.g. backspace) which could make an app URI invalid or misleading if used unescaped.</p>
 <p id="rfc.section.6.p.4">A maliciously crafted archive could contain paths (e.g. combined Unicode sequences) that cause the app URI to be very long, causing issues in information systems propagating said URI.</p>
-<p id="rfc.section.6.p.5">An archive might contain symbolic links that, if extracted to a local file system, might address files outside the archive&#8217;s directory structure.</p>
-<p id="rfc.section.6.p.6">An maliciously crafted app URI might contain <samp>../</samp> segments, which if naively converted to a <samp>file:///</samp> URI might address files outside the archive&#8217;s directory structure.</p>
+<p id="rfc.section.6.p.5">An archive might contain symbolic links that, if extracted to a local file system, might address files outside the archive&#8217;s directory structure. Implementations SHOULD detect such links and prevent outside access.</p>
+<p id="rfc.section.6.p.6">An maliciously crafted app URI might contain <samp>../</samp> path segments, which if naively converted to a <samp>file:///</samp> URI might address files outside the archive&#8217;s directory structure. Implementations SHOULD perform Path Segment Normalization <a href="#RFC3986">[RFC3986]</a> before converting app URIs.</p>
 <p id="rfc.section.6.p.7">In particular for IRIs, an archive might contain multiple paths with similar-looking characters or with different Unicode combine sequences, which could be facilitated to mislead users.</p>
 <p id="rfc.section.6.p.8">An URI hyperlink might use or guess an app URI authority to attempt to climb into a different archive for malicious purposes. Applications SHOULD employ Same Orgin policy <a href="#RFC6454">[RFC6454]</a> checks.</p>
+<p id="rfc.section.6.p.9">While a UUID or hash-based authority provide some level of information hiding of an archive&#8217;s origin, this should not be relied upon for access control or anonymisation. Implementors should keep in mind that such authority components in many cases can be predictably generated by third-parties, for instance using dictionary attacks.</p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#iana" id="iana">IANA Considerations</a></h1>
 <p id="rfc.section.7.p.1">This Internet-Draft contains the Provisional IANA registration of the app URI scheme according to <a href="#RFC7595">[RFC7595]</a>.</p>
 <p id="rfc.section.7.p.2">Scheme name: app</p>
@@ -757,7 +758,7 @@ segment-nz    = 1*pchar
     <samp>./fonts/Coolie.woff</samp>
   </li>
 </ul>
-<p id="rfc.section.A.1.p.5">The application generates the corresponding app URIs and uses those for URI resolutions to find hyperlinks:</p>
+<p id="rfc.section.A.1.p.5">The application generates the corresponding app URIs and uses those for URI resolutions to list resources and their hyperlinks:</p>
 <pre>
 app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html 
   -&gt; app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
@@ -765,7 +766,7 @@ app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
   -&gt; app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 </pre>
-<p id="rfc.section.A.1.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which ZIP file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
+<p id="rfc.section.A.1.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which <samp>tar.gz</samp> file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
 <p id="rfc.section.A.1.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt</samp> and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
 <h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> <a href="#origin-based" id="origin-based">Origin-based</a></h1>
 <p id="rfc.section.A.2.p.1">A web crawler is about to index the content of the URL <samp>http://example.com/data.zip</samp> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
@@ -807,7 +808,7 @@ sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
 <pre>
 app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 </pre>
-<p id="rfc.section.A.3.p.6">The crawler finds that it&#8217;s virus database already contain entries for:</p>
+<p id="rfc.section.A.3.p.6">The crawler finds that its virus database already contain entries for:</p>
 <pre>
 app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 </pre>
@@ -828,6 +829,7 @@ External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
 app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
 app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 </pre>
+<p id="rfc.section.A.4.p.5">When a different application on the same shared file system encounter these app URIs, it can match them to the correct bag folder by inspecting the <samp>External-Identifier</samp> metadata.</p>
 <h1 id="rfc.appendix.A.5"><a href="#rfc.appendix.A.5">A.5.</a> <a href="#resolution-of-packaged-resources" id="resolution-of-packaged-resources">Resolution of packaged resources</a></h1>
 <p id="rfc.section.A.5.p.1">A virtual file system driver on a mobile operating system has mounted several packaged applications for resolving common resources. An application requests the rendering framework to resolve a picture from <samp>app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png</samp> to show it within a user interface.</p>
 <p id="rfc.section.A.5.p.2">The framework first checks that the authority <samp>eb1edec9-d2eb-4736-a875-eb97b37c690e</samp> is valid to access according to the Same Origin policies or permissions of the running application. It then matches the authority to the corresponding application package.</p>

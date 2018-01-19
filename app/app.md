@@ -132,10 +132,11 @@ Background        {#background}
 ==========
 
 Applications that are accessing resources bundled inside a 
-file archive (e.g. zip or tar.gz) can struggle to consume
+archive (e.g. `zip` or `tar.gz` file) can struggle to consume
 hypermedia content types that use relative
-URI references {{RFC3986}}, as it is challenging to 
-determine the base URI in a consistent fashion. 
+URI references {{RFC3986}} such as `../css/`, 
+as it is challenging to determine the base URI 
+in a consistent fashion. 
 
 Frequently the archive must be unpacked locally to 
 synthesize base URIs like `file:///tmp/a1b27ae03865/`
@@ -179,8 +180,7 @@ URIs according to the following production:
     appURI    =  "app://" app-authority [ path-absolute ]
                    [ "?" query ] [ "#" fragment ]
 
-The `app-authority` component provides a unique identifier for the opened archive. 
-See [Authority](#authority) for details.
+The `app-authority` component provides a unique identifier for the opened archive. See [Authority](#authority) for details.
 
 The `path-absolute` component provides the absolute path of a resource
 (e.g. a file or directory) within the archive. See [Path](#path)
@@ -298,7 +298,7 @@ a *directory* or *file*.
 
 * If the _path_ is missing/empty - e.g.
 `app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22` - then 
-the app URI represent the whole archive file.
+the app URI represent the whole archive (e.g. the ZIP file).
 * If the _path_ is `/` - e.g. 
 `app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` - 
 then the app URI represent the root directory
@@ -321,7 +321,7 @@ Resolution protocol  {#resolution}
 This Internet-Draft do not specify directly the protocol to 
 resolve resources according to the app URI scheme. 
 For instance, one implementation might rewrite app URIs to 
-localized `file:///` paths in a temporary directory, while
+localized paths in a temporary directory, while
 another implementation might use an embedded HTTP server.
 
 It is envisioned that an implementation will 
@@ -339,15 +339,16 @@ Implementations that support resolving app URIs SHOULD:
 3. Fail with the equivalent of _Not Found_ if the path does not map to a file or directory within the archive.
 4. Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.
 5. Return an appropriate directory listing if the path maps to a directory within the archive.
-6. Return an appropriate directory listing of the archive's root directory if the path is `/`
+6. Return an appropriate directory listing of the archive's root directory if the path is `/`.
 7. Return the archive file if the path component is missing/empty.
 
 Not all archive formats or implementations will have the 
-concept of a directory listing, in which case the directory listing 
-SHOULD fail with the equivalent of "Not Implemented".
+concept of a directory listing or archive file, in which case 
+the implementation MAY fail such resolutions with the 
+equivalent of "Not Implemented".
 
 It is not specified in this Internet-Draft how an implementation
-can determine the media type of a file within an archive. This may
+can determine the media type of a file within an archive. This could
 be expressed in secondary resources (such as a manifest), 
 be determined by file extensions or magic bytes.
 
@@ -378,8 +379,8 @@ retrieved archive before resolving the individual path.
 Encoding considerations   {#encoding}
 =======================
 
-The production for `UUID` and `alg-val` are restricted to
-ASCII and should not require any encoding considerations.
+The productions for `UUID` and `alg-val` are restricted to
+URI safe ASCII and should not require any encoding considerations.
 
 Care should be taken to %-encode the directory and file segments 
 of `path-absolute` according to {{RFC3986}} (for URIs) or 
@@ -388,13 +389,13 @@ of `path-absolute` according to {{RFC3986}} (for URIs) or
 When used as part an IRI, paths SHOULD be expressed using
 international Unicode characters instead of %-encoding as ASCII.
 
-Not all archive media types have an explicit 
+Not all archive formats have an explicit 
 character encoding specified for their paths. 
 If no such information is available for the archive format, 
 implementations MAY assume that the path component 
 is encoded with UTF-8 {{RFC2279}}.
 
-Some archive media types are case-insensitive, in 
+Some archive formats have case-insensitive paths, in 
 which cases it is RECOMMENDED to preserve the casing 
 as expressed in the archive.
 
@@ -402,9 +403,10 @@ as expressed in the archive.
 Interoperability considerations   {#interoperability}
 ===============================
 
-As multiple authorities are possible ([Authority](#authority)), 
-there could be interoperability challenges when exchanging app URIs
-between implementations. Some considerations:
+As multiple authorities are possible for the same 
+archive ([Authority](#authority)), and path interpretation
+might vary, there can be interoperability challenges when 
+exchanging app URIs between implementations. Some considerations:
 
 1. Two implementations describe the same archive 
   (e.g. stored in the same local file path), but using 
@@ -427,17 +429,18 @@ between implementations. Some considerations:
   the `alg-val` production, but a second
   implementation concurrently modifies the archive's content.
   The first implementation may need to detect changes to 
-  the archive or verify the checksum at the end of its operations.
+  the archive file stamp or re-calculate the checksum
+  at the end of its operations.
 6. Two implementations might have different views of the 
   content of the same archive if the format permits 
   multiple entries with the same path. Care should
   be taken to follow the convention and specification 
   of the particular archive format.
-7. Two implementations that access the same archive
+7. Two implementations access the same archive,
   which contain file paths with Unicode characters,
-  but they extract to two different file systems. Limitations
+  but extracted to two different file systems. Limitations
   and conventions for file names in the local file system 
-  (e.g. Unicode normalization, case insensitivity, total path length)
+  (such as Unicode normalization, case insensitivity, total path length)
   may result in the implementations having 
   inconsistent or inaccessible paths. 
 
@@ -462,11 +465,14 @@ systems propagating said URI.
 
 An archive might contain symbolic links that, if 
 extracted to a local file system, might address files 
-outside the archive's directory structure.
+outside the archive's directory structure. Implementations SHOULD
+detect such links and prevent outside access.
 
-An maliciously crafted app URI might contain `../` segments, 
+An maliciously crafted app URI might contain `../` path segments, 
 which if naively converted to a `file:///` URI might address
-files outside the archive's directory structure. 
+files outside the archive's directory structure. Implementations
+SHOULD perform Path Segment Normalization {{RFC3986}} 
+before converting app URIs.
 
 In particular for IRIs, an archive might contain multiple 
 paths with similar-looking characters or with different
@@ -478,6 +484,12 @@ to attempt to climb into a different archive for
 malicious purposes. Applications SHOULD employ 
 Same Orgin policy {{RFC6454}} checks.
 
+While a UUID or hash-based authority provide some level of
+information hiding of an archive's origin, this should not 
+be relied upon for access control or anonymisation. Implementors 
+should keep in mind that such authority components in many 
+cases can be predictably generated by third-parties, for 
+instance using dictionary attacks.
 
 
 IANA Considerations  {#iana}
@@ -522,7 +534,7 @@ The archive contains the files:
 * `./css/base.css`  which links to `../fonts/Coolie.woff`
 * `./fonts/Coolie.woff`
 
-The application generates the corresponding app URIs and uses those for URI resolutions to find hyperlinks:
+The application generates the corresponding app URIs and uses those for URI resolutions to list resources and their hyperlinks:
 
     app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html 
       -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
@@ -531,7 +543,7 @@ The application generates the corresponding app URIs and uses those for URI reso
     app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
 The application is now confident that all hyperlinked files are
-indeed present in the archive. In its database it notes which ZIP file 
+indeed present in the archive. In its database it notes which `tar.gz` file 
 corresponds to UUID `32a423d6-52ab-47e3-a9cd-54f418a48571`.
 
 If the application had encountered a malicious hyperlink 
@@ -599,7 +611,7 @@ From this the base app URL is:
 
     app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
-The crawler finds that it's virus database already contain entries
+The crawler finds that its virus database already contain entries
 for:
 
     app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
@@ -629,6 +641,8 @@ It then generates app URIs for the files listed in the manifest:
 
     app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
     app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+
+When a different application on the same shared file system encounter these app URIs, it can match them to the correct bag folder by inspecting the `External-Identifier` metadata.
 
 
 Resolution of packaged resources

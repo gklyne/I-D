@@ -90,22 +90,22 @@ Table of Contents
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  11
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  12
      8.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  12
-     A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  12
+     A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  13
      A.2.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  13
      A.3.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  14
-     A.4.  Archives that are not files . . . . . . . . . . . . . . .  14
+     A.4.  Archives that are not files . . . . . . . . . . . . . . .  15
      A.5.  Resolution of packaged resources  . . . . . . . . . . . .  15
-   Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  15
+   Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  16
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Background
 
-   Applications that are accessing resources bundled inside a file
-   archive (e.g. zip or tar.gz) can struggle to consume hypermedia
-
+   Applications that are accessing resources bundled inside a archive
+   (e.g. "zip" or "tar.gz" file) can struggle to consume hypermedia
+   content types that use relative URI references [RFC3986] such as
 
 
 
@@ -114,8 +114,8 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 2]
 Internet-Draft                     app                      January 2018
 
 
-   content types that use relative URI references [RFC3986], as it is
-   challenging to determine the base URI in a consistent fashion.
+   "../css/", as it is challenging to determine the base URI in a
+   consistent fashion.
 
    Frequently the archive must be unpacked locally to synthesize base
    URIs like "file:///tmp/a1b27ae03865/" to represent the root of the
@@ -292,7 +292,7 @@ Internet-Draft                     app                      January 2018
 
    o  If the _path_ is missing/empty - e.g.  "app://833ebda2-f9a8-4462-
       b74a-4fcdc1a02d22" - then the app URI represent the whole archive
-      file.
+      (e.g. the ZIP file).
 
    o  If the _path_ is "/" - e.g.  "app://833ebda2-f9a8-4462-b74a-
       4fcdc1a02d22/" - then the app URI represent the root directory of
@@ -313,8 +313,8 @@ Internet-Draft                     app                      January 2018
 
    This Internet-Draft do not specify directly the protocol to resolve
    resources according to the app URI scheme.  For instance, one
-   implementation might rewrite app URIs to localized "file:///" paths
-   in a temporary directory, while another implementation might use an
+   implementation might rewrite app URIs to localized paths in a
+   temporary directory, while another implementation might use an
    embedded HTTP server.
 
    It is envisioned that an implementation will have extracted or opened
@@ -348,16 +348,16 @@ Internet-Draft                     app                      January 2018
        directory within the archive.
 
    6.  Return an appropriate directory listing of the archive's root
-       directory if the path is "/"
+       directory if the path is "/".
 
    7.  Return the archive file if the path component is missing/empty.
 
    Not all archive formats or implementations will have the concept of a
-   directory listing, in which case the directory listing SHOULD fail
-   with the equivalent of "Not Implemented".
+   directory listing or archive file, in which case the implementation
+   MAY fail such resolutions with the equivalent of "Not Implemented".
 
    It is not specified in this Internet-Draft how an implementation can
-   determine the media type of a file within an archive.  This may be
+   determine the media type of a file within an archive.  This could be
    expressed in secondary resources (such as a manifest), be determined
    by file extensions or magic bytes.
 
@@ -396,8 +396,8 @@ Internet-Draft                     app                      January 2018
 
 4.  Encoding considerations
 
-   The production for "UUID" and "alg-val" are restricted to ASCII and
-   should not require any encoding considerations.
+   The productions for "UUID" and "alg-val" are restricted to URI safe
+   ASCII and should not require any encoding considerations.
 
    Care should be taken to %-encode the directory and file segments of
    "path-absolute" according to [RFC3986] (for URIs) or [RFC3987] (for
@@ -406,17 +406,18 @@ Internet-Draft                     app                      January 2018
    When used as part an IRI, paths SHOULD be expressed using
    international Unicode characters instead of %-encoding as ASCII.
 
-   Not all archive media types have an explicit character encoding
-   specified for their paths.  If no such information is available for
-   the archive format, implementations MAY assume that the path
-   component is encoded with UTF-8 [RFC2279].
+   Not all archive formats have an explicit character encoding specified
+   for their paths.  If no such information is available for the archive
+   format, implementations MAY assume that the path component is encoded
+   with UTF-8 [RFC2279].
 
-   Some archive media types are case-insensitive, in which cases it is
-   RECOMMENDED to preserve the casing as expressed in the archive.
+   Some archive formats have case-insensitive paths, in which cases it
+   is RECOMMENDED to preserve the casing as expressed in the archive.
 
 5.  Interoperability considerations
 
-   As multiple authorities are possible (Section 2.1), there could be
+   As multiple authorities are possible for the same archive
+   (Section 2.1), and path interpretation might vary, there can be
    interoperability challenges when exchanging app URIs between
    implementations.  Some considerations:
 
@@ -444,7 +445,6 @@ Internet-Draft                     app                      January 2018
 
 
 
-
 Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
@@ -453,18 +453,18 @@ Internet-Draft                     app                      January 2018
    5.  An implementation describe an archive using the "alg-val"
        production, but a second implementation concurrently modifies the
        archive's content.  The first implementation may need to detect
-       changes to the archive or verify the checksum at the end of its
-       operations.
+       changes to the archive file stamp or re-calculate the checksum at
+       the end of its operations.
 
    6.  Two implementations might have different views of the content of
        the same archive if the format permits multiple entries with the
        same path.  Care should be taken to follow the convention and
        specification of the particular archive format.
 
-   7.  Two implementations that access the same archive which contain
-       file paths with Unicode characters, but they extract to two
-       different file systems.  Limitations and conventions for file
-       names in the local file system (e.g.  Unicode normalization, case
+   7.  Two implementations access the same archive, which contain file
+       paths with Unicode characters, but extracted to two different
+       file systems.  Limitations and conventions for file names in the
+       local file system (such as Unicode normalization, case
        insensitivity, total path length) may result in the
        implementations having inconsistent or inaccessible paths.
 
@@ -486,18 +486,18 @@ Internet-Draft                     app                      January 2018
 
    An archive might contain symbolic links that, if extracted to a local
    file system, might address files outside the archive's directory
-   structure.
+   structure.  Implementations SHOULD detect such links and prevent
+   outside access.
 
-   An maliciously crafted app URI might contain "../" segments, which if
-   naively converted to a "file:///" URI might address files outside the
-   archive's directory structure.
+   An maliciously crafted app URI might contain "../" path segments,
+   which if naively converted to a "file:///" URI might address files
+   outside the archive's directory structure.  Implementations SHOULD
+   perform Path Segment Normalization [RFC3986] before converting app
+   URIs.
 
    In particular for IRIs, an archive might contain multiple paths with
    similar-looking characters or with different Unicode combine
    sequences, which could be facilitated to mislead users.
-
-
-
 
 
 
@@ -509,6 +509,13 @@ Internet-Draft                     app                      January 2018
    An URI hyperlink might use or guess an app URI authority to attempt
    to climb into a different archive for malicious purposes.
    Applications SHOULD employ Same Orgin policy [RFC6454] checks.
+
+   While a UUID or hash-based authority provide some level of
+   information hiding of an archive's origin, this should not be relied
+   upon for access control or anonymisation.  Implementors should keep
+   in mind that such authority components in many cases can be
+   predictably generated by third-parties, for instance using dictionary
+   attacks.
 
 7.  IANA Considerations
 
@@ -544,6 +551,17 @@ Internet-Draft                     app                      January 2018
               10646", RFC 2279, DOI 10.17487/RFC2279, January 1998,
               <https://www.rfc-editor.org/info/rfc2279>.
 
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 10]
+
+Internet-Draft                     app                      January 2018
+
+
    [RFC2483]  Mealling, M. and R. Daniel, "URI Resolution Services
               Necessary for URN Resolution", RFC 2483,
               DOI 10.17487/RFC2483, January 1999, <https://www.rfc-
@@ -553,14 +571,6 @@ Internet-Draft                     app                      January 2018
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/info/rfc3986>.
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 10]
-
-Internet-Draft                     app                      January 2018
-
 
    [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
               Identifiers (IRIs)", RFC 3987, DOI 10.17487/RFC3987,
@@ -599,6 +609,15 @@ Internet-Draft                     app                      January 2018
               RFC 7595, DOI 10.17487/RFC7595, June 2015,
               <https://www.rfc-editor.org/info/rfc7595>.
 
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 11]
+
+Internet-Draft                     app                      January 2018
+
+
    [RFC8089]  Kerwin, M., "The "file" URI Scheme", RFC 8089,
               DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
               editor.org/info/rfc8089>.
@@ -610,13 +629,6 @@ Internet-Draft                     app                      January 2018
               Workflow-Language/CWLviewer: CWL Viewer", Zenodo Software,
               DOI 10.5281/zenodo.823534, August 2017,
               <https://view.commonwl.org/>.
-
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 11]
-
-Internet-Draft                     app                      January 2018
-
 
    [I-D.draft-kunze-bagit-14]
               Kunze, J., Littman, J., Madden, L., Summers, E., Boyko,
@@ -650,6 +662,18 @@ Internet-Draft                     app                      January 2018
 
 Appendix A.  Examples
 
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 12]
+
+Internet-Draft                     app                      January 2018
+
+
 A.1.  Sandboxing
 
    An document store application has received a file "document.tar.gz"
@@ -667,15 +691,8 @@ A.1.  Sandboxing
 
    o  "./fonts/Coolie.woff"
 
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 12]
-
-Internet-Draft                     app                      January 2018
-
-
    The application generates the corresponding app URIs and uses those
-   for URI resolutions to find hyperlinks:
+   for URI resolutions to list resources and their hyperlinks:
 
    app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
      -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
@@ -684,8 +701,9 @@ Internet-Draft                     app                      January 2018
    app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
    The application is now confident that all hyperlinked files are
-   indeed present in the archive.  In its database it notes which ZIP
-   file corresponds to UUID "32a423d6-52ab-47e3-a9cd-54f418a48571".
+   indeed present in the archive.  In its database it notes which
+   "tar.gz" file corresponds to UUID "32a423d6-52ab-47e3-a9cd-
+   54f418a48571".
 
    If the application had encountered a malicious hyperlink
    "../../../outside.txt" it would first resolve it to the absolute URI
@@ -705,6 +723,13 @@ A.2.  Origin-based
    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 13]
+
+Internet-Draft                     app                      January 2018
+
+
    Thus the base app URI for indexing the ZIP content is
 
    app://b7749d0b-0e47-5fc4-999d-f154abe68065/
@@ -722,13 +747,6 @@ A.2.  Origin-based
    additionally:
 
    app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
-
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 13]
-
-Internet-Draft                     app                      January 2018
-
 
    If files had been removed from the updated ZIP file the crawler can
    simply remove those from its database, as it used the same app base
@@ -758,8 +776,15 @@ A.3.  Hash-based
 
    app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
-   The crawler finds that it's virus database already contain entries
+   The crawler finds that its virus database already contain entries
    for:
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
 
    app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
@@ -777,15 +802,6 @@ A.4.  Archives that are not files
    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
 
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
-
    The application generates a random UUID v4 "ff2d5a82-7142-4d3f-b8cc-
    3e662d6de756" which it adds to the bag metadata file
    "/gfs/bags/scan15/bag-info.txt"
@@ -796,6 +812,10 @@ Internet-Draft                     app                      January 2018
 
  app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
  app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+
+   When a different application on the same shared file system encounter
+   these app URIs, it can match them to the correct bag folder by
+   inspecting the "External-Identifier" metadata.
 
 A.5.  Resolution of packaged resources
 
@@ -812,6 +832,15 @@ A.5.  Resolution of packaged resources
 
    The framework resolves "/img/logo.png" from within that package, and
    returns an image buffer it already had cached in memory.
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 15]
+
+Internet-Draft                     app                      January 2018
+
 
 Appendix B.  History
 
@@ -833,15 +862,6 @@ Appendix B.  History
    For compatibility with existing adaptations of the "app" URI scheme,
    e.g.  [ROBundle] and [CWLViewer], this Internet-Draft reuse the same
    scheme name and remains compatible with the intentions of
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 15]
-
-Internet-Draft                     app                      January 2018
-
-
    [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Archive and
    Packaging Pointer" instead of "Application".
 
@@ -860,26 +880,6 @@ Authors' Addresses
    Mozilla Corporation
 
    Email: marcos@marcosc.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
