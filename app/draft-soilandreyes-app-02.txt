@@ -10,7 +10,7 @@ Expires: July 23, 2018                               Mozilla Corporation
 
 
            The Archive and Packaging Pointer (app) URI scheme
-                       draft-soilandreyes-app-03
+                       draft-soilandreyes-app-02
 
 Abstract
 

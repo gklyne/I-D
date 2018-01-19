@@ -1,7 +1,7 @@
 ---
 title: The Archive and Packaging Pointer (app) URI scheme
 abbrev: app
-docname: draft-soilandreyes-app-03
+docname: draft-soilandreyes-app-02
 date: 2018-01-19
 category: info
 
