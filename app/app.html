@@ -402,8 +402,8 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-app-02-SNAPSHOT" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-1-18" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-app-03" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-1-19" />
   <meta name="dct.abstract" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
   <meta name="description" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
 
@@ -427,12 +427,12 @@
   <td class="right">M. C&#225;ceres</td>
 </tr>
 <tr>
-  <td class="left">Expires: July 22, 2018</td>
+  <td class="left">Expires: July 23, 2018</td>
   <td class="right">Mozilla Corporation</td>
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">January 18, 2018</td>
+  <td class="right">January 19, 2018</td>
 </tr>
 
     	
@@ -440,7 +440,7 @@
   </table>
 
   <p class="title">The Archive and Packaging Pointer (app) URI scheme<br />
-  <span class="filename">draft-soilandreyes-app-02-SNAPSHOT</span></p>
+  <span class="filename">draft-soilandreyes-app-03</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
@@ -456,7 +456,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on July 22, 2018.</p>
+<p>This Internet-Draft will expire on July 23, 2018.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -757,16 +757,16 @@ segment-nz    = 1*pchar
     <samp>./fonts/Coolie.woff</samp>
   </li>
 </ul>
-<p id="rfc.section.A.1.p.5">The application generates the corresponding app URIs and uses those for URI resolutions:</p>
-<p/>
-
-<ul>
-  <li>app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html links to app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css</li>
-  <li>app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css` links to app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff</li>
-  <li>app://32a423d6-52ab-47e3-a9cd-54f418a48571/`fonts/Coolie.woff</li>
-</ul>
-<p id="rfc.section.A.1.p.7">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which ZIP file corresponds to <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
-<p id="rfc.section.A.1.p.8">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt</samp> and conclude from the <em>&#8220;Not Found&#8221;</em> error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
+<p id="rfc.section.A.1.p.5">The application generates the corresponding app URIs and uses those for URI resolutions to find hyperlinks:</p>
+<pre>
+app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html 
+  -&gt; app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css 
+  -&gt; app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+</pre>
+<p id="rfc.section.A.1.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which ZIP file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
+<p id="rfc.section.A.1.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI <samp>app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt</samp> and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
 <h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> <a href="#origin-based" id="origin-based">Origin-based</a></h1>
 <p id="rfc.section.A.2.p.1">A web crawler is about to index the content of the URL <samp>http://example.com/data.zip</samp> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
 <p id="rfc.section.A.2.p.2">The application generates a UUID v5 based on the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and the URL to the zip file:</p>
@@ -774,32 +774,44 @@ segment-nz    = 1*pchar
 &gt;&gt;&gt; uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
 UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 </pre>
-<p id="rfc.section.A.2.p.3">Thus the base app URI is <samp>app://b7749d0b-0e47-5fc4-999d-f154abe68065/</samp> for indexing the ZIP content, after which the crawler finds:</p>
-<p/>
-
-<ul>
-  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/</li>
-  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/</li>
-  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg</li>
-</ul>
+<p id="rfc.section.A.2.p.3">Thus the base app URI for indexing the ZIP content is</p>
+<pre>
+app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+</pre>
+<p id="rfc.section.A.2.p.4">Listing all directories and files in the ZIP, the crawler finds the URIs:</p>
+<pre>
+app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+</pre>
 <p id="rfc.section.A.2.p.5">When the application encounters <samp>http://example.com/data.zip</samp> some time later it can recalculate the same base app URI. This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
-<p/>
-
-<ul>
-  <li>app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg</li>
-</ul>
-<p id="rfc.section.A.2.p.7">If files had been removed from the updated ZIP file the crawler can simply remove those from its database, as it used the same app base URI as in last crawl.</p>
+<pre>
+app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+</pre>
+<p id="rfc.section.A.2.p.6">If files had been removed from the updated ZIP file the crawler can simply remove those from its database, as it used the same app base URI as in last crawl.</p>
 <h1 id="rfc.appendix.A.3"><a href="#rfc.appendix.A.3">A.3.</a> <a href="#hash-based" id="hash-based">Hash-based</a></h1>
 <p id="rfc.section.A.3.p.1">An application where users can upload software distributions for virus checking needs to avoid duplication as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
-<p id="rfc.section.A.3.p.2">The application calculates the <em>sha-256</em> checksum of the uploaded file to be <samp>17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd</samp> in hexadecimal. The <em>base64url</em> encoding <a href="#RFC4648">[RFC4648]</a> of the binary version of the checksum is <samp>F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0</samp>.</p>
-<p id="rfc.section.A.3.p.3">The corresponding <samp>alg-val</samp> authority is thus <samp>sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0</samp> meaning the base app URL is <samp>app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/</samp></p>
-<p id="rfc.section.A.3.p.4">The crawler finds that it&#8217;s virus database already contain entries for:</p>
-<p/>
-
-<ul>
-  <li>app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil</li>
-</ul>
-<p id="rfc.section.A.3.p.6">and flags the upload as malicious without having to scan it again.</p>
+<p id="rfc.section.A.3.p.2">The application calculates the <samp>sha-256</samp> checksum of the uploaded file to be in hexadecimal:</p>
+<pre>
+17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+</pre>
+<p id="rfc.section.A.3.p.3">The <samp>base64url</samp> encoding <a href="#RFC4648">[RFC4648]</a> of the binary version of the checksum is:</p>
+<pre>
+F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+</pre>
+<p id="rfc.section.A.3.p.4">The corresponding <samp>alg-val</samp> authority is thus:</p>
+<pre>
+sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+</pre>
+<p id="rfc.section.A.3.p.5">From this the base app URL is:</p>
+<pre>
+app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+</pre>
+<p id="rfc.section.A.3.p.6">The crawler finds that it&#8217;s virus database already contain entries for:</p>
+<pre>
+app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+</pre>
+<p id="rfc.section.A.3.p.7">and flags the upload as malicious without having to scan it again.</p>
 <h1 id="rfc.appendix.A.4"><a href="#rfc.appendix.A.4">A.4.</a> <a href="#archives-that-are-not-files" id="archives-that-are-not-files">Archives that are not files</a></h1>
 <p id="rfc.section.A.4.p.1">An application is relating BagIt archives <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a> on a shared file system, using structured folders and manifests rather than individual archive files.</p>
 <p id="rfc.section.A.4.p.2">The BagIt payload manifest <samp>/gfs/bags/scan15/manifest-md5.txt</samp> lists the files:</p>

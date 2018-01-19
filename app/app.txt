@@ -5,12 +5,12 @@
 Network Working Group                                   S. Soiland-Reyes
 Internet-Draft                              The University of Manchester
 Intended status: Informational                                M. Caceres
-Expires: July 22, 2018                               Mozilla Corporation
-                                                        January 18, 2018
+Expires: July 23, 2018                               Mozilla Corporation
+                                                        January 19, 2018
 
 
            The Archive and Packaging Pointer (app) URI scheme
-                   draft-soilandreyes-app-02-SNAPSHOT
+                       draft-soilandreyes-app-03
 
 Abstract
 
@@ -53,12 +53,12 @@ Status of This Memo
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 1]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
 
-   This Internet-Draft will expire on July 22, 2018.
+   This Internet-Draft will expire on July 23, 2018.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 2]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 2]
 
 Internet-Draft                     app                      January 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 3]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 3]
 
 Internet-Draft                     app                      January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 4]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 4]
 
 Internet-Draft                     app                      January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 5]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 6]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 6]
 
 Internet-Draft                     app                      January 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 7]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 8]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                 [Page 9]
+Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 9]
 
 Internet-Draft                     app                      January 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 10]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 10]
 
 Internet-Draft                     app                      January 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 11]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 11]
 
 Internet-Draft                     app                      January 2018
 
@@ -669,30 +669,28 @@ A.1.  Sandboxing
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 12]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
 
    The application generates the corresponding app URIs and uses those
-   for URI resolutions:
+   for URI resolutions to find hyperlinks:
 
-   o  app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html links to
-      app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-
-   o  app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css` links to
-      app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-
-   o  app://32a423d6-52ab-47e3-a9cd-54f418a48571/`fonts/Coolie.woff
+   app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
+     -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+   app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+     -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+   app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
    The application is now confident that all hyperlinked files are
    indeed present in the archive.  In its database it notes which ZIP
-   file corresponds to "32a423d6-52ab-47e3-a9cd-54f418a48571".
+   file corresponds to UUID "32a423d6-52ab-47e3-a9cd-54f418a48571".
 
    If the application had encountered a malicious hyperlink
    "../../../outside.txt" it would first resolve it to the absolute URI
    "app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt" and conclude
-   from the _"Not Found"_ error that the path "/outside.txt" was not
+   from the "Not Found" error that the path "/outside.txt" was not
    present in the archive.
 
 A.2.  Origin-based
@@ -707,30 +705,30 @@ A.2.  Origin-based
    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 
-   Thus the base app URI is "app://b7749d0b-0e47-5fc4-999d-
-   f154abe68065/" for indexing the ZIP content, after which the crawler
-   finds:
+   Thus the base app URI for indexing the ZIP content is
 
-   o  app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+   app://b7749d0b-0e47-5fc4-999d-f154abe68065/
 
-   o  app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+   Listing all directories and files in the ZIP, the crawler finds the
+   URIs:
 
-   o  app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+   app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
    When the application encounters "http://example.com/data.zip" some
    time later it can recalculate the same base app URI.  This time the
    ZIP file has been modified upstream and the crawler finds
    additionally:
 
+   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
 
 
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 13]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 13]
 
 Internet-Draft                     app                      January 2018
 
-
-   o  app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
    If files had been removed from the updated ZIP file the crawler can
    simply remove those from its database, as it used the same app base
@@ -742,21 +740,28 @@ A.3.  Hash-based
    virus checking needs to avoid duplication as users tend to upload
    "foo-1.2.tar" multiple times.
 
-   The application calculates the _sha-256_ checksum of the uploaded
-   file to be
-   "17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd" in
-   hexadecimal.  The _base64url_ encoding [RFC4648] of the binary
-   version of the checksum is
-   "F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0".
+   The application calculates the "sha-256" checksum of the uploaded
+   file to be in hexadecimal:
 
-   The corresponding "alg-val" authority is thus "sha-
-   256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0" meaning the base app
-   URL is "app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/"
+   17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+
+   The "base64url" encoding [RFC4648] of the binary version of the
+   checksum is:
+
+   F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+
+   The corresponding "alg-val" authority is thus:
+
+   sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+
+   From this the base app URL is:
+
+   app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
    The crawler finds that it's virus database already contain entries
    for:
 
-   o  app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+   app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
    and flags the upload as malicious without having to scan it again.
 
@@ -772,19 +777,20 @@ A.4.  Archives that are not files
    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
 
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
+
    The application generates a random UUID v4 "ff2d5a82-7142-4d3f-b8cc-
    3e662d6de756" which it adds to the bag metadata file
    "/gfs/bags/scan15/bag-info.txt"
 
    External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
 
    It then generates app URIs for the files listed in the manifest:
 
@@ -827,20 +833,17 @@ Appendix B.  History
    For compatibility with existing adaptations of the "app" URI scheme,
    e.g.  [ROBundle] and [CWLViewer], this Internet-Draft reuse the same
    scheme name and remains compatible with the intentions of
-   [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Archive and
-   Packaging Pointer" instead of "Application".
 
 
 
 
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 15]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 15]
 
 Internet-Draft                     app                      January 2018
 
+
+   [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Archive and
+   Packaging Pointer" instead of "Application".
 
 Authors' Addresses
 
@@ -890,7 +893,4 @@ Authors' Addresses
 
 
 
-
-
-
-Soiland-Reyes & Caceres   Expires July 22, 2018                [Page 16]
+Soiland-Reyes & Caceres   Expires July 23, 2018                [Page 16]
