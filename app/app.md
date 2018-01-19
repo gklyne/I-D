@@ -177,11 +177,12 @@ Scheme syntax    {#syntax}
 The `app` URI scheme follows the {{RFC3986}} syntax for hierarchical
 URIs according to the following productions:
 
-   URI = scheme ":" scheme-specific-part [ "#" fragment ]
+    URI           = scheme ":" app-specific [ "#" fragment ]
 
-   scheme = "app"
+    scheme        = "app"
 
-   scheme-specific-part = "//" app-authority [ path-absolute ] [ "?" query ]
+    app-specific  = "//" app-authority [ path-absolute ] [ "?" query ]
+
 
 The `app-authority` component provides a unique identifier for the opened archive. See [Authority](#authority) for details.
 
@@ -210,7 +211,7 @@ knowledge of the archive.
 The authority of an app URI MUST be valid according to
 this production:
 
-    app-authority    = UUID | alg-val | authority
+    app-authority = UUID | alg-val | authority
 
 The `UUID` production match its definition in {{RFC4122}}, e.g.
 `2a47c495-ac70-4ed1-850b-8800a57618cf`

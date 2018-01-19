@@ -505,13 +505,17 @@
 <p id="rfc.section.1.p.8">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#syntax" id="syntax">Scheme syntax</a></h1>
 <p id="rfc.section.2.p.1">The <samp>app</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following productions:</p>
-<p id="rfc.section.2.p.2">URI = scheme &#8220;:&#8221; scheme-specific-part [ &#8220;#&#8221; fragment ]</p>
-<p id="rfc.section.2.p.3">scheme = &#8220;app&#8221;</p>
-<p id="rfc.section.2.p.4">scheme-specific-part = &#8220;//&#8221; app-authority [ path-absolute ] [ &#8220;?&#8221; query ]</p>
-<p id="rfc.section.2.p.5">The <samp>app-authority</samp> component provides a unique identifier for the opened archive. See <a href="#authority">Section 2.1</a> for details.</p>
-<p id="rfc.section.2.p.6">The <samp>path-absolute</samp> component provides the absolute path of a resource (e.g. a file or directory) within the archive. See <a href="#path">Section 2.2</a> for details.</p>
-<p id="rfc.section.2.p.7">The semantics of the <samp>query</samp> component is undefined by this Internet-Draft.  Implementations SHOULD NOT generate a query component for app URIs.</p>
-<p id="rfc.section.2.p.8">The &#8220;fragment&#8221; component MAY be used by implementations according to <a href="#RFC3986">[RFC3986]</a> and the implied media type <a href="#RFC2046">[RFC2046]</a> of the resource at the path. This Internet-Draft does not specify how to determine the media type.</p>
+<pre>
+URI          = scheme ":" app-specific [ "#" fragment ]
+
+scheme       = "app"
+
+app-specific = "//" app-authority [ path-absolute ] [ "?" query ]
+</pre>
+<p id="rfc.section.2.p.2">The <samp>app-authority</samp> component provides a unique identifier for the opened archive. See <a href="#authority">Section 2.1</a> for details.</p>
+<p id="rfc.section.2.p.3">The <samp>path-absolute</samp> component provides the absolute path of a resource (e.g. a file or directory) within the archive. See <a href="#path">Section 2.2</a> for details.</p>
+<p id="rfc.section.2.p.4">The semantics of the <samp>query</samp> component is undefined by this Internet-Draft.  Implementations SHOULD NOT generate a query component for app URIs.</p>
+<p id="rfc.section.2.p.5">The &#8220;fragment&#8221; component MAY be used by implementations according to <a href="#RFC3986">[RFC3986]</a> and the implied media type <a href="#RFC2046">[RFC2046]</a> of the resource at the path. This Internet-Draft does not specify how to determine the media type.</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#authority" id="authority">Authority</a></h1>
 <p id="rfc.section.2.1.p.1">The purpose of the <samp>authority</samp> component in an app URI is to build a unique base URI for a particular archive. The authority is NOT intended to be resolvable without former knowledge of the archive.</p>
 <p id="rfc.section.2.1.p.2">The authority of an app URI MUST be valid according to this production:</p>
