@@ -105,7 +105,7 @@ This Internet-Draft proposes the
 Archive and Packaging Pointer URI scheme `app`.
 
 app URIs can be used to consume or reference hypermedia 
-resources bundled inside a file archive or a mobile 
+resources bundled inside a file archive or an
 application package, as well as to resolve URIs for 
 archive resources within a programmatic framework.
 
@@ -118,8 +118,8 @@ extract the archive content on the local file system.
 An app URI can be used for purposes of isolation
 (e.g. when consuming multiple archives), 
 security constraints (avoiding "climb out" from the archive),
-or for externally identiyfing sub-resources in 
-other hypermedia formats.
+or for externally identiyfing sub-resources 
+referenced by hypermedia formats.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
@@ -139,7 +139,7 @@ determine the base URI in a consistent fashion.
 
 Frequently the archive must be unpacked locally to 
 synthesize base URIs like `file:///tmp/a1b27ae03865/`
-to represent the root of the archive. Such URIs are fluctual,
+to represent the root of the archive. Such URIs are temporary,
 might not be globally unique, and could be vulnerable to
 attacks such as "climbing out" of the root directory.
 
@@ -635,7 +635,7 @@ Resolution of packaged resources
 --------------------------------
 
 A virtual file system driver on a mobile operating system 
-has mounted several packaged application for resolving 
+has mounted several packaged applications for resolving 
 common resources. An application requests the rendering 
 framework to resolve a picture from
 `app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
@@ -647,7 +647,7 @@ according to the Same Origin policies or permissions of the
 running application. It then matches the
 authority to the corresponding application package.
 
-The framework then resolves `/img/logo.png` from within
+The framework resolves `/img/logo.png` from within
 that package, and returns an image buffer it already had
 cached in memory.
 
@@ -660,7 +660,7 @@ proposed by {{W3C.NOTE-app-uri-20150723}} but never registered with IANA.
 That W3C Note evolved from {{W3C.NOTE-widgets-uri-20120313}} which 
 proposed the URI scheme `widget`.
 
-Neither W3C Notes did progress further as Recommendation track documents.
+Neither W3C Notes progressed further as Recommendation track documents.
 
 While the focus of those W3C Notes was to specify how to resolve resources from
 within a packaged application, this Internet-Draft generalize the `app` URI
