@@ -81,7 +81,7 @@ Table of Contents
    2.  Scheme syntax . . . . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Authority . . . . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Path  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   3.  Scheme semantics  . . . . . . . . . . . . . . . . . . . . . .   5
+   3.  Scheme semantics  . . . . . . . . . . . . . . . . . . . . . .   6
      3.1.  Resolution protocol . . . . . . . . . . . . . . . . . . .   6
      3.2.  Resolving from a .well-known endpoint . . . . . . . . . .   7
    4.  Encoding considerations . . . . . . . . . . . . . . . . . . .   8
@@ -149,17 +149,17 @@ Internet-Draft                     app                      January 2018
 2.  Scheme syntax
 
    The "app" URI scheme follows the [RFC3986] syntax for hierarchical
-   URIs according to the following production:
+   URIs according to the following productions:
 
-   appURI    =  "app://" app-authority [ path-absolute ]
-                  [ "?" query ] [ "#" fragment ]
+   URI = scheme ":" scheme-specific-part [ "#" fragment ]
+
+   scheme = "app"
+
+   scheme-specific-part = "//" app-authority [ path-absolute ] [ "?"
+   query ]
 
    The "app-authority" component provides a unique identifier for the
    opened archive.  See Section 2.1 for details.
-
-   The "path-absolute" component provides the absolute path of a
-   resource (e.g. a file or directory) within the archive.  See
-   Section 2.2 for details.
 
 
 
@@ -169,6 +169,10 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 3]
 
 Internet-Draft                     app                      January 2018
 
+
+   The "path-absolute" component provides the absolute path of a
+   resource (e.g. a file or directory) within the archive.  See
+   Section 2.2 for details.
 
    The semantics of the "query" component is undefined by this Internet-
    Draft.  Implementations SHOULD NOT generate a query component for app
@@ -196,15 +200,15 @@ Internet-Draft                     app                      January 2018
    The "alg-val" production match its definition in [RFC6920], e.g.
    "sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8"
 
-   The "authority" production match its definition in [RFC3986], e.g.
-   "example.com".  As this production necessarily also match the "UUID"
-   and "alg-val" productions, consumers of app URIs should attempt to
-   match those first.  While [RFC7320] section 2.2 says an extension may
-   not "define the structure or the semantics for URI authorities",
-   extensions of this Internet-Draft *are* permitted to do so, if using
-   a DNS domain name under their control.  For instance, a vendor owning
-   "example.com" may specify that "{OID}" in "{OID}.oid.example.com" has
-   special semantics.
+   The "authority" production match its general definition in [RFC3986],
+   e.g.  "example.com".  As this production necessarily also match the
+   "UUID" and "alg-val" productions, consumers of app URIs should
+   attempt to match those first.  While [RFC7320] section 2.2 says an
+   extension may not "define the structure or the semantics for URI
+   authorities", extensions of this Internet-Draft *are* permitted to do
+   so, if using a DNS domain name under their control.  For instance, a
+   vendor owning "example.com" may specify that "{OID}" in
+   "{OID}.oid.example.com" has special semantics.
 
    The choice of authority depends on the purpose of the app URI within
    the implementation.  Below are some recommendations:
@@ -213,11 +217,7 @@ Internet-Draft                     app                      January 2018
        archive, the authority SHOULD be a UUID v4 [RFC4122] created with
        a suitable random number generator [RFC4086].  This ensures with
        high probablity that the app base URI is globally unique.  An
-       application MAY choose to reuse a previously assigned UUID that
-       is associated with the archive.
 
-   2.  _Location-based_, for referencing resources in an archive
-       accessed at a particular URL, the authority SHOULD be generated
 
 
 
@@ -226,6 +226,11 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 4]
 Internet-Draft                     app                      January 2018
 
 
+       application MAY choose to reuse a previously assigned UUID that
+       is associated with the archive.
+
+   2.  _Location-based_, for referencing resources in an archive
+       accessed at a particular URL, the authority SHOULD be generated
        as a name-based UUID v5 [RFC4122]; that is based on the SHA1
        concatination of the URL namespace "6ba7b811-9dad-
        11d1-80b4-00c04fd430c8" (as UUID bytes) and the ASCII bytes of
@@ -268,12 +273,7 @@ Internet-Draft                     app                      January 2018
    It is RECOMMENDED to include the trailing "/" if it is known the path
    represents a directory.
 
-3.  Scheme semantics
 
-   This Internet-Draft does not constrain what particular format might
-   constitute an _archive_, and neither does it require that the archive
-   is retrievable as a single bytestream or file.  Examples of archive
-   media types include "application/zip", "application/
 
 
 
@@ -282,6 +282,12 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 5]
 Internet-Draft                     app                      January 2018
 
 
+3.  Scheme semantics
+
+   This Internet-Draft does not constrain what particular format might
+   constitute an _archive_, and neither does it require that the archive
+   is retrievable as a single bytestream or file.  Examples of archive
+   media types include "application/zip", "application/
    vnd.android.package-archive", "application/x-tar", "application/
    x-gtar" and "application/x-7z-compressed".
 
@@ -325,18 +331,18 @@ Internet-Draft                     app                      January 2018
 
    Implementations that support resolving app URIs SHOULD:
 
-   1.  Fail with the equivalent of _Not Found_ if the authority is
-       unknown.
-
-   2.  Fail with the equivalent of _Gone_ if the authority is known, but
-       the content of the archive is no longer available.
-
 
 
 Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 6]
 
 Internet-Draft                     app                      January 2018
 
+
+   1.  Fail with the equivalent of _Not Found_ if the authority is
+       unknown.
+
+   2.  Fail with the equivalent of _Gone_ if the authority is known, but
+       the content of the archive is no longer available.
 
    3.  Fail with the equivalent of _Not Found_ if the path does not map
        to a file or directory within the archive.
@@ -379,12 +385,6 @@ Internet-Draft                     app                      January 2018
    production, an application MAY attempt to resolve the authority from
    any ".well-known/ni/" endpoint [RFC5785] as specified in [RFC6920]
    section 4, in order to retrieve the complete archive.  Applications
-   SHOULD verify the checksum of the retrieved archive before resolving
-   the individual path.
-
-
-
-
 
 
 
@@ -393,6 +393,9 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
+
+   SHOULD verify the checksum of the retrieved archive before resolving
+   the individual path.
 
 4.  Encoding considerations
 
@@ -439,9 +442,6 @@ Internet-Draft                     app                      January 2018
 
    4.  Two implementations describe the same archive bytestream using
        the "alg-val" production, but they have used two different hash
-       algorithms.  The implementations may need to negotiate to a
-       common hash algorithm.
-
 
 
 
@@ -449,6 +449,9 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
+
+       algorithms.  The implementations may need to negotiate to a
+       common hash algorithm.
 
    5.  An implementation describe an archive using the "alg-val"
        production, but a second implementation concurrently modifies the
@@ -495,9 +498,6 @@ Internet-Draft                     app                      January 2018
    perform Path Segment Normalization [RFC3986] before converting app
    URIs.
 
-   In particular for IRIs, an archive might contain multiple paths with
-   similar-looking characters or with different Unicode combine
-   sequences, which could be facilitated to mislead users.
 
 
 
@@ -505,6 +505,10 @@ Soiland-Reyes & Caceres   Expires July 23, 2018                 [Page 9]
 
 Internet-Draft                     app                      January 2018
 
+
+   In particular for IRIs, an archive might contain multiple paths with
+   similar-looking characters or with different Unicode combine
+   sequences, which could be facilitated to mislead users.
 
    An URI hyperlink might use or guess an app URI authority to attempt
    to climb into a different archive for malicious purposes.
@@ -550,10 +554,6 @@ Internet-Draft                     app                      January 2018
    [RFC2279]  Yergeau, F., "UTF-8, a transformation format of ISO
               10646", RFC 2279, DOI 10.17487/RFC2279, January 1998,
               <https://www.rfc-editor.org/info/rfc2279>.
-
-
-
-
 
 
 

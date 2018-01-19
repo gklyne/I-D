@@ -41,24 +41,24 @@
     <abstract>
 
 
-<t>This Internet-Draft proposes the 
+<t>This Internet-Draft proposes the
 Archive and Packaging Pointer URI scheme <spanx style="verb">app</spanx>.</t>
 
-<t>app URIs can be used to consume or reference hypermedia 
+<t>app URIs can be used to consume or reference hypermedia
 resources bundled inside a file archive or an
-application package, as well as to resolve URIs for 
+application package, as well as to resolve URIs for
 archive resources within a programmatic framework.</t>
 
-<t>This URI scheme provides mechanisms to generate a 
-unique base URI to represent the root of the archive, 
-so that relative URI references in a bundled resource 
-can be resolved within the archive without having to 
+<t>This URI scheme provides mechanisms to generate a
+unique base URI to represent the root of the archive,
+so that relative URI references in a bundled resource
+can be resolved within the archive without having to
 extract the archive content on the local file system.</t>
 
 <t>An app URI can be used for purposes of isolation
-(e.g. when consuming multiple archives), 
+(e.g. when consuming multiple archives),
 security constraints (avoiding “climb out” from the archive),
-or for externally identiyfing sub-resources 
+or for externally identiyfing sub-resources
 referenced by hypermedia formats.</t>
 
 <t>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL
@@ -78,25 +78,25 @@ NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”,  “MAY”, and
 
 <section anchor="background" title="Background">
 
-<t>Applications that are accessing resources bundled inside a 
+<t>Applications that are accessing resources bundled inside a
 archive (e.g. <spanx style="verb">zip</spanx> or <spanx style="verb">tar.gz</spanx> file) can struggle to consume
 hypermedia content types that use relative
-URI references <xref target="RFC3986"/> such as <spanx style="verb">../css/</spanx>, 
-as it is challenging to determine the base URI 
+URI references <xref target="RFC3986"/> such as <spanx style="verb">../css/</spanx>,
+as it is challenging to determine the base URI
 in a consistent fashion.</t>
 
-<t>Frequently the archive must be unpacked locally to 
+<t>Frequently the archive must be unpacked locally to
 synthesize base URIs like <spanx style="verb">file:///tmp/a1b27ae03865/</spanx>
 to represent the root of the archive. Such URIs are temporary,
 might not be globally unique, and could be vulnerable to
 attacks such as “climbing out” of the root directory.</t>
 
-<t>Mobile and Web applications that are distributed as packages 
-may bundle resources such as stylesheets with 
+<t>Mobile and Web applications that are distributed as packages
+may bundle resources such as stylesheets with
 relative URI references to images and fonts.</t>
 
-<t>An archive containing multiple HTML or 
-Linked Data resources, such as in a 
+<t>An archive containing multiple HTML or
+Linked Data resources, such as in a
 BagIt archive <xref target="I-D.draft-kunze-bagit-14"/>, may be using
 relative URIs to cross-reference constituent files.</t>
 
@@ -104,29 +104,30 @@ relative URIs to cross-reference constituent files.</t>
 in memory or through a common framework, abstracting
 away any local file location.</t>
 
-<t>Consumption of an archive with a consistent base URL 
+<t>Consumption of an archive with a consistent base URL
 should be possible no matter from which location it was retrieved,
 or on which device it is inspected.</t>
 
-<t>When consuming multiple archives from untrusted sources 
-it would be beneficial to have a Same Origin policy <xref target="RFC6454"/> 
+<t>When consuming multiple archives from untrusted sources
+it would be beneficial to have a Same Origin policy <xref target="RFC6454"/>
 so that relative hyperlinks can’t escape the particular archive.</t>
 
-<t>The <spanx style="verb">file:</spanx> URI scheme <xref target="RFC8089"/> 
+<t>The <spanx style="verb">file:</spanx> URI scheme <xref target="RFC8089"/>
 can be ill-suited for purposes such as above, where a
-location-independent URI scheme is more flexible, 
+location-independent URI scheme is more flexible,
 secure and globally unique.</t>
 
 </section>
 <section anchor="syntax" title="Scheme syntax">
 
 <t>The <spanx style="verb">app</spanx> URI scheme follows the <xref target="RFC3986"/> syntax for hierarchical
-URIs according to the following production:</t>
+URIs according to the following productions:</t>
 
-<figure><artwork><![CDATA[
-appURI    =  "app://" app-authority [ path-absolute ]
-               [ "?" query ] [ "#" fragment ]
-]]></artwork></figure>
+<t>URI = scheme “:” scheme-specific-part [ “#” fragment ]</t>
+
+<t>scheme = “app”</t>
+
+<t>scheme-specific-part = “//” app-authority [ path-absolute ] [ “?” query ]</t>
 
 <t>The <spanx style="verb">app-authority</spanx> component provides a unique identifier for the opened archive. See <xref target="authority"></xref> for details.</t>
 
@@ -134,7 +135,7 @@ appURI    =  "app://" app-authority [ path-absolute ]
 (e.g. a file or directory) within the archive. See <xref target="path"></xref>
 for details.</t>
 
-<t>The semantics of the <spanx style="verb">query</spanx> component is undefined by this Internet-Draft. 
+<t>The semantics of the <spanx style="verb">query</spanx> component is undefined by this Internet-Draft.
 Implementations SHOULD NOT generate a query component for app URIs.</t>
 
 <t>The “fragment” component MAY be used by implementations according
@@ -144,8 +145,8 @@ to determine the media type.</t>
 
 <section anchor="authority" title="Authority">
 
-<t>The purpose of the <spanx style="verb">authority</spanx> component in an app URI is 
-to build a unique base URI for a particular archive. The 
+<t>The purpose of the <spanx style="verb">authority</spanx> component in an app URI is
+to build a unique base URI for a particular archive. The
 authority is NOT intended to be resolvable without former
 knowledge of the archive.</t>
 
@@ -162,54 +163,54 @@ app-authority    = UUID | alg-val | authority
 <t>The <spanx style="verb">alg-val</spanx> production match its definition in <xref target="RFC6920"/>, e.g.
 <spanx style="verb">sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8</spanx></t>
 
-<t>The <spanx style="verb">authority</spanx> production match its definition in <xref target="RFC3986"/>, e.g. <spanx style="verb">example.com</spanx>. 
-As this production necessarily also match the <spanx style="verb">UUID</spanx> and <spanx style="verb">alg-val</spanx>
-productions, consumers of app URIs should attempt to match those first.
-While <xref target="RFC7320"/> section 2.2 says an extension may not 
-“define the structure or the semantics for URI authorities”, 
-extensions of this Internet-Draft <spanx style="strong">are</spanx> permitted to do so, 
-if using a DNS domain name under their control. 
-For instance, a vendor owning <spanx style="verb">example.com</spanx> may specify that 
+<t>The <spanx style="verb">authority</spanx> production match its general definition in <xref target="RFC3986"/>, e.g.
+<spanx style="verb">example.com</spanx>.  As this production necessarily also match the <spanx style="verb">UUID</spanx> and
+<spanx style="verb">alg-val</spanx> productions, consumers of app URIs should attempt to match those
+first.  While <xref target="RFC7320"/> section 2.2 says an extension may not
+“define the structure or the semantics for URI authorities”,
+extensions of this Internet-Draft <spanx style="strong">are</spanx> permitted to do so,
+if using a DNS domain name under their control.
+For instance, a vendor owning <spanx style="verb">example.com</spanx> may specify that
 <spanx style="verb">{OID}</spanx> in <spanx style="verb">{OID}.oid.example.com</spanx> has special semantics.</t>
 
 <t>The choice of authority depends on the purpose of the app URI within the implementation.
 Below are some recommendations:</t>
 
 <t><list style="numbers">
-  <t><spanx style="emph">Sandboxing</spanx>, when independently interpreting resources in 
- an archive, the authority SHOULD be a 
+  <t><spanx style="emph">Sandboxing</spanx>, when independently interpreting resources in
+ an archive, the authority SHOULD be a
  UUID v4 <xref target="RFC4122"/> created with a suitable random number generator <xref target="RFC4086"/>.
- This ensures with high probablity that 
- the app base URI is globally unique. An application MAY choose to 
+ This ensures with high probablity that
+ the app base URI is globally unique. An application MAY choose to
  reuse a previously assigned UUID that is associated with the archive.</t>
-  <t><spanx style="emph">Location-based</spanx>, for referencing resources in an archive accessed at a 
- particular URL, the authority SHOULD be generated as a name-based UUID v5 <xref target="RFC4122"/>; that is 
- based on the SHA1 concatination of the URL namespace 
- <spanx style="verb">6ba7b811-9dad-11d1-80b4-00c04fd430c8</spanx> (as UUID bytes) and the 
- ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach 
+  <t><spanx style="emph">Location-based</spanx>, for referencing resources in an archive accessed at a
+ particular URL, the authority SHOULD be generated as a name-based UUID v5 <xref target="RFC4122"/>; that is
+ based on the SHA1 concatination of the URL namespace
+ <spanx style="verb">6ba7b811-9dad-11d1-80b4-00c04fd430c8</spanx> (as UUID bytes) and the
+ ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach
  with a file URI <xref target="RFC8089"/> without a fully qualified <spanx style="verb">host</spanx> name.</t>
-  <t><spanx style="emph">Hash-based</spanx>, for referencing resources in an archive as a 
- particular bytestream, independent of its location, the authority SHOULD be 
- a checksum of the archive bytes. The checksum MUST be expressed 
+  <t><spanx style="emph">Hash-based</spanx>, for referencing resources in an archive as a
+ particular bytestream, independent of its location, the authority SHOULD be
+ a checksum of the archive bytes. The checksum MUST be expressed
  according to <xref target="RFC6920"/>’s <spanx style="verb">alg-val</spanx> production, and SHOULD use the
  <spanx style="verb">sha-256</spanx> algorithm. It is NOT RECOMMENDED to use truncated hash methods.</t>
 </list></t>
 
-<t>The generic <spanx style="verb">authority</spanx> production MAY be used 
-for extensions if the above mechanisms are not suitable. 
-Care should be taken so that the custom <spanx style="verb">authority</spanx> 
+<t>The generic <spanx style="verb">authority</spanx> production MAY be used
+for extensions if the above mechanisms are not suitable.
+Care should be taken so that the custom <spanx style="verb">authority</spanx>
 do not match the <spanx style="verb">UUID</spanx> nor <spanx style="verb">alg-val</spanx> productions.</t>
 
 </section>
 <section anchor="path" title="Path">
 
-<t>The <spanx style="verb">path-absolute</spanx> component MUST match the production in 
+<t>The <spanx style="verb">path-absolute</spanx> component MUST match the production in
 <xref target="RFC3986"/> and provide the absolute path of a resource
 (e.g. a file or directory) within the archive.</t>
 
-<t>Archive media types vary in constraints and flexibilities 
+<t>Archive media types vary in constraints and flexibilities
 of how to express paths. Here we assume an archive generally
-consists of a single root directory, which can contain 
+consists of a single root directory, which can contain
 multiple directories and files at arbitrary nesting levels.</t>
 
 <t>Paths SHOULD be expressed using <spanx style="verb">/</spanx> as the directory separator.
@@ -221,11 +222,11 @@ segment       = *pchar
 segment-nz    = 1*pchar
 ]]></artwork></figure>
 
-<t>In an app URI, each intermediate <spanx style="verb">segment</spanx> (or <spanx style="verb">segment-nz</spanx>) 
-represent a directory name, while the last segment represent 
+<t>In an app URI, each intermediate <spanx style="verb">segment</spanx> (or <spanx style="verb">segment-nz</spanx>)
+represent a directory name, while the last segment represent
 either a directory or file name.</t>
 
-<t>It is RECOMMENDED to include the trailing <spanx style="verb">/</spanx> if it is known 
+<t>It is RECOMMENDED to include the trailing <spanx style="verb">/</spanx> if it is known
 the path represents a directory.</t>
 
 </section>
@@ -233,32 +234,32 @@ the path represents a directory.</t>
 <section anchor="semantics" title="Scheme semantics">
 
 <t>This Internet-Draft does not constrain what particular format
-might constitute an <spanx style="emph">archive</spanx>, and neither does it require 
+might constitute an <spanx style="emph">archive</spanx>, and neither does it require
 that the archive is retrievable as a single bytestream or file.
-Examples of archive media types include 
-<spanx style="verb">application/zip</spanx>, <spanx style="verb">application/vnd.android.package-archive</spanx>, 
-<spanx style="verb">application/x-tar</spanx>, <spanx style="verb">application/x-gtar</spanx> and 
+Examples of archive media types include
+<spanx style="verb">application/zip</spanx>, <spanx style="verb">application/vnd.android.package-archive</spanx>,
+<spanx style="verb">application/x-tar</spanx>, <spanx style="verb">application/x-gtar</spanx> and
 <spanx style="verb">application/x-7z-compressed</spanx>.</t>
 
 <t>The <spanx style="emph">authority</spanx> component identifies the archive file.</t>
 
-<t>The <spanx style="emph">path</spanx> component of an app URI identify individual 
-resources within a particular archive, typically 
+<t>The <spanx style="emph">path</spanx> component of an app URI identify individual
+resources within a particular archive, typically
 a <spanx style="emph">directory</spanx> or <spanx style="emph">file</spanx>.</t>
 
 <t><list style="symbols">
   <t>If the <spanx style="emph">path</spanx> is missing/empty - e.g.
-<spanx style="verb">app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22</spanx> - then 
+<spanx style="verb">app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22</spanx> - then
 the app URI represent the whole archive (e.g. the ZIP file).</t>
-  <t>If the <spanx style="emph">path</spanx> is <spanx style="verb">/</spanx> - e.g. 
-<spanx style="verb">app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/</spanx> - 
+  <t>If the <spanx style="emph">path</spanx> is <spanx style="verb">/</spanx> - e.g.
+<spanx style="verb">app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/</spanx> -
 then the app URI represent the root directory
 of the archive.</t>
   <t>If the path ends with <spanx style="verb">/</spanx> then the path represents
 a directory in the archive</t>
 </list></t>
 
-<t>The app URIs can be used for uniquely identifying 
+<t>The app URIs can be used for uniquely identifying
 the resources independent of the location of the archive,
 such as within an information system.</t>
 
@@ -268,18 +269,18 @@ can also be used for resolution.</t>
 
 <section anchor="resolution" title="Resolution protocol">
 
-<t>This Internet-Draft do not specify directly the protocol to 
-resolve resources according to the app URI scheme. 
-For instance, one implementation might rewrite app URIs to 
+<t>This Internet-Draft do not specify directly the protocol to
+resolve resources according to the app URI scheme.
+For instance, one implementation might rewrite app URIs to
 localized paths in a temporary directory, while
 another implementation might use an embedded HTTP server.</t>
 
-<t>It is envisioned that an implementation will 
-have extracted or opened an archive in 
+<t>It is envisioned that an implementation will
+have extracted or opened an archive in
 advance, and assigned it an appropriate authority according
 to <xref target="authority"></xref>. Such an implementation
 can then resolve app URIs programmatically, e.g. by using
-in-memory access or mapping paths to the extracted archive on 
+in-memory access or mapping paths to the extracted archive on
 the local file system.</t>
 
 <t>Implementations that support resolving app URIs SHOULD:</t>
@@ -294,23 +295,23 @@ the local file system.</t>
   <t>Return the archive file if the path component is missing/empty.</t>
 </list></t>
 
-<t>Not all archive formats or implementations will have the 
-concept of a directory listing or archive file, in which case 
-the implementation MAY fail such resolutions with the 
+<t>Not all archive formats or implementations will have the
+concept of a directory listing or archive file, in which case
+the implementation MAY fail such resolutions with the
 equivalent of “Not Implemented”.</t>
 
 <t>It is not specified in this Internet-Draft how an implementation
 can determine the media type of a file within an archive. This could
-be expressed in secondary resources (such as a manifest), 
+be expressed in secondary resources (such as a manifest),
 be determined by file extensions or magic bytes.</t>
 
-<t>The media type <spanx style="verb">text/uri-list</spanx> <xref target="RFC2483"/> MAY be used to represent 
+<t>The media type <spanx style="verb">text/uri-list</spanx> <xref target="RFC2483"/> MAY be used to represent
 a directory listing, in which case it SHOULD contain only URIs
 that start with the app URI of the directory.</t>
 
-<t>Some archive formats might support resources which are 
-neither directories nor regular files (e.g. device files, 
-symbolic links). This Internet-Draft does not specify the 
+<t>Some archive formats might support resources which are
+neither directories nor regular files (e.g. device files,
+symbolic links). This Internet-Draft does not specify the
 semantics of attempting to resolve such resources.</t>
 
 <t>This Internet-Draft does not specify how to change an archive
@@ -321,9 +322,9 @@ or its content using app URIs.</t>
 
 <t>If the <spanx style="verb">authority</spanx> component of an app URI matches the <spanx style="verb">alg-val</spanx>
 production, an application MAY attempt to resolve the authority
-from any <spanx style="verb">.well-known/ni/</spanx> endpoint <xref target="RFC5785"/> as specified in 
+from any <spanx style="verb">.well-known/ni/</spanx> endpoint <xref target="RFC5785"/> as specified in
 <xref target="RFC6920"/> section 4, in order to retrieve the complete
-archive. Applications SHOULD verify the checksum of the 
+archive. Applications SHOULD verify the checksum of the
 retrieved archive before resolving the individual path.</t>
 
 </section>
@@ -333,66 +334,66 @@ retrieved archive before resolving the individual path.</t>
 <t>The productions for <spanx style="verb">UUID</spanx> and <spanx style="verb">alg-val</spanx> are restricted to
 URI safe ASCII and should not require any encoding considerations.</t>
 
-<t>Care should be taken to %-encode the directory and file segments 
-of <spanx style="verb">path-absolute</spanx> according to <xref target="RFC3986"/> (for URIs) or 
+<t>Care should be taken to %-encode the directory and file segments
+of <spanx style="verb">path-absolute</spanx> according to <xref target="RFC3986"/> (for URIs) or
 <xref target="RFC3987"/> (for IRIs).</t>
 
 <t>When used as part an IRI, paths SHOULD be expressed using
 international Unicode characters instead of %-encoding as ASCII.</t>
 
-<t>Not all archive formats have an explicit 
-character encoding specified for their paths. 
-If no such information is available for the archive format, 
-implementations MAY assume that the path component 
+<t>Not all archive formats have an explicit
+character encoding specified for their paths.
+If no such information is available for the archive format,
+implementations MAY assume that the path component
 is encoded with UTF-8 <xref target="RFC2279"/>.</t>
 
-<t>Some archive formats have case-insensitive paths, in 
-which cases it is RECOMMENDED to preserve the casing 
+<t>Some archive formats have case-insensitive paths, in
+which cases it is RECOMMENDED to preserve the casing
 as expressed in the archive.</t>
 
 </section>
 <section anchor="interoperability" title="Interoperability considerations">
 
-<t>As multiple authorities are possible for the same 
+<t>As multiple authorities are possible for the same
 archive (<xref target="authority"></xref>), and path interpretation
-might vary, there can be interoperability challenges when 
+might vary, there can be interoperability challenges when
 exchanging app URIs between implementations. Some considerations:</t>
 
 <t><list style="numbers">
-  <t>Two implementations describe the same archive 
-  (e.g. stored in the same local file path), but using 
-  different v4 UUIDs. The implementations may 
+  <t>Two implementations describe the same archive
+  (e.g. stored in the same local file path), but using
+  different v4 UUIDs. The implementations may
   need to detect equality of the two UUIDs out of band.</t>
   <t>Two implementations describe an archive retrieved
   from the same URL, with the same v5 UUIDs, but retrieved
   at different times. The implementations might disagree
   about the content of the archive.</t>
   <t>Two implementations describe an archive retrieved
-  from the same URL, with the same v5 UUIDs, but retrieved 
+  from the same URL, with the same v5 UUIDs, but retrieved
   using different content negotiation resulting in different
-  archive representations. The implementations may disagree 
+  archive representations. The implementations may disagree
   about path encoding, file name casing or hierarchy.</t>
-  <t>Two implementations describe the same archive bytestream 
+  <t>Two implementations describe the same archive bytestream
   using the <spanx style="verb">alg-val</spanx> production, but they have used
   two different hash algorithms. The implementations may
   need to negotiate to a common hash algorithm.</t>
   <t>An implementation describe an archive using
   the <spanx style="verb">alg-val</spanx> production, but a second
   implementation concurrently modifies the archive’s content.
-  The first implementation may need to detect changes to 
+  The first implementation may need to detect changes to
   the archive file stamp or re-calculate the checksum
   at the end of its operations.</t>
-  <t>Two implementations might have different views of the 
-  content of the same archive if the format permits 
+  <t>Two implementations might have different views of the
+  content of the same archive if the format permits
   multiple entries with the same path. Care should
-  be taken to follow the convention and specification 
+  be taken to follow the convention and specification
   of the particular archive format.</t>
   <t>Two implementations access the same archive,
   which contain file paths with Unicode characters,
   but extracted to two different file systems. Limitations
-  and conventions for file names in the local file system 
+  and conventions for file names in the local file system
   (such as Unicode normalization, case insensitivity, total path length)
-  may result in the implementations having 
+  may result in the implementations having
   inconsistent or inaccessible paths.</t>
 </list></t>
 
@@ -410,42 +411,42 @@ fill all available disk space.</t>
 misleading if used unescaped.</t>
 
 <t>A maliciously crafted archive could contain paths
-(e.g. combined Unicode sequences) that cause the 
+(e.g. combined Unicode sequences) that cause the
 app URI to be very long, causing issues in information
 systems propagating said URI.</t>
 
-<t>An archive might contain symbolic links that, if 
-extracted to a local file system, might address files 
+<t>An archive might contain symbolic links that, if
+extracted to a local file system, might address files
 outside the archive’s directory structure. Implementations SHOULD
 detect such links and prevent outside access.</t>
 
-<t>An maliciously crafted app URI might contain <spanx style="verb">../</spanx> path segments, 
+<t>An maliciously crafted app URI might contain <spanx style="verb">../</spanx> path segments,
 which if naively converted to a <spanx style="verb">file:///</spanx> URI might address
 files outside the archive’s directory structure. Implementations
-SHOULD perform Path Segment Normalization <xref target="RFC3986"/> 
+SHOULD perform Path Segment Normalization <xref target="RFC3986"/>
 before converting app URIs.</t>
 
-<t>In particular for IRIs, an archive might contain multiple 
+<t>In particular for IRIs, an archive might contain multiple
 paths with similar-looking characters or with different
 Unicode combine sequences, which could be facilitated
 to mislead users.</t>
 
-<t>An URI hyperlink might use or guess an app URI authority 
-to attempt to climb into a different archive for 
-malicious purposes. Applications SHOULD employ 
+<t>An URI hyperlink might use or guess an app URI authority
+to attempt to climb into a different archive for
+malicious purposes. Applications SHOULD employ
 Same Orgin policy <xref target="RFC6454"/> checks.</t>
 
 <t>While a UUID or hash-based authority provide some level of
-information hiding of an archive’s origin, this should not 
-be relied upon for access control or anonymisation. Implementors 
-should keep in mind that such authority components in many 
-cases can be predictably generated by third-parties, for 
+information hiding of an archive’s origin, this should not
+be relied upon for access control or anonymisation. Implementors
+should keep in mind that such authority components in many
+cases can be predictably generated by third-parties, for
 instance using dictionary attacks.</t>
 
 </section>
 <section anchor="iana" title="IANA Considerations">
 
-<t>This Internet-Draft contains the Provisional IANA 
+<t>This Internet-Draft contains the Provisional IANA
 registration of the app URI scheme according to <xref target="RFC7595"/>.</t>
 
 <t>Scheme name: app</t>
@@ -818,10 +819,10 @@ registration of the app URI scheme according to <xref target="RFC7595"/>.</t>
 
 <section anchor="sandboxing" title="Sandboxing">
 
-<t>An document store application has received a file 
+<t>An document store application has received a file
 <spanx style="verb">document.tar.gz</spanx> which content will be checked for consistency.</t>
 
-<t>For sandboxing purposes it generates a UUID v4 
+<t>For sandboxing purposes it generates a UUID v4
 <spanx style="verb">32a423d6-52ab-47e3-a9cd-54f418a48571</spanx> using a pseudo-random generator.
 The app base URI is thus <spanx style="verb">app://32a423d6-52ab-47e3-a9cd-54f418a48571/</spanx></t>
 
@@ -836,21 +837,21 @@ The app base URI is thus <spanx style="verb">app://32a423d6-52ab-47e3-a9cd-54f41
 <t>The application generates the corresponding app URIs and uses those for URI resolutions to list resources and their hyperlinks:</t>
 
 <figure><artwork><![CDATA[
-app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html 
+app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
   -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css 
+app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
   -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 ]]></artwork></figure>
 
 <t>The application is now confident that all hyperlinked files are
-indeed present in the archive. In its database it notes which <spanx style="verb">tar.gz</spanx> file 
+indeed present in the archive. In its database it notes which <spanx style="verb">tar.gz</spanx> file
 corresponds to UUID <spanx style="verb">32a423d6-52ab-47e3-a9cd-54f418a48571</spanx>.</t>
 
-<t>If the application had encountered a malicious hyperlink 
-<spanx style="verb">../../../outside.txt</spanx> it would first resolve it to 
+<t>If the application had encountered a malicious hyperlink
+<spanx style="verb">../../../outside.txt</spanx> it would first resolve it to
 the absolute URI <spanx style="verb">app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt</spanx> and
-conclude from the “Not Found” error that the path <spanx style="verb">/outside.txt</spanx> was not 
+conclude from the “Not Found” error that the path <spanx style="verb">/outside.txt</spanx> was not
 present in the archive.</t>
 
 </section>
@@ -860,7 +861,7 @@ present in the archive.</t>
 <spanx style="verb">http://example.com/data.zip</spanx> and need to generate absolute URIs
 as it continues crawling inside the individual resources of the archive.</t>
 
-<t>The application generates a UUID v5 based on the 
+<t>The application generates a UUID v5 based on the
 URL namespace <spanx style="verb">6ba7b811-9dad-11d1-80b4-00c04fd430c8</spanx> and
 the URL to the zip file:</t>
 
@@ -892,7 +893,7 @@ app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 ]]></artwork></figure>
 
 <t>If files had been removed from the updated ZIP file the
-crawler can simply remove those from its database, 
+crawler can simply remove those from its database,
 as it used the same app base URI as in last crawl.</t>
 
 </section>
@@ -939,7 +940,7 @@ app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 </section>
 <section anchor="archives-that-are-not-files" title="Archives that are not files">
 
-<t>An application is relating BagIt archives 
+<t>An application is relating BagIt archives
 <xref target="I-D.draft-kunze-bagit-14"/> on a shared file system, using structured
 folders and manifests rather than individual archive files.</t>
 
@@ -950,8 +951,8 @@ folders and manifests rather than individual archive files.</t>
 408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
 ]]></artwork></figure>
 
-<t>The application generates a random UUID v4 
-<spanx style="verb">ff2d5a82-7142-4d3f-b8cc-3e662d6de756</spanx> which it adds to 
+<t>The application generates a random UUID v4
+<spanx style="verb">ff2d5a82-7142-4d3f-b8cc-3e662d6de756</spanx> which it adds to
 the bag metadata file <spanx style="verb">/gfs/bags/scan15/bag-info.txt</spanx></t>
 
 <figure><artwork><![CDATA[
@@ -970,14 +971,14 @@ app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 </section>
 <section anchor="resolution-of-packaged-resources" title="Resolution of packaged resources">
 
-<t>A virtual file system driver on a mobile operating system 
-has mounted several packaged applications for resolving 
-common resources. An application requests the rendering 
+<t>A virtual file system driver on a mobile operating system
+has mounted several packaged applications for resolving
+common resources. An application requests the rendering
 framework to resolve a picture from
 <spanx style="verb">app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png</spanx>
 to show it within a user interface.</t>
 
-<t>The framework first checks that the authority 
+<t>The framework first checks that the authority
 <spanx style="verb">eb1edec9-d2eb-4736-a875-eb97b37c690e</spanx> is valid to access
 according to the Same Origin policies or permissions of the
 running application. It then matches the
@@ -991,9 +992,9 @@ cached in memory.</t>
 </section>
 <section anchor="history" title="History">
 
-<t>This Internet-Draft proposes the URI scheme <spanx style="verb">app</spanx>, which was originally 
+<t>This Internet-Draft proposes the URI scheme <spanx style="verb">app</spanx>, which was originally
 proposed by <xref target="W3C.NOTE-app-uri-20150723"/> but never registered with IANA.
-That W3C Note evolved from <xref target="W3C.NOTE-widgets-uri-20120313"/> which 
+That W3C Note evolved from <xref target="W3C.NOTE-widgets-uri-20120313"/> which
 proposed the URI scheme <spanx style="verb">widget</spanx>.</t>
 
 <t>Neither W3C Notes progressed further as Recommendation track documents.</t>
@@ -1003,10 +1004,10 @@ within a packaged application, this Internet-Draft generalize the <spanx style="
 scheme to support referencing and identifying resources within any archive, and
 de-emphasize the retrieval mechanism.</t>
 
-<t>For compatibility with existing adaptations of the <spanx style="verb">app</spanx> URI scheme, 
+<t>For compatibility with existing adaptations of the <spanx style="verb">app</spanx> URI scheme,
 e.g. <xref target="ROBundle"/> and <xref target="CWLViewer"/>, this Internet-Draft reuse the same
 scheme name and remains compatible with the intentions of
-<xref target="W3C.NOTE-app-uri-20150723"/>, but renames “app” to mean 
+<xref target="W3C.NOTE-app-uri-20150723"/>, but renames “app” to mean
 “Archive and Packaging Pointer” instead of “Application”.</t>
 
 </section>
@@ -1015,203 +1016,202 @@ scheme name and remains compatible with the intentions of
   </back>
 
 <!-- ##markdown-source:
-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
-iGAAAA==
+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
+oNpv5JkpYURxcZKSdRawLnjaSGjDZgQOsOILjLbvUAyokOEJhvGD0p0wmRF2
+RCQa6bSdMuuYDAfG+iYvJVwWw36V2FwWpoRIPxaLpMIEH3hKJZmsVN9qCrGQ
+QqWnH510GC9h3ptTSWRVTw82XoMcowXqEjUXZFE90hPLUSrFo5hxlptRMIbK
+RxAJl5pCqiD7JJ88pmfmiTyG2JgLffxv/vtePtkAgxf+KxxMrwbmnbj0oxBw
+JxW6nmi5ibCw/NwMBRWMbFxPND8WdRpVeVtHLUhESJntUlVWDjY3RGhgK100
+RmKtAUexHhWsIVraIcnCdGsYGpkstSRIYpPN4jK+Df7qFUt/LT8P45xJTsXY
+f7ayMSYh80Ag6fgeNg8s5Slyrn+Y1LFNSVbE4x8Mk39g1ZkZtNCkSWU7GYTT
+O1YmEpfaI/+HTLWRh9psWIx2xTN2KP18Z0N2DVrF3HNpelhj6MjGo9ss6mKz
+DzqpJsscmPnmneboj0Glivb4j8ESn5poo/Fi+ilAJceyNTe6/oPTrx/82Nkm
+dsoGTnirPA5p7w9pBrBmAlRXUQIKEiy5OFS33Iu4O4ivhCoQQsknjp+eIKqf
+IABPAIIn8pItjQEDM4QJVXh6GCvtZGACN+61mI1GehGpYRCfqlkwHp8Mg8V0
+rIJxHEbhQPWH0XA4hzEwIzO23UazjnG3yr1CLmt0fP6Py7dcHeoeAgxl59vB
+wUEISibvh6epl0U7xeBgITGliIW8LwTIzdwSYeGri6ZRsimLQ/VxdAPYbXf1
+y3hHuaaVbrhjDR/Llmp977WuKJtcseWVTLpGHPi6LuuWJpHOzFfkm4LUKuVk
+thzvWz/EGC7Ml+9nZsANgzHAzOSMOW6seZqS2xTa+7uu1wFgrupFAZIqD/MU
+NV79jZfJCho5rUNar5E8Y6qY2p2bHAIh2yZQY3kvFW25hzPF7XgaxLcVoJo6
+TaHvQC94FIfVqOCSfILNk1PBdX1XvGs5CakWCvaA6vbgAhTAZVJDSBlhNu3F
+u3dvsZvmVhfOOunsNkHfEhMIVIzL2nPdJWkqqAZiOgMwSCpcIrr2csBPUdGt
+SSJkUR0uJlWbe2pfv5E2vSeRbYqZe6ARx5CkWSI5VPoNG6jrONGEeVuuuyVZ
+YMpiHGTijtYwmuoJhHlD23rPrsGEVdihHoh2ApowWm432ABmYCTmt1CyT8b5
+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
+8go0eMDjfwFQDSPHLmAAAA==
 
 -->
 
