@@ -121,12 +121,16 @@ security constraints (avoiding "climb out" from the archive),
 or for externally identiyfing sub-resources
 referenced by hypermedia formats.
 
+
+--- middle
+
+Keywords
+========
+
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 {{RFC2119}}.
-
---- middle
 
 Background        {#background}
 ==========

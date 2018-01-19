@@ -32,10 +32,6 @@ Abstract
    the archive), or for externally identiyfing sub-resources referenced
    by hypermedia formats.
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [RFC2119].
-
 Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
@@ -51,14 +47,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
+   This Internet-Draft will expire on July 24, 2018.
+
+
+
 
 
 Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
-
-   This Internet-Draft will expire on July 24, 2018.
 
 Copyright Notice
 
@@ -77,21 +75,22 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Background  . . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Scheme syntax . . . . . . . . . . . . . . . . . . . . . . . .   3
-     2.1.  Authority . . . . . . . . . . . . . . . . . . . . . . . .   4
-     2.2.  Path  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-   3.  Scheme semantics  . . . . . . . . . . . . . . . . . . . . . .   6
-     3.1.  Resolution protocol . . . . . . . . . . . . . . . . . . .   6
-     3.2.  Resolving from a .well-known endpoint . . . . . . . . . .   7
-   4.  Encoding considerations . . . . . . . . . . . . . . . . . . .   8
-   5.  Interoperability considerations . . . . . . . . . . . . . . .   8
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  12
-     8.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+   1.  Keywords  . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Background  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   3.  Scheme syntax . . . . . . . . . . . . . . . . . . . . . . . .   3
+     3.1.  Authority . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Path  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Scheme semantics  . . . . . . . . . . . . . . . . . . . . . .   6
+     4.1.  Resolution protocol . . . . . . . . . . . . . . . . . . .   6
+     4.2.  Resolving from a .well-known endpoint . . . . . . . . . .   7
+   5.  Encoding considerations . . . . . . . . . . . . . . . . . . .   8
+   6.  Interoperability considerations . . . . . . . . . . . . . . .   8
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
+     9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  12
      A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  13
      A.2.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  13
@@ -101,11 +100,12 @@ Table of Contents
    Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  16
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
-1.  Background
+1.  Keywords
 
-   Applications that are accessing resources bundled inside a archive
-   (e.g. "zip" or "tar.gz" file) can struggle to consume hypermedia
-   content types that use relative URI references [RFC3986] such as
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
 
 
 
@@ -114,6 +114,11 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 2]
 Internet-Draft                     app                      January 2018
 
 
+2.  Background
+
+   Applications that are accessing resources bundled inside a archive
+   (e.g. "zip" or "tar.gz" file) can struggle to consume hypermedia
+   content types that use relative URI references [RFC3986] such as
    "../css/", as it is challenging to determine the base URI in a
    consistent fashion.
 
@@ -146,7 +151,7 @@ Internet-Draft                     app                      January 2018
    as above, where a location-independent URI scheme is more flexible,
    secure and globally unique.
 
-2.  Scheme syntax
+3.  Scheme syntax
 
    The "app" URI scheme follows the [RFC3986] syntax for hierarchical
    URIs according to the following productions:
@@ -157,11 +162,6 @@ Internet-Draft                     app                      January 2018
 
    app-specific  = "//" app-authority [ path-absolute ] [ "?" query ]
 
-   The "app-authority" component provides a unique identifier for the
-   opened archive.  See Section 2.1 for details.
-
-
-
 
 
 
@@ -170,9 +170,12 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 3]
 Internet-Draft                     app                      January 2018
 
 
+   The "app-authority" component provides a unique identifier for the
+   opened archive.  See Section 3.1 for details.
+
    The "path-absolute" component provides the absolute path of a
    resource (e.g. a file or directory) within the archive.  See
-   Section 2.2 for details.
+   Section 3.2 for details.
 
    The semantics of the "query" component is undefined by this Internet-
    Draft.  Implementations SHOULD NOT generate a query component for app
@@ -183,7 +186,7 @@ Internet-Draft                     app                      January 2018
    path.  This Internet-Draft does not specify how to determine the
    media type.
 
-2.1.  Authority
+3.1.  Authority
 
    The purpose of the "authority" component in an app URI is to build a
    unique base URI for a particular archive.  The authority is NOT
@@ -215,9 +218,6 @@ Internet-Draft                     app                      January 2018
 
    1.  _Sandboxing_, when independently interpreting resources in an
        archive, the authority SHOULD be a UUID v4 [RFC4122] created with
-       a suitable random number generator [RFC4086].  This ensures with
-       high probablity that the app base URI is globally unique.  An
-
 
 
 
@@ -226,6 +226,8 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 4]
 Internet-Draft                     app                      January 2018
 
 
+       a suitable random number generator [RFC4086].  This ensures with
+       high probablity that the app base URI is globally unique.  An
        application MAY choose to reuse a previously assigned UUID that
        is associated with the archive.
 
@@ -248,7 +250,7 @@ Internet-Draft                     app                      January 2018
    above mechanisms are not suitable.  Care should be taken so that the
    custom "authority" do not match the "UUID" nor "alg-val" productions.
 
-2.2.  Path
+3.2.  Path
 
    The "path-absolute" component MUST match the production in [RFC3986]
    and provide the absolute path of a resource (e.g. a file or
@@ -275,14 +277,12 @@ Internet-Draft                     app                      January 2018
 
 
 
-
-
 Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
 
-3.  Scheme semantics
+4.  Scheme semantics
 
    This Internet-Draft does not constrain what particular format might
    constitute an _archive_, and neither does it require that the archive
@@ -315,7 +315,7 @@ Internet-Draft                     app                      January 2018
    the corresponding archive, an app URI can also be used for
    resolution.
 
-3.1.  Resolution protocol
+4.1.  Resolution protocol
 
    This Internet-Draft do not specify directly the protocol to resolve
    resources according to the app URI scheme.  For instance, one
@@ -325,7 +325,7 @@ Internet-Draft                     app                      January 2018
 
    It is envisioned that an implementation will have extracted or opened
    an archive in advance, and assigned it an appropriate authority
-   according to Section 2.1.  Such an implementation can then resolve
+   according to Section 3.1.  Such an implementation can then resolve
    app URIs programmatically, e.g. by using in-memory access or mapping
    paths to the extracted archive on the local file system.
 
@@ -379,7 +379,7 @@ Internet-Draft                     app                      January 2018
    This Internet-Draft does not specify how to change an archive or its
    content using app URIs.
 
-3.2.  Resolving from a .well-known endpoint
+4.2.  Resolving from a .well-known endpoint
 
    If the "authority" component of an app URI matches the "alg-val"
    production, an application MAY attempt to resolve the authority from
@@ -397,7 +397,7 @@ Internet-Draft                     app                      January 2018
    SHOULD verify the checksum of the retrieved archive before resolving
    the individual path.
 
-4.  Encoding considerations
+5.  Encoding considerations
 
    The productions for "UUID" and "alg-val" are restricted to URI safe
    ASCII and should not require any encoding considerations.
@@ -417,10 +417,10 @@ Internet-Draft                     app                      January 2018
    Some archive formats have case-insensitive paths, in which cases it
    is RECOMMENDED to preserve the casing as expressed in the archive.
 
-5.  Interoperability considerations
+6.  Interoperability considerations
 
    As multiple authorities are possible for the same archive
-   (Section 2.1), and path interpretation might vary, there can be
+   (Section 3.1), and path interpretation might vary, there can be
    interoperability challenges when exchanging app URIs between
    implementations.  Some considerations:
 
@@ -471,7 +471,7 @@ Internet-Draft                     app                      January 2018
        insensitivity, total path length) may result in the
        implementations having inconsistent or inaccessible paths.
 
-6.  Security Considerations
+7.  Security Considerations
 
    As when handling any content, extra care should be taken when
    consuming archives and app URIs from unknown sources.
@@ -521,7 +521,7 @@ Internet-Draft                     app                      January 2018
    predictably generated by third-parties, for instance using dictionary
    attacks.
 
-7.  IANA Considerations
+8.  IANA Considerations
 
    This Internet-Draft contains the Provisional IANA registration of the
    app URI scheme according to [RFC7595].
@@ -537,9 +537,9 @@ Internet-Draft                     app                      January 2018
 
    Change controller: Stian Soiland-Reyes
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [RFC2046]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
               Extensions (MIME) Part Two: Media Types", RFC 2046,
@@ -622,7 +622,7 @@ Internet-Draft                     app                      January 2018
               DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
               editor.org/info/rfc8089>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [CWLViewer]
               Robinson, M., Soiland-Reyes, S., and M. Crusoe, "Common-
@@ -656,7 +656,7 @@ Internet-Draft                     app                      January 2018
               Consortium NOTE NOTE-widgets-uri-20120313, March 2012,
               <http://www.w3.org/TR/2012/NOTE-widgets-uri-20120313>.
 
-8.3.  URIs
+9.3.  URIs
 
    [1] mailto:stain@apache.org
 
