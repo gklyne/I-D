@@ -1,8 +1,8 @@
 ---
-title: The Archive and Packaging Pointer (app) URI scheme
+title: Application and Packaging Pointer (app) URI scheme
 abbrev: app
 docname: draft-soilandreyes-app-04-SNAPSHOT
-date: 2018-01-20
+date: 2018-01-22
 category: info
 
 ipr: trust200902
@@ -87,20 +87,10 @@ informative:
     - name: Robert Haines
       ins: R. Haines
     date: '2014-11-05'
-  CWLViewer:
-    seriesinfo:
-      Zenodo: Software
-      DOI: 10.5281/zenodo.823534
-    title: 'Common-Workflow-Language/CWLviewer: CWL Viewer'
-    target: https://view.commonwl.org/
-    author:
-    - name: Mark Robinson
-      ins: M. Robinson
-    - name: Stian Soiland-Reyes
-      ins: S. Soiland-Reyes
-    - name: Michael R. Crusoe
-      ins: M. Crusoe
-    date: '2017-08-24'
+  ApacheTaverna:
+    title: 'Apache Taverna (incubating)'
+    target: https://taverna.incubator.apache.org/
+    date: '2018-01-22'
 
 
 
@@ -108,7 +98,7 @@ informative:
 --- abstract
 
 This specification proposes the
-Archive and Packaging Pointer URI scheme `app`.
+Application and Packaging Pointer URI scheme `app`.
 
 app URIs can be used to consume or reference hypermedia
 resources bundled inside a file archive or an
@@ -155,7 +145,15 @@ a _container_, _application_ or _package_.
 Background        {#background}
 ==========
 
-Applications that are accessing resources bundled inside a
+Mobile and Web Applications ("apps") 
+may bundle resources such as stylesheets with
+relative URI references to scripts, images and fonts. Resolving 
+such resources within URI handling frameworks may require
+generating absolute URIs and applying 
+Same-Origin {{RFC6454}} security policies separately for 
+each app.
+
+Applications that are accessing resources bundled inside an
 archive (e.g. `zip` or `tar.gz` file) can struggle to consume
 hypermedia content types that use relative
 URI references {{RFC3986}} such as `../css/`,
@@ -167,10 +165,6 @@ synthesize base URIs like `file:///tmp/a1b27ae03865/`
 to represent the root of the archive. Such URIs are temporary,
 might not be globally unique, and could be vulnerable to
 attacks such as "climbing out" of the root directory.
-
-Mobile and Web applications that are distributed as packages
-may bundle resources such as stylesheets with
-relative URI references to images and fonts.
 
 An archive containing multiple HTML or
 Linked Data resources, such as in a
@@ -353,7 +347,7 @@ resources within a particular archive, typically
 a *directory* or *file*.
 
 * If the _path_ is `/` - e.g.
-`app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
+`app://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
 then the app URI represent the archive itself, 
 typically represented as a root directory or collection.
 * If the path ends with `/` then the path represents
@@ -571,7 +565,7 @@ An document store application has received a file
 
 For sandboxing purposes it generates a UUID v4
 `32a423d6-52ab-47e3-a9cd-54f418a48571` using a pseudo-random generator.
-The app base URI is thus `app://32a423d6-52ab-47e3-a9cd-54f418a48571/`
+The app base URI is thus `app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/`
 
 The archive contains the files:
 
@@ -581,11 +575,11 @@ The archive contains the files:
 
 The application generates the corresponding app URIs and uses those for URI resolutions to list resources and their hyperlinks:
 
-    app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
-      -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-    app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-      -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-    app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
+      -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+      -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
 The application is now confident that all hyperlinked files are
 indeed present in the archive. In its database it notes which `tar.gz` file
@@ -593,7 +587,7 @@ corresponds to UUID `32a423d6-52ab-47e3-a9cd-54f418a48571`.
 
 If the application had encountered a malicious hyperlink
 `../../../outside.txt` it would first resolve it to
-the absolute URI `app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
+the absolute URI `app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
 conclude from the "Not Found" error that the path `/outside.txt` was not
 present in the archive.
 
@@ -612,21 +606,21 @@ the URL to the zip file:
     >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
     UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 
-Thus the base app URI for indexing the ZIP content is
+Thus the location-based app URI for indexing the ZIP content is
 
-    app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
 
 Listing all directories and files in the ZIP, the crawler finds the URIs:
 
-    app://b7749d0b-0e47-5fc4-999d-f154abe68065/
-    app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
-    app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
 When the application encounters `http://example.com/data.zip` some time later
 it can recalculate the same base app URI. This time the ZIP file has been
 modified upstream and the crawler finds additionally:
 
-    app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
 If files had been removed from the updated ZIP file the
 crawler can simply remove those from its database,
@@ -652,14 +646,14 @@ The corresponding `alg-val` authority is thus:
 
     sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
 
-From this the base app URL is:
+From this the hash base app URL is:
 
-    app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+    app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
 The crawler finds that its virus database already contain entries
 for:
 
-    app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+    app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
 and flags the upload as malicious without having to scan it again.
 
@@ -684,10 +678,12 @@ the bag metadata file `/gfs/bags/scan15/bag-info.txt`
 
 It then generates app URIs for the files listed in the manifest:
 
-    app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
-    app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
+    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 
-When a different application on the same shared file system encounter these app URIs, it can match them to the correct bag folder by inspecting the `External-Identifier` metadata.
+When a different application on the same shared file system encounter 
+these app URIs, it can match them to the correct bag folder by 
+inspecting the `External-Identifier` metadata.
 
 
 Linked Data containers which are not on the web
@@ -708,23 +704,23 @@ The application generates a new random UUID v4
 address book, and provides the corresponding app URI
 to the LDP client:
 
-    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
 
 The LDP client resolves the container with content negotiation
 for the `text/turtle` media type, and receives:
 
-    @base <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+    @base <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
     @prefix ldp: <http://www.w3.org/ns/ldp#>.
     @prefix dcterms: <http://purl.org/dc/terms/>.
     
-    <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
+    <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
       dcterms:title "Address book" ;
       ldp:contains <contact1>, <contact2> .
 
 The LDP client resolves the relative URIs to retrieve each of the contacts:
 
-    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
-    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
+    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
+    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
 
 Resolution of packaged resources
@@ -734,11 +730,11 @@ A virtual file system driver on a mobile operating system
 has mounted several packaged applications for resolving
 common resources. An application requests the rendering
 framework to resolve a picture from
-`app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
+`app://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
 to show it within a user interface.
 
 The framework first checks that the authority
-`eb1edec9-d2eb-4736-a875-eb97b37c690e` is valid to access
+`uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e` is valid to access
 according to the Same Origin policies or permissions of the
 running application. It then matches the
 authority to the corresponding application package.
@@ -764,8 +760,8 @@ scheme to support referencing and identifying resources within any archive, and
 de-emphasize the retrieval mechanism.
 
 For compatibility with existing adaptations of the `app` URI scheme,
-e.g. {{ROBundle}} and {{CWLViewer}}, this specification reuse the same
+e.g. {{ROBundle}} and {{ApacheTaverna}}, this specification reuse the same
 scheme name and remains compatible with the intentions of
 {{W3C.NOTE-app-uri-20150723}}, but renames "app" to mean
-"Archive and Packaging Pointer" instead of "Application".
+"Application and Packaging Pointer" instead of "Application".
 

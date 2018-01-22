@@ -5,16 +5,16 @@
 Network Working Group                                   S. Soiland-Reyes
 Internet-Draft                              The University of Manchester
 Intended status: Informational                                M. Caceres
-Expires: July 24, 2018                               Mozilla Corporation
-                                                        January 20, 2018
+Expires: July 26, 2018                               Mozilla Corporation
+                                                        January 22, 2018
 
 
-           The Archive and Packaging Pointer (app) URI scheme
+           Application and Packaging Pointer (app) URI scheme
                    draft-soilandreyes-app-04-SNAPSHOT
 
 Abstract
 
-   This specification proposes the Archive and Packaging Pointer URI
+   This specification proposes the Application and Packaging Pointer URI
    scheme "app".
 
    app URIs can be used to consume or reference hypermedia resources
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 24, 2018.
+   This Internet-Draft will expire on July 26, 2018.
 
 
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 1]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
@@ -92,8 +92,8 @@ Table of Contents
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
-     9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  14
+     9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  13
      A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  14
      A.2.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  14
      A.3.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  15
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 2]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 2]
 
 Internet-Draft                     app                      January 2018
 
@@ -134,7 +134,13 @@ Internet-Draft                     app                      January 2018
 
 2.  Background
 
-   Applications that are accessing resources bundled inside a archive
+   Mobile and Web Applications ("apps") may bundle resources such as
+   stylesheets with relative URI references to scripts, images and
+   fonts.  Resolving such resources within URI handling frameworks may
+   require generating absolute URIs and applying Same-Origin [RFC6454]
+   security policies separately for each app.
+
+   Applications that are accessing resources bundled inside an archive
    (e.g. "zip" or "tar.gz" file) can struggle to consume hypermedia
    content types that use relative URI references [RFC3986] such as
    "../css/", as it is challenging to determine the base URI in a
@@ -145,10 +151,6 @@ Internet-Draft                     app                      January 2018
    archive.  Such URIs are temporary, might not be globally unique, and
    could be vulnerable to attacks such as "climbing out" of the root
    directory.
-
-   Mobile and Web applications that are distributed as packages may
-   bundle resources such as stylesheets with relative URI references to
-   images and fonts.
 
    An archive containing multiple HTML or Linked Data resources, such as
    in a BagIt archive [I-D.draft-kunze-bagit-14], may be using relative
@@ -163,9 +165,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 3]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 3]
 
 Internet-Draft                     app                      January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 4]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 4]
 
 Internet-Draft                     app                      January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 5]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 6]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 6]
 
 Internet-Draft                     app                      January 2018
 
@@ -347,7 +347,7 @@ Internet-Draft                     app                      January 2018
    The _path_ component of an app URI identify individual resources
    within a particular archive, typically a _directory_ or _file_.
 
-   o  If the _path_ is "/" - e.g.  "app://833ebda2-f9a8-4462-b74a-
+   o  If the _path_ is "/" - e.g.  "app://uuid,833ebda2-f9a8-4462-b74a-
       4fcdc1a02d22/" - then the app URI represent the archive itself,
       typically represented as a root directory or collection.
 
@@ -389,7 +389,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 7]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 8]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 9]
+Soiland-Reyes & Caceres   Expires July 26, 2018                 [Page 9]
 
 Internet-Draft                     app                      January 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 10]
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 10]
 
 Internet-Draft                     app                      January 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 11]
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 11]
 
 Internet-Draft                     app                      January 2018
 
@@ -662,23 +662,17 @@ Internet-Draft                     app                      January 2018
 
 9.2.  Informative References
 
+   [ApacheTaverna]
+              "Apache Taverna (incubating)", January 2018,
+              <https://taverna.incubator.apache.org/>.
 
 
 
 
-
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 12]
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
-
-   [CWLViewer]
-              Robinson, M., Soiland-Reyes, S., and M. Crusoe, "Common-
-              Workflow-Language/CWLviewer: CWL Viewer", Zenodo Software,
-              DOI 10.5281/zenodo.823534, August 2017,
-              <https://view.commonwl.org/>.
 
    [I-D.draft-kunze-bagit-14]
               Kunze, J., Littman, J., Madden, L., Summers, E., Boyko,
@@ -718,23 +712,23 @@ Internet-Draft                     app                      January 2018
               Consortium WD WD-appmanifest-20180118, January 2018,
               <https://www.w3.org/TR/2018/WD-appmanifest-20180118>.
 
-
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 13]
-
-Internet-Draft                     app                      January 2018
-
-
 9.3.  URIs
 
    [1] mailto:stain@apache.org
 
 Appendix A.  Examples
+
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 13]
+
+Internet-Draft                     app                      January 2018
+
 
 A.1.  Sandboxing
 
@@ -743,7 +737,7 @@ A.1.  Sandboxing
 
    For sandboxing purposes it generates a UUID v4 "32a423d6-52ab-47e3-
    a9cd-54f418a48571" using a pseudo-random generator.  The app base URI
-   is thus "app://32a423d6-52ab-47e3-a9cd-54f418a48571/"
+   is thus "app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/"
 
    The archive contains the files:
 
@@ -756,11 +750,11 @@ A.1.  Sandboxing
    The application generates the corresponding app URIs and uses those
    for URI resolutions to list resources and their hyperlinks:
 
-   app://32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
-     -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-   app://32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-     -> app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-   app://32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+  app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
+    -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+  app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+    -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+  app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
    The application is now confident that all hyperlinked files are
    indeed present in the archive.  In its database it notes which
@@ -769,9 +763,9 @@ A.1.  Sandboxing
 
    If the application had encountered a malicious hyperlink
    "../../../outside.txt" it would first resolve it to the absolute URI
-   "app://32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt" and conclude
-   from the "Not Found" error that the path "/outside.txt" was not
-   present in the archive.
+   "app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt" and
+   conclude from the "Not Found" error that the path "/outside.txt" was
+   not present in the archive.
 
 A.2.  Origin-based
 
@@ -779,36 +773,36 @@ A.2.  Origin-based
    "http://example.com/data.zip" and need to generate absolute URIs as
    it continues crawling inside the individual resources of the archive.
 
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
-
    The application generates a UUID v5 based on the URL namespace
    "6ba7b811-9dad-11d1-80b4-00c04fd430c8" and the URL to the zip file:
 
    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 
-   Thus the base app URI for indexing the ZIP content is
 
-   app://b7749d0b-0e47-5fc4-999d-f154abe68065/
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
+
+   Thus the location-based app URI for indexing the ZIP content is
+
+   app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
 
    Listing all directories and files in the ZIP, the crawler finds the
    URIs:
 
-   app://b7749d0b-0e47-5fc4-999d-f154abe68065/
-   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
-   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+   app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+   app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+   app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
    When the application encounters "http://example.com/data.zip" some
    time later it can recalculate the same base app URI.  This time the
    ZIP file has been modified upstream and the crawler finds
    additionally:
 
-   app://b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+   app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
    If files had been removed from the updated ZIP file the crawler can
    simply remove those from its database, as it used the same app base
@@ -834,22 +828,21 @@ A.3.  Hash-based
 
    sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
 
+   From this the hash base app URL is:
 
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 15]
-
-Internet-Draft                     app                      January 2018
-
-
-   From this the base app URL is:
-
-   app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+   app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
    The crawler finds that its virus database already contain entries
    for:
 
-   app://sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 15]
+
+Internet-Draft                     app                      January 2018
+
+
+   app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
    and flags the upload as malicious without having to scan it again.
 
@@ -873,8 +866,8 @@ A.4.  Archives that are not files
 
    It then generates app URIs for the files listed in the manifest:
 
- app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
- app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
+app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 
    When a different application on the same shared file system encounter
    these app URIs, it can match them to the correct bag folder by
@@ -891,45 +884,46 @@ A.5.  Linked Data containers which are not on the web
    (developed for http), but connected to the application's URI
    resolution mechanism.
 
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 16]
-
-Internet-Draft                     app                      January 2018
-
-
    The application generates a new random UUID v4 "12f89f9c-e6ca-
    4032-ae73-46b68c2b415a" for the address book, and provides the
    corresponding app URI to the LDP client:
 
-   app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+   app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 16]
+
+Internet-Draft                     app                      January 2018
+
 
    The LDP client resolves the container with content negotiation for
    the "text/turtle" media type, and receives:
 
-   @base <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
-   @prefix ldp: <http://www.w3.org/ns/ldp#>.
-   @prefix dcterms: <http://purl.org/dc/terms/>.
+@base <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
 
-   <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
-     dcterms:title "Address book" ;
-     ldp:contains <contact1>, <contact2> .
+<app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
+  dcterms:title "Address book" ;
+  ldp:contains <contact1>, <contact2> .
 
    The LDP client resolves the relative URIs to retrieve each of the
    contacts:
 
-   app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
-   app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
+   app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
+   app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
 A.6.  Resolution of packaged resources
 
    A virtual file system driver on a mobile operating system has mounted
    several packaged applications for resolving common resources.  An
    application requests the rendering framework to resolve a picture
-   from "app://eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png" to
-   show it within a user interface.
+   from "app://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png"
+   to show it within a user interface.
 
-   The framework first checks that the authority "eb1edec9-d2eb-
+   The framework first checks that the authority "uuid,eb1edec9-d2eb-
    4736-a875-eb97b37c690e" is valid to access according to the Same
    Origin policies or permissions of the running application.  It then
    matches the authority to the corresponding application package.
@@ -945,29 +939,29 @@ Appendix B.  History
    [W3C.NOTE-widgets-uri-20120313] which proposed the URI scheme
    "widget".
 
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 17]
-
-Internet-Draft                     app                      January 2018
-
-
    Neither W3C Notes progressed further as Recommendation track
    documents.
 
    While the focus of those W3C Notes was to specify how to resolve
    resources from within a packaged application, this specification
    generalize the "app" URI scheme to support referencing and
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 17]
+
+Internet-Draft                     app                      January 2018
+
+
    identifying resources within any archive, and de-emphasize the
    retrieval mechanism.
 
    For compatibility with existing adaptations of the "app" URI scheme,
-   e.g.  [ROBundle] and [CWLViewer], this specification reuse the same
-   scheme name and remains compatible with the intentions of
-   [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Archive and
-   Packaging Pointer" instead of "Application".
+   e.g.  [ROBundle] and [ApacheTaverna], this specification reuse the
+   same scheme name and remains compatible with the intentions of
+   [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Application
+   and Packaging Pointer" instead of "Application".
 
 Authors' Addresses
 
@@ -1005,4 +999,10 @@ Authors' Addresses
 
 
 
-Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 18]
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 18]
