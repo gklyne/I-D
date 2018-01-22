@@ -56,6 +56,8 @@ normative:
   RFC7595:
   # file URI scheme
   RFC8089:
+  # +zip formats
+  RFC6839:
 
 informative:
   # base64
@@ -66,6 +68,10 @@ informative:
   W3C.NOTE-app-uri-20150723:
   # w3c widget://
   W3C.NOTE-widgets-uri-20120313:
+  # LDP
+  W3C.REC-ldp-20150226:
+  # web app manifest
+  W3C.WD-appmanifest-20180118:
   # RO bundle
   ROBundle:
     seriesinfo:
@@ -124,13 +130,24 @@ referenced by hypermedia formats.
 
 --- middle
 
-Keywords
-========
+Introduction
+============
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
 NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 {{RFC2119}}.
+
+For the purpose of this specification, an **archive** is a 
+collection of sub-resources addressable by name or path.
+This definition covers typical archive file formats like 
+`.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}}, 
+but also non-file resource bundles
+can be considered an archive, e.g. 
+an LDP Container {{W3C.REC-ldp-20150226}},
+an installed Web App {{W3C.WD-appmanifest-20180118}},
+or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
+
 
 Background        {#background}
 ==========
@@ -266,21 +283,9 @@ The `path-absolute` component MUST match the production in
 {{RFC3986}} and provide the absolute path of a resource
 (e.g. a file or directory) within the archive.
 
-Archive media types vary in constraints and flexibilities
-of how to express paths. Here we assume an archive generally
-consists of a single root directory, which can contain
-multiple directories and files at arbitrary nesting levels.
-
-Paths SHOULD be expressed using `/` as the directory separator.
-The below productions are from {{RFC3986}}:
-
-    path-absolute = "/" [ segment-nz *( "/" segment ) ]
-    segment       = *pchar
-    segment-nz    = 1*pchar
-
-In an app URI, each intermediate `segment` (or `segment-nz`)
-represent a directory name, while the last segment represent
-either a directory or file name.
+Archive media types vary in constraints and possibilities on
+how to express paths, however implementations SHOULD use `/` as 
+path separator for nested folders and files.
 
 It is RECOMMENDED to include the trailing `/` if it is known
 the path represents a directory.
@@ -297,7 +302,7 @@ Examples of archive media types include
 `application/x-tar`, `application/x-gtar` and
 `application/x-7z-compressed`.
 
-The _authority_ component identifies the archive file.
+The _authority_ component identifies the archive itself.
 
 The _path_ component of an app URI identify individual
 resources within a particular archive, typically
@@ -347,10 +352,10 @@ Implementations that support resolving app URIs SHOULD:
 4. Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.
 5. Return an appropriate directory listing if the path maps to a directory within the archive.
 6. Return an appropriate directory listing of the archive's root directory if the path is `/`.
-7. Return the archive file if the path component is missing/empty.
+7. Return the archive as a bytestream representation if the path component is missing/empty.
 
 Not all archive formats or implementations will have the
-concept of a directory listing or archive file, in which case
+concept of a directory listing or archive bytestream, in which case
 the implementation MAY fail such resolutions with the
 equivalent of "Not Implemented".
 

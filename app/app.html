@@ -374,7 +374,7 @@
   </style>
 
   <link href="#rfc.toc" rel="Contents"/>
-<link href="#rfc.section.1" rel="Chapter" title="1 Keywords"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
 <link href="#rfc.section.2" rel="Chapter" title="2 Background"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Scheme syntax"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Authority"/>
@@ -468,7 +468,7 @@
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Keywords</a></li>
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
 <li>2.   <a href="#rfc.section.2">Background</a></li>
 <li>3.   <a href="#rfc.section.3">Scheme syntax</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Authority</a></li>
@@ -495,8 +495,9 @@
 
   </ul>
 
-  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#keywords" id="keywords">Keywords</a></h1>
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
 <p id="rfc.section.1.p.1">The key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;,  &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
+<p id="rfc.section.1.p.2">For the purpose of this specification, an <strong>archive</strong> is a collection of sub-resources addressable by name or path.  This definition covers typical archive file formats like <samp>.zip</samp> or <samp>tar.gz</samp> and derived <samp>+zip</samp> media types <a href="#RFC6839">[RFC6839]</a>, but also non-file resource bundles can be considered an archive, e.g.  an LDP Container <a href="#W3C.REC-ldp-20150226">[W3C.REC-ldp-20150226]</a>, an installed Web App <a href="#W3C.WD-appmanifest-20180118">[W3C.WD-appmanifest-20180118]</a>, or a BagIt folder structure <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#background" id="background">Background</a></h1>
 <p id="rfc.section.2.p.1">Applications that are accessing resources bundled inside a archive (e.g. <samp>zip</samp> or <samp>tar.gz</samp> file) can struggle to consume hypermedia content types that use relative URI references <a href="#RFC3986">[RFC3986]</a> such as <samp>../css/</samp>, as it is challenging to determine the base URI in a consistent fashion.</p>
 <p id="rfc.section.2.p.2">Frequently the archive must be unpacked locally to synthesize base URIs like <samp>file:///tmp/a1b27ae03865/</samp> to represent the root of the archive. Such URIs are temporary, might not be globally unique, and could be vulnerable to attacks such as &#8220;climbing out&#8221; of the root directory.</p>
@@ -539,18 +540,11 @@ app-authority = UUID | alg-val | authority
 <p id="rfc.section.3.1.p.8">The generic <samp>authority</samp> production MAY be used for extensions if the above mechanisms are not suitable.  Care should be taken so that the custom <samp>authority</samp> do not match the <samp>UUID</samp> nor <samp>alg-val</samp> productions.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#path" id="path">Path</a></h1>
 <p id="rfc.section.3.2.p.1">The <samp>path-absolute</samp> component MUST match the production in <a href="#RFC3986">[RFC3986]</a> and provide the absolute path of a resource (e.g. a file or directory) within the archive.</p>
-<p id="rfc.section.3.2.p.2">Archive media types vary in constraints and flexibilities of how to express paths. Here we assume an archive generally consists of a single root directory, which can contain multiple directories and files at arbitrary nesting levels.</p>
-<p id="rfc.section.3.2.p.3">Paths SHOULD be expressed using <samp>/</samp> as the directory separator.  The below productions are from <a href="#RFC3986">[RFC3986]</a>:</p>
-<pre>
-path-absolute = "/" [ segment-nz *( "/" segment ) ]
-segment       = *pchar
-segment-nz    = 1*pchar
-</pre>
-<p id="rfc.section.3.2.p.4">In an app URI, each intermediate <samp>segment</samp> (or <samp>segment-nz</samp>) represent a directory name, while the last segment represent either a directory or file name.</p>
-<p id="rfc.section.3.2.p.5">It is RECOMMENDED to include the trailing <samp>/</samp> if it is known the path represents a directory.</p>
+<p id="rfc.section.3.2.p.2">Archive media types vary in constraints and possibilities on how to express paths, however implementations SHOULD use <samp>/</samp> as path separator for nested folders and files.</p>
+<p id="rfc.section.3.2.p.3">It is RECOMMENDED to include the trailing <samp>/</samp> if it is known the path represents a directory.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#semantics" id="semantics">Scheme semantics</a></h1>
 <p id="rfc.section.4.p.1">This specification does not constrain what particular format might constitute an <em>archive</em>, and neither does it require that the archive is retrievable as a single bytestream or file.  Examples of archive media types include <samp>application/zip</samp>, <samp>application/vnd.android.package-archive</samp>, <samp>application/x-tar</samp>, <samp>application/x-gtar</samp> and <samp>application/x-7z-compressed</samp>.</p>
-<p id="rfc.section.4.p.2">The <em>authority</em> component identifies the archive file.</p>
+<p id="rfc.section.4.p.2">The <em>authority</em> component identifies the archive itself.</p>
 <p id="rfc.section.4.p.3">The <em>path</em> component of an app URI identify individual resources within a particular archive, typically a <em>directory</em> or <em>file</em>.</p>
 <p/>
 
@@ -574,9 +568,9 @@ segment-nz    = 1*pchar
   <li>Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.</li>
   <li>Return an appropriate directory listing if the path maps to a directory within the archive.</li>
   <li>Return an appropriate directory listing of the archive&#8217;s root directory if the path is <samp>/</samp>.</li>
-  <li>Return the archive file if the path component is missing/empty.</li>
+  <li>Return the archive as a bytestream representation if the path component is missing/empty.</li>
 </ol>
-<p id="rfc.section.4.1.p.5">Not all archive formats or implementations will have the concept of a directory listing or archive file, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
+<p id="rfc.section.4.1.p.5">Not all archive formats or implementations will have the concept of a directory listing or archive bytestream, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
 <p id="rfc.section.4.1.p.6">It is not undefined by this specification how an implementation can determine the media type of a file within an archive. This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
 <p id="rfc.section.4.1.p.7">The media type <samp>text/uri-list</samp> <a href="#RFC2483">[RFC2483]</a> MAY be used to represent a directory listing, in which case it SHOULD contain only URIs that start with the app URI of the directory.</p>
 <p id="rfc.section.4.1.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This specification does not define the semantics of attempting to resolve such resources.</p>
@@ -685,6 +679,12 @@ segment-nz    = 1*pchar
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC6839">[RFC6839]</b>
+      </td>
+      <td class="top"><a>Hansen, T.</a> and <a>A. Melnikov</a>, "<a href="http://tools.ietf.org/html/rfc6839">Additional Media Type Structured Syntax Suffixes</a>", RFC 6839, DOI 10.17487/RFC6839, January 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC6920">[RFC6920]</b>
       </td>
       <td class="top"><a>Farrell, S.</a>, <a>Kutscher, D.</a>, <a>Dannewitz, C.</a>, <a>Ohlman, B.</a>, <a>Keranen, A.</a> and <a>P. Hallam-Baker</a>, "<a href="http://tools.ietf.org/html/rfc6920">Naming Things with Hashes</a>", RFC 6920, DOI 10.17487/RFC6920, April 2013.</td>
@@ -747,6 +747,18 @@ segment-nz    = 1*pchar
         <b id="W3C.NOTE-widgets-uri-20120313">[W3C.NOTE-widgets-uri-20120313]</b>
       </td>
       <td class="top"><a>Caceres, M.</a>, "<a href="http://www.w3.org/TR/2012/NOTE-widgets-uri-20120313">Widget URI scheme</a>", World Wide Web Consortium NOTE NOTE-widgets-uri-20120313, March 2012.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="W3C.REC-ldp-20150226">[W3C.REC-ldp-20150226]</b>
+      </td>
+      <td class="top"><a>Speicher, S.</a>, <a>Arwe, J.</a> and <a>A. Malhotra</a>, "<a href="http://www.w3.org/TR/2015/REC-ldp-20150226">Linked Data Platform 1.0</a>", World Wide Web Consortium Recommendation REC-ldp-20150226, February 2015.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="W3C.WD-appmanifest-20180118">[W3C.WD-appmanifest-20180118]</b>
+      </td>
+      <td class="top"><a>Caceres, M.</a>, <a>Christiansen, K.</a>, <a>Lamouri, M.</a>, <a>Kostiainen, A.</a> and <a>R. Dolin</a>, "<a href="https://www.w3.org/TR/2018/WD-appmanifest-20180118">Web App Manifest</a>", World Wide Web Consortium WD WD-appmanifest-20180118, January 2018.</td>
     </tr>
   </tbody>
 </table>
