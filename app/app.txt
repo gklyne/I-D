@@ -91,7 +91,7 @@ Table of Contents
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
      9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  14
      A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -320,15 +320,15 @@ Internet-Draft                     app                      January 2018
 
    5.  If the prefix is "name," this indicates that the authority is an
        application or package name, typically as installed on a device
-       or system.  Implementations SHOULD assume that the "name"
-       authority is only unique within a particular installation.  It is
-       RECOMMENDED that implementations creating name-based authorities
-       use DNS names under their control, for instance an app installed
-       as "app.example.com" can make an authority "name,app.example.com"
-       to refer to its packaged resources, or "name,foo.app.example.com"
-       to refer to its "foo" container.
-
-
+       or system.  Implementations SHOULD assume that an unrecognized
+       "name" authority is only unique within a particular installation,
+       but MAY assume further uniqueness guarantees for names under
+       their control.  It is RECOMMENDED that implementations creating
+       name-based authorities use DNS names under their control, for
+       instance an app installed as "app.example.com" can make an
+       authority "name,app.example.com" to refer to its packaged
+       resources, or "name,foo.app.example.com" to refer to a "foo"
+       container distributed across all installations.
 
 
 
@@ -362,6 +362,10 @@ Internet-Draft                     app                      January 2018
    the corresponding archive, an app URI can also be used for
    resolution.
 
+   Some archive formats might permit resources with the same (duplicate)
+   path, in which case it is undefined from this specification which
+   particular entry is described.
+
 4.3.  Resolution protocol
 
    This specification do not define the protocol to resolve resources
@@ -383,16 +387,15 @@ Internet-Draft                     app                      January 2018
    2.  Fail with the equivalent of _Gone_ if the authority is known, but
        the content of the archive is no longer available.
 
-   3.  Fail with the equivalent of _Not Found_ if the path does not map
-       to a file or directory within the archive.
-
-
 
 
 Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
+
+   3.  Fail with the equivalent of _Not Found_ if the path does not map
+       to a file or directory within the archive.
 
    4.  Return the corresponding (potentially uncompressed) bytestream if
        the path maps to a file within the archive.
@@ -438,9 +441,6 @@ Internet-Draft                     app                      January 2018
    The productions for "UUID" and "alg-val" are restricted to URI safe
    ASCII and should not require any encoding considerations.
 
-   Care should be taken to %-encode the directory and file segments of
-   "path-absolute" according to [RFC3986] (for URIs) or [RFC3987] (for
-   IRIs).
 
 
 
@@ -449,6 +449,10 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
+
+   Care should be taken to %-encode the directory and file segments of
+   "path-absolute" according to [RFC3986] (for URIs) or [RFC3987] (for
+   IRIs).
 
    When used as part an IRI, paths SHOULD be expressed using
    international Unicode characters instead of %-encoding as ASCII.
@@ -469,34 +473,30 @@ Internet-Draft                     app                      January 2018
    implementations.  Some considerations:
 
    1.  Two implementations describe the same archive (e.g. stored in the
-       same local file path), but using different v4 UUIDs.  The
-       implementations may need to detect equality of the two UUIDs out
-       of band.
+       same local file path), but using different random-based UUID
+       authorities.  The implementations may need to detect equality of
+       the two UUIDs out of band.
 
    2.  Two implementations describe an archive retrieved from the same
-       URL, with the same v5 UUIDs, but retrieved at different times.
-       The implementations might disagree about the content of the
-       archive.
+       URL, with the same location-based UUID authority, but retrieved
+       at different times.  The implementations might disagree about the
+       content of the archive.
 
    3.  Two implementations describe an archive retrieved from the same
-       URL, with the same v5 UUIDs, but retrieved using different
-       content negotiation resulting in different archive
-       representations.  The implementations may disagree about path
-       encoding, file name casing or hierarchy.
+       URL, with the same location-based UUID authority, but retrieved
+       using different content negotiation resulting in different
+       archive representations.  The implementations may disagree about
+       path encoding, file name casing or hierarchy.
 
    4.  Two implementations describe the same archive bytestream using
-       the "alg-val" production, but they have used two different hash
+       the hash-based authority, but they have used two different hash
        algorithms.  The implementations may need to negotiate to a
        common hash algorithm.
 
-   5.  An implementation describe an archive using the "alg-val"
-       production, but a second implementation concurrently modifies the
-       archive's content.  The first implementation may need to detect
-       changes to the archive file stamp or re-calculate the checksum at
-       the end of its operations.
-
-   6.  Two implementations might have different views of the content of
-       the same archive if the format permits multiple entries with the
+   5.  Two implementations access the same archive, which contain file
+       paths with Unicode characters, but extracted to two different
+       file systems.  Limitations and conventions for file names in the
+       local file system (such as Unicode normalization, case
 
 
 
@@ -506,13 +506,6 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 9]
 Internet-Draft                     app                      January 2018
 
 
-       same path.  Care should be taken to follow the convention and
-       specification of the particular archive format.
-
-   7.  Two implementations access the same archive, which contain file
-       paths with Unicode characters, but extracted to two different
-       file systems.  Limitations and conventions for file names in the
-       local file system (such as Unicode normalization, case
        insensitivity, total path length) may result in the
        implementations having inconsistent or inaccessible paths.
 
@@ -545,15 +538,22 @@ Internet-Draft                     app                      January 2018
 
    In particular for IRIs, an archive might contain multiple paths with
    similar-looking characters or with different Unicode combine
-   sequences, which could be facilitated to mislead users.
+   sequences, which could be used to mislead users.
 
    An URI hyperlink might use or guess an app URI authority to attempt
    to climb into a different archive for malicious purposes.
-   Applications SHOULD employ Same Orgin policy [RFC6454] checks.
+   Applications SHOULD employ Same Orgin policy [RFC6454] checks if
+   resolving cross-references is not desired.
 
    While a UUID or hash-based authority provide some level of
    information hiding of an archive's origin, this should not be relied
    upon for access control or anonymisation.  Implementors should keep
+   in mind that such authority components in many cases can be
+   predictably generated by third-parties, for instance using dictionary
+   attacks.
+
+
+
 
 
 
@@ -562,14 +562,10 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 10]
 Internet-Draft                     app                      January 2018
 
 
-   in mind that such authority components in many cases can be
-   predictably generated by third-parties, for instance using dictionary
-   attacks.
-
 8.  IANA Considerations
 
-   This specification contains the Provisional IANA registration of the
-   app URI scheme according to [RFC7595].
+   This specification requests that IANA registers the following URI
+   scheme according to the provisions of [RFC7595].
 
    Scheme name: app
 
@@ -610,6 +606,10 @@ Internet-Draft                     app                      January 2018
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/info/rfc3986>.
 
+   [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
+              Identifiers (IRIs)", RFC 3987, DOI 10.17487/RFC3987,
+              January 2005, <https://www.rfc-editor.org/info/rfc3987>.
+
 
 
 
@@ -617,10 +617,6 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 11]
 
 Internet-Draft                     app                      January 2018
 
-
-   [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
-              Identifiers (IRIs)", RFC 3987, DOI 10.17487/RFC3987,
-              January 2005, <https://www.rfc-editor.org/info/rfc3987>.
 
    [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
               "Randomness Requirements for Security", BCP 106, RFC 4086,
@@ -664,6 +660,10 @@ Internet-Draft                     app                      January 2018
               DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
               editor.org/info/rfc8089>.
 
+9.2.  Informative References
+
+
+
 
 
 
@@ -673,8 +673,6 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
-
-9.2.  Informative References
 
    [CWLViewer]
               Robinson, M., Soiland-Reyes, S., and M. Crusoe, "Common-
@@ -719,6 +717,8 @@ Internet-Draft                     app                      January 2018
               A., and R. Dolin, "Web App Manifest", World Wide Web
               Consortium WD WD-appmanifest-20180118, January 2018,
               <https://www.w3.org/TR/2018/WD-appmanifest-20180118>.
+
+
 
 
 

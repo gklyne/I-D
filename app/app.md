@@ -329,14 +329,16 @@ the archive, without necessarily providing access to the archive.
 4. If the prefix is `name,` this indicates that the authority
   is an application or package name, typically as installed 
   on a device or system. 
-  Implementations SHOULD assume that the `name`
-  authority is only unique within a particular installation.
+  Implementations SHOULD assume that an unrecognized `name`
+  authority is only unique within a particular installation,  
+  but MAY assume further uniqueness guarantees for names under
+  their control. 
   It is RECOMMENDED that implementations creating 
   name-based authorities use DNS names under their control, 
   for instance an app installed as `app.example.com` can
   make an authority `name,app.example.com` to refer to its
-  packaged resources, or `name,foo.app.example.com` to refer to its
-  `foo` container.
+  packaged resources, or `name,foo.app.example.com` to refer to a
+  `foo` container distributed across all installations.
 
 The uniqueness properties are unspecified for app
 URIs which authority do not match any of the prefixes defined in
@@ -364,6 +366,11 @@ such as within an information system.
 Assuming an appropriate resolution mechanism which have
 knowledge of the corresponding archive, an app URI
 can also be used for resolution.
+
+Some archive formats might permit resources
+with the same (duplicate) path, in which case it is undefined from
+this specification which particular entry is described.
+
 
 Resolution protocol  {#resolution}
 -------------------
@@ -459,33 +466,22 @@ exchanging app URIs between implementations. Some considerations:
 
 1. Two implementations describe the same archive
   (e.g. stored in the same local file path), but using
-  different v4 UUIDs. The implementations may
+  different random-based UUID authorities. The implementations may
   need to detect equality of the two UUIDs out of band.
 2. Two implementations describe an archive retrieved
-  from the same URL, with the same v5 UUIDs, but retrieved
-  at different times. The implementations might disagree
+  from the same URL, with the same location-based UUID authority, 
+  but retrieved at different times. The implementations might disagree
   about the content of the archive.
 3.  Two implementations describe an archive retrieved
-  from the same URL, with the same v5 UUIDs, but retrieved
+  from the same URL, with the same location-based UUID authority, but retrieved
   using different content negotiation resulting in different
   archive representations. The implementations may disagree
   about path encoding, file name casing or hierarchy.
 4. Two implementations describe the same archive bytestream
-  using the `alg-val` production, but they have used
+  using the hash-based authority, but they have used
   two different hash algorithms. The implementations may
   need to negotiate to a common hash algorithm.
-5. An implementation describe an archive using
-  the `alg-val` production, but a second
-  implementation concurrently modifies the archive's content.
-  The first implementation may need to detect changes to
-  the archive file stamp or re-calculate the checksum
-  at the end of its operations.
-6. Two implementations might have different views of the
-  content of the same archive if the format permits
-  multiple entries with the same path. Care should
-  be taken to follow the convention and specification
-  of the particular archive format.
-7. Two implementations access the same archive,
+5. Two implementations access the same archive,
   which contain file paths with Unicode characters,
   but extracted to two different file systems. Limitations
   and conventions for file names in the local file system
@@ -525,13 +521,13 @@ before converting app URIs.
 
 In particular for IRIs, an archive might contain multiple
 paths with similar-looking characters or with different
-Unicode combine sequences, which could be facilitated
-to mislead users.
+Unicode combine sequences, which could be used to mislead users.
 
 An URI hyperlink might use or guess an app URI authority
 to attempt to climb into a different archive for
 malicious purposes. Applications SHOULD employ
-Same Orgin policy {{RFC6454}} checks.
+Same Orgin policy {{RFC6454}} checks if 
+resolving cross-references is not desired.
 
 While a UUID or hash-based authority provide some level of
 information hiding of an archive's origin, this should not
@@ -544,8 +540,8 @@ instance using dictionary attacks.
 IANA Considerations  {#iana}
 ===================
 
-This specification contains the Provisional IANA
-registration of the app URI scheme according to {{RFC7595}}.
+This specification requests that IANA registers the following 
+URI scheme according to the provisions of {{RFC7595}}.
 
 Scheme name: app
 
