@@ -821,8 +821,12 @@ app://name,gallery.example.org/photos/?New
 </pre>
 <p id="rfc.section.A.1.p.17">then it would be rejected by the app framework as permission was not granted.</p>
 <p id="rfc.section.A.1.p.18">However, if such access had been granted, the gallery could return a <samp>text/uri-list</samp> of the newest photos:</p>
-<p id="rfc.section.A.1.p.19">app://name,gallery.example.org/photos/137 app://name,gallery.example.org/photos/138 app://name,gallery.example.org/photos/139</p>
-<p id="rfc.section.A.1.p.20">This examples show that although an app URI represents a resource, it can have different representations or UI states for different apps.</p>
+<pre>
+app://name,gallery.example.org/photos/137
+app://name,gallery.example.org/photos/138
+app://name,gallery.example.org/photos/139
+</pre>
+<p id="rfc.section.A.1.p.19">This examples show that although an app URI represents a resource, it can have different representations or UI states for different apps.</p>
 <h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> <a href="#sandboxing" id="sandboxing">Sandboxing</a></h1>
 <p id="rfc.section.A.2.p.1">An document store application has received a file <samp>document.tar.gz</samp> which content will be checked for consistency.</p>
 <p id="rfc.section.A.2.p.2">For sandboxing purposes it generates a UUID v4 <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp> using a pseudo-random generator.  The app base URI is thus <samp>app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/</samp></p>

@@ -631,9 +631,9 @@ granted.
 However, if such access had been granted, the gallery could
 return a `text/uri-list` of the newest photos:
 
-  app://name,gallery.example.org/photos/137
-  app://name,gallery.example.org/photos/138
-  app://name,gallery.example.org/photos/139
+    app://name,gallery.example.org/photos/137
+    app://name,gallery.example.org/photos/138
+    app://name,gallery.example.org/photos/139
 
 This examples show that although an app URI represents a resource, 
 it can have different representations or UI states 
