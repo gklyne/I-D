@@ -93,16 +93,16 @@ Table of Contents
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
      9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  13
-     A.1.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  14
-     A.2.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  14
-     A.3.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  15
-     A.4.  Archives that are not files . . . . . . . . . . . . . . .  16
-     A.5.  Linked Data containers which are not on the web . . . . .  16
-     A.6.  Resolution of packaged resources  . . . . . . . . . . . .  17
-   Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  17
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
-
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  14
+     A.1.  Sharing using app names . . . . . . . . . . . . . . . . .  14
+     A.2.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  15
+     A.3.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  16
+     A.4.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  17
+     A.5.  Archives that are not files . . . . . . . . . . . . . . .  17
+     A.6.  Linked Data containers which are not on the web . . . . .  18
+     A.7.  Resolution of packaged resources  . . . . . . . . . . . .  19
+   Appendix B.  History  . . . . . . . . . . . . . . . . . . . . . .  19
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
 
 
@@ -684,6 +684,11 @@ Internet-Draft                     app                      January 2018
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/info/rfc4648>.
 
+   [RFC6570]  Gregorio, J., Fielding, R., Hadley, M., Nottingham, M.,
+              and D. Orchard, "URI Template", RFC 6570,
+              DOI 10.17487/RFC6570, March 2012, <https://www.rfc-
+              editor.org/info/rfc6570>.
+
    [ROBundle]
               Soiland-Reyes, S., Gamble, M., and R. Haines, "Research
               Object Bundle 1.0", Zenodo report,
@@ -716,11 +721,6 @@ Internet-Draft                     app                      January 2018
 
    [1] mailto:stain@apache.org
 
-Appendix A.  Examples
-
-
-
-
 
 
 
@@ -730,7 +730,97 @@ Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 13]
 Internet-Draft                     app                      January 2018
 
 
-A.1.  Sandboxing
+Appendix A.  Examples
+
+A.1.  Sharing using app names
+
+   A photo gallery application on a mobile device uses app URIs for
+   navigation between its UI states.  The gallery is secured so that
+   other applications can't normally access its photos.
+
+   The application is installed as the package name
+   "gallery.example.org", making the corresponding name-based app URI:
+
+   app://name,gallery.example.org/
+
+   A user is at the application state which shows the newest photos as
+   thumbnails:
+
+   app://name,gallery.example.org/photos/?New
+
+   The user selects a photo, rendered with metadata overlaid:
+
+   app://name,gallery.example.org/photos/137
+
+   The user requests to "share" the photo, selecting
+   "messaging.example.com" which uses the common URI framework on the
+   device.
+
+   The photo gallery registers with the device's app framework that the
+   chosen "messaging.example.com" gets read permission to its
+   "/photos/137" resource.
+
+   The sharing function returns a URI Template [RFC6570]:
+
+   app://name,messaging.example.com/share{;uri}{;redirect}
+
+   Filling in the template, the gallery requests to pop up:
+
+   app://name,messaging.example.com/share
+     ;uri=app://gallery.example.org/photos/137
+     ;redirect=app://gallery.example.org/photos/%3fNew
+
+   The app framework checks its registration for "messaging.example.com"
+   and finds the installed messaging application.  It performs
+   permission checks that other apps are allowed to navigate to its
+   "/share" state.
+
+   The messaging app is launched and navigates to its "sharing" UI,
+   asking the user for a caption.
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
+
+   The messaging app requests the app framework to retrieve
+   "app://name,gallery.example.org/photos/137" using content negotiation
+   for an "image/jpeg" representation.
+
+   The app framework finds the installed photo gallery
+   "gallery.example.org", and confirms the read permission.
+
+   The photo gallery application returns a JPEG representation after
+   retrieving the photo from its internal store.
+
+   After the messaging app has completed sharing the picture bytestream,
+   it request the UI framework to navigate to:
+
+   app://name,gallery.example.org/photos/?New
+
+   The UI returns to the original view in the photo gallery.
+
+   If the messaging app had attempted to _retrieve_ the app URI
+
+   app://name,gallery.example.org/photos/?New
+
+   then it would be rejected by the app framework as permission was not
+   granted.
+
+   However, if such access had been granted, the gallery could return a
+   "text/uri-list" of the newest photos:
+
+   app://name,gallery.example.org/photos/137
+   app://name,gallery.example.org/photos/138
+   app://name,gallery.example.org/photos/139
+
+   This examples show that although an app URI represents a resource, it
+   can have different representations or UI states for different apps.
+
+A.2.  Sandboxing
 
    An document store application has received a file "document.tar.gz"
    which content will be checked for consistency.
@@ -744,6 +834,13 @@ A.1.  Sandboxing
    o  "./doc.html" which links to "css/base.css"
 
    o  "./css/base.css" which links to "../fonts/Coolie.woff"
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 15]
+
+Internet-Draft                     app                      January 2018
+
 
    o  "./fonts/Coolie.woff"
 
@@ -767,7 +864,7 @@ A.1.  Sandboxing
    conclude from the "Not Found" error that the path "/outside.txt" was
    not present in the archive.
 
-A.2.  Origin-based
+A.3.  Origin-based
 
    A web crawler is about to index the content of the URL
    "http://example.com/data.zip" and need to generate absolute URIs as
@@ -778,13 +875,6 @@ A.2.  Origin-based
 
    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
-
-
-
-Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
 
    Thus the location-based app URI for indexing the ZIP content is
 
@@ -799,6 +889,15 @@ Internet-Draft                     app                      January 2018
 
    When the application encounters "http://example.com/data.zip" some
    time later it can recalculate the same base app URI.  This time the
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 16]
+
+Internet-Draft                     app                      January 2018
+
+
    ZIP file has been modified upstream and the crawler finds
    additionally:
 
@@ -808,7 +907,7 @@ Internet-Draft                     app                      January 2018
    simply remove those from its database, as it used the same app base
    URI as in last crawl.
 
-A.3.  Hash-based
+A.4.  Hash-based
 
    An application where users can upload software distributions for
    virus checking needs to avoid duplication as users tend to upload
@@ -835,18 +934,11 @@ A.3.  Hash-based
    The crawler finds that its virus database already contain entries
    for:
 
-
-
-Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 15]
-
-Internet-Draft                     app                      January 2018
-
-
    app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
    and flags the upload as malicious without having to scan it again.
 
-A.4.  Archives that are not files
+A.5.  Archives that are not files
 
    An application is relating BagIt archives [I-D.draft-kunze-bagit-14]
    on a shared file system, using structured folders and manifests
@@ -854,6 +946,13 @@ A.4.  Archives that are not files
 
    The BagIt payload manifest "/gfs/bags/scan15/manifest-md5.txt" lists
    the files:
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 17]
+
+Internet-Draft                     app                      January 2018
+
 
    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
@@ -873,7 +972,7 @@ A.4.  Archives that are not files
    these app URIs, it can match them to the correct bag folder by
    inspecting the "External-Identifier" metadata.
 
-A.5.  Linked Data containers which are not on the web
+A.6.  Linked Data containers which are not on the web
 
    An application exposes in-memory objects of an Address Book as a
    Linked Data Platform container [W3C.REC-ldp-20150226], but addressing
@@ -890,14 +989,6 @@ A.5.  Linked Data containers which are not on the web
 
    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
 
-
-
-
-Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 16]
-
-Internet-Draft                     app                      January 2018
-
-
    The LDP client resolves the container with content negotiation for
    the "text/turtle" media type, and receives:
 
@@ -910,13 +1001,22 @@ Internet-Draft                     app                      January 2018
      dcterms:title "Address book";
      ldp:contains <contact1>, <contact2>.
 
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 18]
+
+Internet-Draft                     app                      January 2018
+
+
    The LDP client resolves the relative URIs to retrieve each of the
    contacts:
 
    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
-A.6.  Resolution of packaged resources
+A.7.  Resolution of packaged resources
 
    A virtual file system driver on a mobile operating system has mounted
    several packaged applications for resolving common resources.  An
@@ -946,14 +1046,6 @@ Appendix B.  History
    While the focus of those W3C Notes was to specify how to resolve
    resources from within a packaged application, this specification
    generalize the "app" URI scheme to support referencing and
-
-
-
-Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 17]
-
-Internet-Draft                     app                      January 2018
-
-
    identifying resources within any archive, and de-emphasize the
    retrieval mechanism.
 
@@ -962,6 +1054,17 @@ Internet-Draft                     app                      January 2018
    same scheme name and remains compatible with the intentions of
    [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Application
    and Packaging Pointer" instead of "Application".
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 19]
+
+Internet-Draft                     app                      January 2018
+
 
 Authors' Addresses
 
@@ -1005,4 +1108,13 @@ Authors' Addresses
 
 
 
-Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 18]
+
+
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 26, 2018                [Page 20]
