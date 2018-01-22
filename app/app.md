@@ -101,7 +101,7 @@ informative:
 
 --- abstract
 
-This Internet-Draft proposes the
+This specification proposes the
 Archive and Packaging Pointer URI scheme `app`.
 
 app URIs can be used to consume or reference hypermedia
@@ -194,12 +194,11 @@ The `path-absolute` component provides the absolute path of a resource
 (e.g. a file or directory) within the archive. See [Path](#path)
 for details.
 
-The semantics of the `query` component is undefined by this Internet-Draft.
-Implementations SHOULD NOT generate a query component for app URIs.
+The `query` component MAY be used, but its semantics is undefined by this specification.
 
 The "fragment" component MAY be used by implementations according
 to {{RFC3986}} and the implied media type {{RFC2046}} of the
-resource at the path. This Internet-Draft does not specify how
+resource at the path. This specification does not specify how
 to determine the media type.
 
 
@@ -228,7 +227,7 @@ The `authority` production match its general definition in {{RFC3986}}, e.g.
 `alg-val` productions, consumers of app URIs should attempt to match those
 first.  While {{RFC7320}} section 2.2 says an extension may not
 "define the structure or the semantics for URI authorities",
-extensions of this Internet-Draft **are** permitted to do so,
+extensions of this specification **are** permitted to do so,
 if using a DNS domain name under their control.
 For instance, a vendor owning `example.com` may specify that
 `{OID}` in `{OID}.oid.example.com` has special semantics.
@@ -290,7 +289,7 @@ the path represents a directory.
 Scheme semantics    {#semantics}
 ================
 
-This Internet-Draft does not constrain what particular format
+This specification does not constrain what particular format
 might constitute an _archive_, and neither does it require
 that the archive is retrievable as a single bytestream or file.
 Examples of archive media types include
@@ -326,7 +325,7 @@ can also be used for resolution.
 Resolution protocol  {#resolution}
 -------------------
 
-This Internet-Draft do not specify directly the protocol to
+This specification do not define the protocol to
 resolve resources according to the app URI scheme.
 For instance, one implementation might rewrite app URIs to
 localized paths in a temporary directory, while
@@ -355,7 +354,7 @@ concept of a directory listing or archive file, in which case
 the implementation MAY fail such resolutions with the
 equivalent of "Not Implemented".
 
-It is not specified in this Internet-Draft how an implementation
+It is not undefined by this specification how an implementation
 can determine the media type of a file within an archive. This could
 be expressed in secondary resources (such as a manifest),
 be determined by file extensions or magic bytes.
@@ -366,10 +365,10 @@ that start with the app URI of the directory.
 
 Some archive formats might support resources which are
 neither directories nor regular files (e.g. device files,
-symbolic links). This Internet-Draft does not specify the
+symbolic links). This specification does not define the
 semantics of attempting to resolve such resources.
 
-This Internet-Draft does not specify how to change an archive
+This specification does not define how to change an archive
 or its content using app URIs.
 
 
@@ -503,7 +502,7 @@ instance using dictionary attacks.
 IANA Considerations  {#iana}
 ===================
 
-This Internet-Draft contains the Provisional IANA
+This specification contains the Provisional IANA
 registration of the app URI scheme according to {{RFC7595}}.
 
 Scheme name: app
@@ -677,7 +676,7 @@ cached in memory.
 History   {#history}
 =======
 
-This Internet-Draft proposes the URI scheme `app`, which was originally
+This specification proposes the URI scheme `app`, which was originally
 proposed by {{W3C.NOTE-app-uri-20150723}} but never registered with IANA.
 That W3C Note evolved from {{W3C.NOTE-widgets-uri-20120313}} which
 proposed the URI scheme `widget`.
@@ -685,12 +684,12 @@ proposed the URI scheme `widget`.
 Neither W3C Notes progressed further as Recommendation track documents.
 
 While the focus of those W3C Notes was to specify how to resolve resources from
-within a packaged application, this Internet-Draft generalize the `app` URI
+within a packaged application, this specification generalize the `app` URI
 scheme to support referencing and identifying resources within any archive, and
 de-emphasize the retrieval mechanism.
 
 For compatibility with existing adaptations of the `app` URI scheme,
-e.g. {{ROBundle}} and {{CWLViewer}}, this Internet-Draft reuse the same
+e.g. {{ROBundle}} and {{CWLViewer}}, this specification reuse the same
 scheme name and remains compatible with the intentions of
 {{W3C.NOTE-app-uri-20150723}}, but renames "app" to mean
 "Archive and Packaging Pointer" instead of "Application".

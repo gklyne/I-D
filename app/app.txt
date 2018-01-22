@@ -14,7 +14,7 @@ Expires: July 24, 2018                               Mozilla Corporation
 
 Abstract
 
-   This Internet-Draft proposes the Archive and Packaging Pointer URI
+   This specification proposes the Archive and Packaging Pointer URI
    scheme "app".
 
    app URIs can be used to consume or reference hypermedia resources
@@ -177,14 +177,13 @@ Internet-Draft                     app                      January 2018
    resource (e.g. a file or directory) within the archive.  See
    Section 3.2 for details.
 
-   The semantics of the "query" component is undefined by this Internet-
-   Draft.  Implementations SHOULD NOT generate a query component for app
-   URIs.
+   The "query" component MAY be used, but its semantics is undefined by
+   this specification.
 
    The "fragment" component MAY be used by implementations according to
    [RFC3986] and the implied media type [RFC2046] of the resource at the
-   path.  This Internet-Draft does not specify how to determine the
-   media type.
+   path.  This specification does not specify how to determine the media
+   type.
 
 3.1.  Authority
 
@@ -208,7 +207,7 @@ Internet-Draft                     app                      January 2018
    "UUID" and "alg-val" productions, consumers of app URIs should
    attempt to match those first.  While [RFC7320] section 2.2 says an
    extension may not "define the structure or the semantics for URI
-   authorities", extensions of this Internet-Draft *are* permitted to do
+   authorities", extensions of this specification *are* permitted to do
    so, if using a DNS domain name under their control.  For instance, a
    vendor owning "example.com" may specify that "{OID}" in
    "{OID}.oid.example.com" has special semantics.
@@ -218,6 +217,7 @@ Internet-Draft                     app                      January 2018
 
    1.  _Sandboxing_, when independently interpreting resources in an
        archive, the authority SHOULD be a UUID v4 [RFC4122] created with
+       a suitable random number generator [RFC4086].  This ensures with
 
 
 
@@ -226,7 +226,6 @@ Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 4]
 Internet-Draft                     app                      January 2018
 
 
-       a suitable random number generator [RFC4086].  This ensures with
        high probablity that the app base URI is globally unique.  An
        application MAY choose to reuse a previously assigned UUID that
        is associated with the archive.
@@ -277,6 +276,7 @@ Internet-Draft                     app                      January 2018
 
 
 
+
 Soiland-Reyes & Caceres   Expires July 24, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
@@ -284,7 +284,7 @@ Internet-Draft                     app                      January 2018
 
 4.  Scheme semantics
 
-   This Internet-Draft does not constrain what particular format might
+   This specification does not constrain what particular format might
    constitute an _archive_, and neither does it require that the archive
    is retrievable as a single bytestream or file.  Examples of archive
    media types include "application/zip", "application/
@@ -317,11 +317,10 @@ Internet-Draft                     app                      January 2018
 
 4.1.  Resolution protocol
 
-   This Internet-Draft do not specify directly the protocol to resolve
-   resources according to the app URI scheme.  For instance, one
-   implementation might rewrite app URIs to localized paths in a
-   temporary directory, while another implementation might use an
-   embedded HTTP server.
+   This specification do not define the protocol to resolve resources
+   according to the app URI scheme.  For instance, one implementation
+   might rewrite app URIs to localized paths in a temporary directory,
+   while another implementation might use an embedded HTTP server.
 
    It is envisioned that an implementation will have extracted or opened
    an archive in advance, and assigned it an appropriate authority
@@ -330,6 +329,7 @@ Internet-Draft                     app                      January 2018
    paths to the extracted archive on the local file system.
 
    Implementations that support resolving app URIs SHOULD:
+
 
 
 
@@ -362,7 +362,7 @@ Internet-Draft                     app                      January 2018
    directory listing or archive file, in which case the implementation
    MAY fail such resolutions with the equivalent of "Not Implemented".
 
-   It is not specified in this Internet-Draft how an implementation can
+   It is not undefined by this specification how an implementation can
    determine the media type of a file within an archive.  This could be
    expressed in secondary resources (such as a manifest), be determined
    by file extensions or magic bytes.
@@ -373,10 +373,10 @@ Internet-Draft                     app                      January 2018
 
    Some archive formats might support resources which are neither
    directories nor regular files (e.g. device files, symbolic links).
-   This Internet-Draft does not specify the semantics of attempting to
+   This specification does not define the semantics of attempting to
    resolve such resources.
 
-   This Internet-Draft does not specify how to change an archive or its
+   This specification does not define how to change an archive or its
    content using app URIs.
 
 4.2.  Resolving from a .well-known endpoint
@@ -523,7 +523,7 @@ Internet-Draft                     app                      January 2018
 
 8.  IANA Considerations
 
-   This Internet-Draft contains the Provisional IANA registration of the
+   This specification contains the Provisional IANA registration of the
    app URI scheme according to [RFC7595].
 
    Scheme name: app
@@ -844,7 +844,7 @@ Internet-Draft                     app                      January 2018
 
 Appendix B.  History
 
-   This Internet-Draft proposes the URI scheme "app", which was
+   This specification proposes the URI scheme "app", which was
    originally proposed by [W3C.NOTE-app-uri-20150723] but never
    registered with IANA.  That W3C Note evolved from
    [W3C.NOTE-widgets-uri-20120313] which proposed the URI scheme
@@ -854,13 +854,13 @@ Appendix B.  History
    documents.
 
    While the focus of those W3C Notes was to specify how to resolve
-   resources from within a packaged application, this Internet-Draft
+   resources from within a packaged application, this specification
    generalize the "app" URI scheme to support referencing and
    identifying resources within any archive, and de-emphasize the
    retrieval mechanism.
 
    For compatibility with existing adaptations of the "app" URI scheme,
-   e.g.  [ROBundle] and [CWLViewer], this Internet-Draft reuse the same
+   e.g.  [ROBundle] and [CWLViewer], this specification reuse the same
    scheme name and remains compatible with the intentions of
    [W3C.NOTE-app-uri-20150723], but renames "app" to mean "Archive and
    Packaging Pointer" instead of "Application".

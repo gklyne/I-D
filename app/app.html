@@ -405,8 +405,8 @@
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-app-04-SNAPSHOT" />
   <meta name="dct.issued" scheme="ISO8601" content="2018-1-20" />
-  <meta name="dct.abstract" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
-  <meta name="description" content="This Internet-Draft proposes the Archive and Packaging Pointer URI scheme " />
+  <meta name="dct.abstract" content="This specification proposes the Archive and Packaging Pointer URI scheme " />
+  <meta name="description" content="This specification proposes the Archive and Packaging Pointer URI scheme " />
 
 </head>
 
@@ -446,7 +446,7 @@
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This Internet-Draft proposes the Archive and Packaging Pointer URI scheme <samp>app</samp>.</p>
+<p>This specification proposes the Archive and Packaging Pointer URI scheme <samp>app</samp>.</p>
 <p>app URIs can be used to consume or reference hypermedia resources bundled inside a file archive or an application package, as well as to resolve URIs for archive resources within a programmatic framework.</p>
 <p>This URI scheme provides mechanisms to generate a unique base URI to represent the root of the archive, so that relative URI references in a bundled resource can be resolved within the archive without having to extract the archive content on the local file system.</p>
 <p>An app URI can be used for purposes of isolation (e.g. when consuming multiple archives), security constraints (avoiding &#8220;climb out&#8221; from the archive), or for externally identiyfing sub-resources referenced by hypermedia formats.</p>
@@ -517,8 +517,8 @@ app-specific  = "//" app-authority [ path-absolute ] [ "?" query ]
 </pre>
 <p id="rfc.section.3.p.2">The <samp>app-authority</samp> component provides a unique identifier for the opened archive. See <a href="#authority">Section 3.1</a> for details.</p>
 <p id="rfc.section.3.p.3">The <samp>path-absolute</samp> component provides the absolute path of a resource (e.g. a file or directory) within the archive. See <a href="#path">Section 3.2</a> for details.</p>
-<p id="rfc.section.3.p.4">The semantics of the <samp>query</samp> component is undefined by this Internet-Draft.  Implementations SHOULD NOT generate a query component for app URIs.</p>
-<p id="rfc.section.3.p.5">The &#8220;fragment&#8221; component MAY be used by implementations according to <a href="#RFC3986">[RFC3986]</a> and the implied media type <a href="#RFC2046">[RFC2046]</a> of the resource at the path. This Internet-Draft does not specify how to determine the media type.</p>
+<p id="rfc.section.3.p.4">The <samp>query</samp> component MAY be used, but its semantics is undefined by this specification.</p>
+<p id="rfc.section.3.p.5">The &#8220;fragment&#8221; component MAY be used by implementations according to <a href="#RFC3986">[RFC3986]</a> and the implied media type <a href="#RFC2046">[RFC2046]</a> of the resource at the path. This specification does not specify how to determine the media type.</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#authority" id="authority">Authority</a></h1>
 <p id="rfc.section.3.1.p.1">The purpose of the <samp>authority</samp> component in an app URI is to build a unique base URI for a particular archive. The authority is NOT intended to be resolvable without former knowledge of the archive.</p>
 <p id="rfc.section.3.1.p.2">The authority of an app URI MUST be valid according to this production:</p>
@@ -527,7 +527,7 @@ app-authority = UUID | alg-val | authority
 </pre>
 <p id="rfc.section.3.1.p.3">The <samp>UUID</samp> production match its definition in <a href="#RFC4122">[RFC4122]</a>, e.g.  <samp>2a47c495-ac70-4ed1-850b-8800a57618cf</samp></p>
 <p id="rfc.section.3.1.p.4">The <samp>alg-val</samp> production match its definition in <a href="#RFC6920">[RFC6920]</a>, e.g.  <samp>sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8</samp></p>
-<p id="rfc.section.3.1.p.5">The <samp>authority</samp> production match its general definition in <a href="#RFC3986">[RFC3986]</a>, e.g.  <samp>example.com</samp>.  As this production necessarily also match the <samp>UUID</samp> and <samp>alg-val</samp> productions, consumers of app URIs should attempt to match those first.  While <a href="#RFC7320">[RFC7320]</a> section 2.2 says an extension may not &#8220;define the structure or the semantics for URI authorities&#8221;, extensions of this Internet-Draft <strong>are</strong> permitted to do so, if using a DNS domain name under their control.  For instance, a vendor owning <samp>example.com</samp> may specify that <samp>{OID}</samp> in <samp>{OID}.oid.example.com</samp> has special semantics.</p>
+<p id="rfc.section.3.1.p.5">The <samp>authority</samp> production match its general definition in <a href="#RFC3986">[RFC3986]</a>, e.g.  <samp>example.com</samp>.  As this production necessarily also match the <samp>UUID</samp> and <samp>alg-val</samp> productions, consumers of app URIs should attempt to match those first.  While <a href="#RFC7320">[RFC7320]</a> section 2.2 says an extension may not &#8220;define the structure or the semantics for URI authorities&#8221;, extensions of this specification <strong>are</strong> permitted to do so, if using a DNS domain name under their control.  For instance, a vendor owning <samp>example.com</samp> may specify that <samp>{OID}</samp> in <samp>{OID}.oid.example.com</samp> has special semantics.</p>
 <p id="rfc.section.3.1.p.6">The choice of authority depends on the purpose of the app URI within the implementation.  Below are some recommendations:</p>
 <p/>
 
@@ -549,7 +549,7 @@ segment-nz    = 1*pchar
 <p id="rfc.section.3.2.p.4">In an app URI, each intermediate <samp>segment</samp> (or <samp>segment-nz</samp>) represent a directory name, while the last segment represent either a directory or file name.</p>
 <p id="rfc.section.3.2.p.5">It is RECOMMENDED to include the trailing <samp>/</samp> if it is known the path represents a directory.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#semantics" id="semantics">Scheme semantics</a></h1>
-<p id="rfc.section.4.p.1">This Internet-Draft does not constrain what particular format might constitute an <em>archive</em>, and neither does it require that the archive is retrievable as a single bytestream or file.  Examples of archive media types include <samp>application/zip</samp>, <samp>application/vnd.android.package-archive</samp>, <samp>application/x-tar</samp>, <samp>application/x-gtar</samp> and <samp>application/x-7z-compressed</samp>.</p>
+<p id="rfc.section.4.p.1">This specification does not constrain what particular format might constitute an <em>archive</em>, and neither does it require that the archive is retrievable as a single bytestream or file.  Examples of archive media types include <samp>application/zip</samp>, <samp>application/vnd.android.package-archive</samp>, <samp>application/x-tar</samp>, <samp>application/x-gtar</samp> and <samp>application/x-7z-compressed</samp>.</p>
 <p id="rfc.section.4.p.2">The <em>authority</em> component identifies the archive file.</p>
 <p id="rfc.section.4.p.3">The <em>path</em> component of an app URI identify individual resources within a particular archive, typically a <em>directory</em> or <em>file</em>.</p>
 <p/>
@@ -562,7 +562,7 @@ segment-nz    = 1*pchar
 <p id="rfc.section.4.p.5">The app URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
 <p id="rfc.section.4.p.6">Assuming an appropriate resolution mechanism which have knowledge of the corresponding archive, an app URI can also be used for resolution.</p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> <a href="#resolution" id="resolution">Resolution protocol</a></h1>
-<p id="rfc.section.4.1.p.1">This Internet-Draft do not specify directly the protocol to resolve resources according to the app URI scheme.  For instance, one implementation might rewrite app URIs to localized paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
+<p id="rfc.section.4.1.p.1">This specification do not define the protocol to resolve resources according to the app URI scheme.  For instance, one implementation might rewrite app URIs to localized paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
 <p id="rfc.section.4.1.p.2">It is envisioned that an implementation will have extracted or opened an archive in advance, and assigned it an appropriate authority according to <a href="#authority">Section 3.1</a>. Such an implementation can then resolve app URIs programmatically, e.g. by using in-memory access or mapping paths to the extracted archive on the local file system.</p>
 <p id="rfc.section.4.1.p.3">Implementations that support resolving app URIs SHOULD:</p>
 <p/>
@@ -577,10 +577,10 @@ segment-nz    = 1*pchar
   <li>Return the archive file if the path component is missing/empty.</li>
 </ol>
 <p id="rfc.section.4.1.p.5">Not all archive formats or implementations will have the concept of a directory listing or archive file, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
-<p id="rfc.section.4.1.p.6">It is not specified in this Internet-Draft how an implementation can determine the media type of a file within an archive. This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
+<p id="rfc.section.4.1.p.6">It is not undefined by this specification how an implementation can determine the media type of a file within an archive. This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
 <p id="rfc.section.4.1.p.7">The media type <samp>text/uri-list</samp> <a href="#RFC2483">[RFC2483]</a> MAY be used to represent a directory listing, in which case it SHOULD contain only URIs that start with the app URI of the directory.</p>
-<p id="rfc.section.4.1.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This Internet-Draft does not specify the semantics of attempting to resolve such resources.</p>
-<p id="rfc.section.4.1.p.9">This Internet-Draft does not specify how to change an archive or its content using app URIs.</p>
+<p id="rfc.section.4.1.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This specification does not define the semantics of attempting to resolve such resources.</p>
+<p id="rfc.section.4.1.p.9">This specification does not define how to change an archive or its content using app URIs.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#well-known" id="well-known">Resolving from a .well-known endpoint</a></h1>
 <p id="rfc.section.4.2.p.1">If the <samp>authority</samp> component of an app URI matches the <samp>alg-val</samp> production, an application MAY attempt to resolve the authority from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> section 4, in order to retrieve the complete archive. Applications SHOULD verify the checksum of the retrieved archive before resolving the individual path.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#encoding" id="encoding">Encoding considerations</a></h1>
@@ -613,7 +613,7 @@ segment-nz    = 1*pchar
 <p id="rfc.section.7.p.8">An URI hyperlink might use or guess an app URI authority to attempt to climb into a different archive for malicious purposes. Applications SHOULD employ Same Orgin policy <a href="#RFC6454">[RFC6454]</a> checks.</p>
 <p id="rfc.section.7.p.9">While a UUID or hash-based authority provide some level of information hiding of an archive&#8217;s origin, this should not be relied upon for access control or anonymisation. Implementors should keep in mind that such authority components in many cases can be predictably generated by third-parties, for instance using dictionary attacks.</p>
 <h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#iana" id="iana">IANA Considerations</a></h1>
-<p id="rfc.section.8.p.1">This Internet-Draft contains the Provisional IANA registration of the app URI scheme according to <a href="#RFC7595">[RFC7595]</a>.</p>
+<p id="rfc.section.8.p.1">This specification contains the Provisional IANA registration of the app URI scheme according to <a href="#RFC7595">[RFC7595]</a>.</p>
 <p id="rfc.section.8.p.2">Scheme name: app</p>
 <p id="rfc.section.8.p.3">Status: provisional</p>
 <p id="rfc.section.8.p.4">Applications/protocols that use this protocol: Hypermedia-consuming application that handle archives or packages.</p>
@@ -841,10 +841,10 @@ app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 <p id="rfc.section.A.5.p.2">The framework first checks that the authority <samp>eb1edec9-d2eb-4736-a875-eb97b37c690e</samp> is valid to access according to the Same Origin policies or permissions of the running application. It then matches the authority to the corresponding application package.</p>
 <p id="rfc.section.A.5.p.3">The framework resolves <samp>/img/logo.png</samp> from within that package, and returns an image buffer it already had cached in memory.</p>
 <h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#history" id="history">History</a></h1>
-<p id="rfc.section.B.p.1">This Internet-Draft proposes the URI scheme <samp>app</samp>, which was originally proposed by <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a> but never registered with IANA.  That W3C Note evolved from <a href="#W3C.NOTE-widgets-uri-20120313">[W3C.NOTE-widgets-uri-20120313]</a> which proposed the URI scheme <samp>widget</samp>.</p>
+<p id="rfc.section.B.p.1">This specification proposes the URI scheme <samp>app</samp>, which was originally proposed by <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a> but never registered with IANA.  That W3C Note evolved from <a href="#W3C.NOTE-widgets-uri-20120313">[W3C.NOTE-widgets-uri-20120313]</a> which proposed the URI scheme <samp>widget</samp>.</p>
 <p id="rfc.section.B.p.2">Neither W3C Notes progressed further as Recommendation track documents.</p>
-<p id="rfc.section.B.p.3">While the focus of those W3C Notes was to specify how to resolve resources from within a packaged application, this Internet-Draft generalize the <samp>app</samp> URI scheme to support referencing and identifying resources within any archive, and de-emphasize the retrieval mechanism.</p>
-<p id="rfc.section.B.p.4">For compatibility with existing adaptations of the <samp>app</samp> URI scheme, e.g. <a href="#ROBundle">[ROBundle]</a> and <a href="#CWLViewer">[CWLViewer]</a>, this Internet-Draft reuse the same scheme name and remains compatible with the intentions of <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a>, but renames &#8220;app&#8221; to mean &#8220;Archive and Packaging Pointer&#8221; instead of &#8220;Application&#8221;.</p>
+<p id="rfc.section.B.p.3">While the focus of those W3C Notes was to specify how to resolve resources from within a packaged application, this specification generalize the <samp>app</samp> URI scheme to support referencing and identifying resources within any archive, and de-emphasize the retrieval mechanism.</p>
+<p id="rfc.section.B.p.4">For compatibility with existing adaptations of the <samp>app</samp> URI scheme, e.g. <a href="#ROBundle">[ROBundle]</a> and <a href="#CWLViewer">[CWLViewer]</a>, this specification reuse the same scheme name and remains compatible with the intentions of <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a>, but renames &#8220;app&#8221; to mean &#8220;Archive and Packaging Pointer&#8221; instead of &#8220;Application&#8221;.</p>
 <h1 id="rfc.authors">
   <a href="#rfc.authors">Authors' Addresses</a>
 </h1>
