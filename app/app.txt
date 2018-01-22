@@ -647,10 +647,6 @@ Internet-Draft                     app                      January 2018
               Hashes", RFC 6920, DOI 10.17487/RFC6920, April 2013,
               <https://www.rfc-editor.org/info/rfc6920>.
 
-   [RFC7320]  Nottingham, M., "URI Design and Ownership", BCP 190,
-              RFC 7320, DOI 10.17487/RFC7320, July 2014,
-              <https://www.rfc-editor.org/info/rfc7320>.
-
    [RFC7595]  Thaler, D., Ed., Hansen, T., and T. Hardie, "Guidelines
               and Registration Procedures for URI Schemes", BCP 35,
               RFC 7595, DOI 10.17487/RFC7595, June 2015,
@@ -665,6 +661,10 @@ Internet-Draft                     app                      January 2018
    [ApacheTaverna]
               "Apache Taverna (incubating)", January 2018,
               <https://taverna.incubator.apache.org/>.
+
+
+
+
 
 
 
@@ -855,8 +855,8 @@ A.4.  Archives that are not files
    The BagIt payload manifest "/gfs/bags/scan15/manifest-md5.txt" lists
    the files:
 
-   49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
-   408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
+   49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
+   408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
 
    The application generates a random UUID v4 "ff2d5a82-7142-4d3f-b8cc-
    3e662d6de756" which it adds to the bag metadata file
@@ -866,8 +866,8 @@ A.4.  Archives that are not files
 
    It then generates app URIs for the files listed in the manifest:
 
-app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
-app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+   app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+   app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 
    When a different application on the same shared file system encounter
    these app URIs, it can match them to the correct bag folder by
@@ -901,13 +901,14 @@ Internet-Draft                     app                      January 2018
    The LDP client resolves the container with content negotiation for
    the "text/turtle" media type, and receives:
 
-@base <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
-@prefix ldp: <http://www.w3.org/ns/ldp#>.
-@prefix dcterms: <http://purl.org/dc/terms/>.
+   @base <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+   @prefix ldp: <http://www.w3.org/ns/ldp#>.
+   @prefix dcterms: <http://purl.org/dc/terms/>.
 
-<app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
-  dcterms:title "Address book" ;
-  ldp:contains <contact1>, <contact2> .
+   <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
+     a ldp:BasicContainer;
+     dcterms:title "Address book";
+     ldp:contains <contact1>, <contact2>.
 
    The LDP client resolves the relative URIs to retrieve each of the
    contacts:
@@ -945,7 +946,6 @@ Appendix B.  History
    While the focus of those W3C Notes was to specify how to resolve
    resources from within a packaged application, this specification
    generalize the "app" URI scheme to support referencing and
-
 
 
 

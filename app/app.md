@@ -50,8 +50,6 @@ normative:
   RFC6454:
   # ni hashes
   RFC6920:
-  # URI design
-  RFC7320:
   # Registration Procedures for URI Schemes
   RFC7595:
   # file URI scheme
@@ -667,8 +665,8 @@ folders and manifests rather than individual archive files.
 
 The BagIt payload manifest `/gfs/bags/scan15/manifest-md5.txt` lists the files:
 
-    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
-    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
+    49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
+    408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
 
 The application generates a random UUID v4
 `ff2d5a82-7142-4d3f-b8cc-3e662d6de756` which it adds to
@@ -678,8 +676,8 @@ the bag metadata file `/gfs/bags/scan15/bag-info.txt`
 
 It then generates app URIs for the files listed in the manifest:
 
-    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
-    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 
 When a different application on the same shared file system encounter 
 these app URIs, it can match them to the correct bag folder by 
@@ -713,9 +711,10 @@ for the `text/turtle` media type, and receives:
     @prefix ldp: <http://www.w3.org/ns/ldp#>.
     @prefix dcterms: <http://purl.org/dc/terms/>.
     
-    <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
-      dcterms:title "Address book" ;
-      ldp:contains <contact1>, <contact2> .
+    <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
+      a ldp:BasicContainer;
+      dcterms:title "Address book";
+      ldp:contains <contact1>, <contact2>.
 
 The LDP client resolves the relative URIs to retrieve each of the contacts:
 

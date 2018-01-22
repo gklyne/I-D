@@ -710,12 +710,6 @@ name          = "name," reg-name
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC7320">[RFC7320]</b>
-      </td>
-      <td class="top"><a>Nottingham, M.</a>, "<a href="http://tools.ietf.org/html/rfc7320">URI Design and Ownership</a>", BCP 190, RFC 7320, DOI 10.17487/RFC7320, July 2014.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC7595">[RFC7595]</b>
       </td>
       <td class="top"><a>Thaler, D.</a>, <a>Hansen, T.</a> and <a>T. Hardie</a>, "<a href="http://tools.ietf.org/html/rfc7595">Guidelines and Registration Procedures for URI Schemes</a>", BCP 35, RFC 7595, DOI 10.17487/RFC7595, June 2015.</td>
@@ -849,8 +843,8 @@ app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 <p id="rfc.section.A.4.p.1">An application is relating BagIt archives <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a> on a shared file system, using structured folders and manifests rather than individual archive files.</p>
 <p id="rfc.section.A.4.p.2">The BagIt payload manifest <samp>/gfs/bags/scan15/manifest-md5.txt</samp> lists the files:</p>
 <pre>
-49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/images/q172.png
-408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/images/q172.txt
+49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
+408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
 </pre>
 <p id="rfc.section.A.4.p.3">The application generates a random UUID v4 <samp>ff2d5a82-7142-4d3f-b8cc-3e662d6de756</samp> which it adds to the bag metadata file <samp>/gfs/bags/scan15/bag-info.txt</samp></p>
 <pre>
@@ -858,8 +852,8 @@ External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
 </pre>
 <p id="rfc.section.A.4.p.4">It then generates app URIs for the files listed in the manifest:</p>
 <pre>
-app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.png
-app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
+app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 </pre>
 <p id="rfc.section.A.4.p.5">When a different application on the same shared file system encounter these app URIs, it can match them to the correct bag folder by inspecting the <samp>External-Identifier</samp> metadata.</p>
 <h1 id="rfc.appendix.A.5"><a href="#rfc.appendix.A.5">A.5.</a> <a href="#linked-data-containers-which-are-not-on-the-web" id="linked-data-containers-which-are-not-on-the-web">Linked Data containers which are not on the web</a></h1>
@@ -875,9 +869,10 @@ app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
 @prefix ldp: &lt;http://www.w3.org/ns/ldp#&gt;.
 @prefix dcterms: &lt;http://purl.org/dc/terms/&gt;.
 
-&lt;app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/&gt; a ldp:BasicContainer ;
-  dcterms:title "Address book" ;
-  ldp:contains &lt;contact1&gt;, &lt;contact2&gt; .
+&lt;app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/&gt;
+  a ldp:BasicContainer;
+  dcterms:title "Address book";
+  ldp:contains &lt;contact1&gt;, &lt;contact2&gt;.
 </pre>
 <p id="rfc.section.A.5.p.5">The LDP client resolves the relative URIs to retrieve each of the contacts:</p>
 <pre>
