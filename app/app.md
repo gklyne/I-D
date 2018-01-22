@@ -142,11 +142,14 @@ For the purpose of this specification, an **archive** is a
 collection of sub-resources addressable by name or path.
 This definition covers typical archive file formats like 
 `.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}}, 
-but also non-file resource bundles
-can be considered an archive, e.g. 
+but also non-file resource packages like
 an LDP Container {{W3C.REC-ldp-20150226}},
 an installed Web App {{W3C.WD-appmanifest-20180118}},
 or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
+
+For brevity, the term _archive_ is used throughout this 
+specification, although from the above it can also mean 
+a _container_, _application_ or _package_.
 
 
 Background        {#background}
@@ -229,58 +232,33 @@ knowledge of the archive.
 
 
 The authority of an app URI MUST be valid according to
-this production:
+these productions:
 
-    app-authority = UUID | alg-val | authority
+    app-authority = uuid | ni | name | authority
+    uuid          = "uuid," UUID
+    ni            = "ni," alg-val
+    name          = "name," reg-name 
 
-The `UUID` production match its definition in {{RFC4122}}, e.g.
-`2a47c495-ac70-4ed1-850b-8800a57618cf`
+1. The prefix `uuid,` combines with the `UUID` production as defined in {{RFC4122}}, e.g.
+`uuid,2a47c495-ac70-4ed1-850b-8800a57618cf`
 
-The `alg-val` production match its definition in {{RFC6920}}, e.g.
-`sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
+2. The prefix `ni,` combines with the `alg-val` production as defined in {{RFC6920}}, e.g.
+`ni,sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
 
-The `authority` production match its general definition in {{RFC3986}}, e.g.
-`example.com`.  As this production necessarily also match the `UUID` and
-`alg-val` productions, consumers of app URIs should attempt to match those
-first.  While {{RFC7320}} section 2.2 says an extension may not
-"define the structure or the semantics for URI authorities",
-extensions of this specification **are** permitted to do so,
-if using a DNS domain name under their control.
-For instance, a vendor owning `example.com` may specify that
-`{OID}` in `{OID}.oid.example.com` has special semantics.
+3. The prefix `name,` combines with the `reg-name` production 
+as defined in {{RFC3986}}, e.g. `name,app.example.com`. 
 
-The choice of authority depends on the purpose of the app URI within the implementation.
-Below are some recommendations:
-
-1. _Sandboxing_, when independently interpreting resources in
- an archive, the authority SHOULD be a
- UUID v4 {{RFC4122}} created with a suitable random number generator {{RFC4086}}.
- This ensures with high probablity that
- the app base URI is globally unique. An application MAY choose to
- reuse a previously assigned UUID that is associated with the archive.
-2. _Location-based_, for referencing resources in an archive accessed at a
- particular URL, the authority SHOULD be generated as a name-based UUID v5 {{RFC4122}}; that is
- based on the SHA1 concatination of the URL namespace
- `6ba7b811-9dad-11d1-80b4-00c04fd430c8` (as UUID bytes) and the
- ASCII bytes of the particular URL. It is NOT RECOMMENDED to use this approach
- with a file URI {{RFC8089}} without a fully qualified `host` name.
-3. _Hash-based_, for referencing resources in an archive as a
- particular bytestream, independent of its location, the authority SHOULD be
- a checksum of the archive bytes. The checksum MUST be expressed
- according to {{RFC6920}}'s `alg-val` production, and SHOULD use the
- `sha-256` algorithm. It is NOT RECOMMENDED to use truncated hash methods.
-
-The generic `authority` production MAY be used
-for extensions if the above mechanisms are not suitable.
-Care should be taken so that the custom `authority`
-do not match the `UUID` nor `alg-val` productions.
+4. The production `authority` matches its definition in {{RFC3986}}. 
+As this necessarily also match the above prefixed productions, 
+those should be considered first before falling back to this production.
 
 
 Path  {#path}
 ----
 
-The `path-absolute` component MUST match the production in
-{{RFC3986}} and provide the absolute path of a resource
+The `path-absolute` component, if present, 
+MUST match the production in {{RFC3986}} and provide 
+the absolute path of a resource
 (e.g. a file or directory) within the archive.
 
 Archive media types vary in constraints and possibilities on
@@ -294,30 +272,90 @@ the path represents a directory.
 Scheme semantics    {#semantics}
 ================
 
-This specification does not constrain what particular format
+This specification does not constrain what format
 might constitute an _archive_, and neither does it require
 that the archive is retrievable as a single bytestream or file.
-Examples of archive media types include
+
+Examples of retrievable archive media types include
 `application/zip`, `application/vnd.android.package-archive`,
 `application/x-tar`, `application/x-gtar` and
 `application/x-7z-compressed`.
 
-The _authority_ component identifies the archive itself.
+Examples of non-file archives include 
+an LDP Container {{W3C.REC-ldp-20150226}},
+an installed Web App {{W3C.WD-appmanifest-20180118}},
+or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
+
+
+Authority semantics
+-------------------
+
+The _authority_ component identifies the archive itself. 
+
+Implementations MAY assume that two app URIs with the 
+same authority component relate to resources within the same 
+archive, subject to limitations explained in this section.
+
+The authority prefix, if present, helps to inform consumers 
+what uniqueness constraints have been used when identifying 
+the archive, without necessarily providing access to the archive.
+
+1. If the prefix is `uuid,` followed by a UUID {{RFC4122}},
+  this indicates a unique archive identity.
+1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}},
+  this indicate uniqueness based on a random number generator.
+  Implementations creating random-based 
+  authorities SHOULD generate the v4 random UUID using
+  a suitable random number generator {{RFC4086}}.
+2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}}, 
+  this indicates uniqueness based on an existing archive location, 
+  typically an URL. Implementations creating location-based
+  authorities from an archive's URL SHOULD generate the
+  v5 UUID using the URL 
+  namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8` 
+  and the particular URL (see {{RFC4122}} section 4.3).
+  Note that while implementations cannot resolve which location was
+  used, they can confirm the name-based UUID if the location
+  is otherwise known. 
+3. If the prefix is `ni,` this indicates a unique archive identity 
+  based on a hashing of the archive's bytestream or content.
+  Implementations can assume that resources within an 
+  `ni` app URIs remains static, although the implementation may
+  use content negotiation or similar transformations. 
+  The checksum MUST be expressed
+  according to {{RFC6920}}'s `alg-val` production.
+  Implementations creating hash-based authorities from an archive's
+  bytestream SHOULD use the `sha-256` without truncation.
+4. If the prefix is `name,` this indicates that the authority
+  is an application or package name, typically as installed 
+  on a device or system. 
+  Implementations SHOULD assume that the `name`
+  authority is only unique within a particular installation.
+  It is RECOMMENDED that implementations creating 
+  name-based authorities use DNS names under their control, 
+  for instance an app installed as `app.example.com` can
+  make an authority `name,app.example.com` to refer to its
+  packaged resources, or `name,foo.app.example.com` to refer to its
+  `foo` container.
+
+The uniqueness properties are unspecified for app
+URIs which authority do not match any of the prefixes defined in
+this specification.
+
+
+Path semantics
+--------------
 
 The _path_ component of an app URI identify individual
 resources within a particular archive, typically
 a *directory* or *file*.
 
-* If the _path_ is missing/empty - e.g.
-`app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22` - then
-the app URI represent the whole archive (e.g. the ZIP file).
 * If the _path_ is `/` - e.g.
 `app://833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
-then the app URI represent the root directory
-of the archive.
+then the app URI represent the archive itself, 
+typically represented as a root directory or collection.
 * If the path ends with `/` then the path represents
-a directory in the archive
-
+a directory or collection.
 
 The app URIs can be used for uniquely identifying
 the resources independent of the location of the archive,
@@ -352,10 +390,9 @@ Implementations that support resolving app URIs SHOULD:
 4. Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.
 5. Return an appropriate directory listing if the path maps to a directory within the archive.
 6. Return an appropriate directory listing of the archive's root directory if the path is `/`.
-7. Return the archive as a bytestream representation if the path component is missing/empty.
 
 Not all archive formats or implementations will have the
-concept of a directory listing or archive bytestream, in which case
+concept of a directory listing, in which case
 the implementation MAY fail such resolutions with the
 equivalent of "Not Implemented".
 
@@ -655,6 +692,43 @@ It then generates app URIs for the files listed in the manifest:
     app://ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/images/q172.txt
 
 When a different application on the same shared file system encounter these app URIs, it can match them to the correct bag folder by inspecting the `External-Identifier` metadata.
+
+
+Linked Data containers which are not on the web
+-----------------------------------------------
+
+An application exposes in-memory objects
+of an Address Book as a 
+Linked Data Platform container {{W3C.REC-ldp-20150226}},
+but addressing the container using app URIs instead of
+http to avoid network exposure.
+
+The app URIs are used in conjuction with a generic
+LDP client library (developed for http), but connected
+to the application's URI resolution mechanism.
+
+The application generates a new random UUID v4 
+`12f89f9c-e6ca-4032-ae73-46b68c2b415a` for the 
+address book, and provides the corresponding app URI
+to the LDP client:
+
+    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+
+The LDP client resolves the container with content negotiation
+for the `text/turtle` media type, and receives:
+
+    @base <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+    @prefix ldp: <http://www.w3.org/ns/ldp#>.
+    @prefix dcterms: <http://purl.org/dc/terms/>.
+    
+    <app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/> a ldp:BasicContainer ;
+      dcterms:title "Address book" ;
+      ldp:contains <contact1>, <contact2> .
+
+The LDP client resolves the relative URIs to retrieve each of the contacts:
+
+    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
+    app://12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
 
 Resolution of packaged resources
