@@ -60,6 +60,8 @@ normative:
 informative:
   # base64
   RFC4648:
+  # URI template
+  RFC6570:
   # bagit
   I-D.draft-kunze-bagit-14:
   # w3c app://
@@ -554,6 +556,89 @@ Change controller: Stian Soiland-Reyes
 
 Examples  {#examples}
 ========
+
+Sharing using app names
+-----------------------
+
+A photo gallery application on a mobile device uses app URIs
+for navigation between its UI states.
+The gallery is secured so that other applications can't normally
+access its photos.
+
+The application is installed as the package name 
+`gallery.example.org`, making the corresponding 
+name-based app URI:
+
+    app://name,gallery.example.org/
+
+A user is at the application state which shows the newest photos as thumbnails:
+
+    app://name,gallery.example.org/photos/?New
+
+The user selects a photo, rendered with metadata overlaid:
+
+    app://name,gallery.example.org/photos/137
+
+The user requests to "share" the photo, selecting
+`messaging.example.com` which uses the common URI 
+framework on the device.
+
+The photo gallery registers with the device's 
+app framework that the chosen `messaging.example.com` gets
+read permission to its `/photos/137` resource.
+
+The sharing function returns a URI Template {{RFC6570}}:
+
+    app://name,messaging.example.com/share{;uri}{;redirect}
+
+Filling in the template, the gallery requests to pop up:
+
+    app://name,messaging.example.com/share
+      ;uri=app://gallery.example.org/photos/137
+      ;redirect=app://gallery.example.org/photos/%3fNew
+
+The app framework checks its registration for `messaging.example.com`
+and finds the installed messaging application. It performs permission
+checks that other apps are allowed to navigate to its `/share` state.
+
+The messaging app is launched and navigates to its "sharing"
+UI, asking the user for a caption.
+
+The messaging app requests the app framework to retrieve
+`app://name,gallery.example.org/photos/137`
+using content negotiation for an `image/jpeg` representation.
+
+The app framework finds the installed photo gallery
+`gallery.example.org`, and confirms the read permission.
+
+The photo gallery application returns a JPEG representation after
+retrieving the photo from its internal store.
+
+After the messaging app has completed sharing the picture bytestream,
+it request the UI framework to navigate to:
+
+    app://name,gallery.example.org/photos/?New
+
+The UI returns to the original view in the photo gallery.
+
+If the messaging app had attempted to _retrieve_ the app URI
+
+    app://name,gallery.example.org/photos/?New
+
+then it would be rejected by the app framework as permission was not
+granted.
+
+However, if such access had been granted, the gallery could
+return a `text/uri-list` of the newest photos:
+
+  app://name,gallery.example.org/photos/137
+  app://name,gallery.example.org/photos/138
+  app://name,gallery.example.org/photos/139
+
+This examples show that although an app URI represents a resource, 
+it can have different representations or UI states 
+for different apps.
+
 
 Sandboxing
 ----------
