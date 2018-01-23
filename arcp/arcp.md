@@ -1,7 +1,7 @@
 ---
-title: Application and Packaging Pointer (app) URI scheme
+title: The Archive and Packaging (arcp) URI scheme
 abbrev: app
-docname: draft-soilandreyes-app-05-SNAPSHOT
+docname: draft-soilandreyes-arcp-00
 date: 2018-01-23
 category: info
 
@@ -64,7 +64,7 @@ informative:
   RFC6570:
   # bagit
   I-D.draft-kunze-bagit-14:
-  # w3c app://
+  # w3c arcp://
   W3C.NOTE-app-uri-20150723:
   # w3c widget://
   W3C.NOTE-widgets-uri-20120313:
@@ -72,6 +72,15 @@ informative:
   W3C.REC-ldp-20150226:
   # web app manifest
   W3C.WD-appmanifest-20180118:
+  # FirefoxOSSecurity
+  FirefoxOS:
+    seriesinfo:
+      MDN: Mozilla Developer Network Web Docs
+    author:
+      org: Mozilla Firefox
+    title: Firefox OS security overview
+    target: https://developer.mozilla.org/en-US/docs/Archive/B2G_OS/Security/Security_model#Packaged_Apps
+    date: 2017-02-27
   # RO bundle
   ROBundle:
     seriesinfo:
@@ -87,10 +96,6 @@ informative:
     - name: Robert Haines
       ins: R. Haines
     date: '2014-11-05'
-  ApacheTaverna:
-    title: 'Apache Taverna (incubating)'
-    target: https://taverna.incubator.apache.org/
-    date: '2018-01-22'
 
 
 
@@ -98,9 +103,9 @@ informative:
 --- abstract
 
 This specification proposes the
-Application and Packaging Pointer URI scheme `app`.
+Application and Packaging Pointer URI scheme `arcp`.
 
-app URIs can be used to consume or reference hypermedia
+arcp URIs can be used to consume or reference hypermedia
 resources bundled inside a file archive or an
 application package, as well as to resolve URIs for
 archive resources within a programmatic framework.
@@ -111,7 +116,7 @@ so that relative URI references in a bundled resource
 can be resolved within the archive without having to
 extract the archive content on the local file system.
 
-An app URI can be used for purposes of isolation
+An arcp URI can be used for purposes of isolation
 (e.g. when consuming multiple archives),
 security constraints (avoiding "climb out" from the archive),
 or for externally identiyfing sub-resources
@@ -145,7 +150,7 @@ a _container_, _application_ or _package_.
 Background        {#background}
 ==========
 
-Mobile and Web Applications ("apps") 
+Mobile and Web Applications 
 may bundle resources such as stylesheets with
 relative URI references to scripts, images and fonts. Resolving 
 such resources within URI handling frameworks may require
@@ -192,17 +197,17 @@ secure and globally unique.
 Scheme syntax    {#syntax}
 =============
 
-The `app` URI scheme follows the {{RFC3986}} syntax for hierarchical
+The `arcp` URI scheme follows the {{RFC3986}} syntax for hierarchical
 URIs according to the following productions:
 
-    URI           = scheme ":" app-specific [ "#" fragment ]
+    URI           = scheme ":" arcp-specific [ "#" fragment ]
 
-    scheme        = "app"
+    scheme        = "arcp"
 
-    app-specific  = "//" app-authority [ path-absolute ] [ "?" query ]
+    arcp-specific  = "//" arcp-authority [ path-absolute ] [ "?" query ]
 
 
-The `app-authority` component provides a unique identifier for the opened archive. See [Authority](#authority) for details.
+The `arcp-authority` component provides a unique identifier for the opened archive. See [Authority](#authority) for details.
 
 The `path-absolute` component provides the absolute path of a resource
 (e.g. a file or directory) within the archive. See [Path](#path)
@@ -219,16 +224,16 @@ to determine the media type.
 Authority  {#authority}
 ---------
 
-The purpose of the `authority` component in an app URI is
+The purpose of the `authority` component in an arcp URI is
 to build a unique base URI for a particular archive. The
 authority is NOT intended to be resolvable without former
 knowledge of the archive.
 
 
-The authority of an app URI MUST be valid according to
+The authority of an arcp URI MUST be valid according to
 these productions:
 
-    app-authority = uuid | ni | name | authority
+    arcp-authority = uuid | ni | name | authority
     uuid          = "uuid," UUID
     ni            = "ni," alg-val
     name          = "name," reg-name 
@@ -286,7 +291,7 @@ Authority semantics
 
 The _authority_ component identifies the archive itself. 
 
-Implementations MAY assume that two app URIs with the 
+Implementations MAY assume that two arcp URIs with the 
 same authority component relate to resources within the same 
 archive, subject to limitations explained in this section.
 
@@ -314,7 +319,7 @@ the archive, without necessarily providing access to the archive.
 3. If the prefix is `ni,` this indicates a unique archive identity 
   based on a hashing of the archive's bytestream or content.
   Implementations can assume that resources within an 
-  `ni` app URIs remains static, although the implementation may
+  `ni` arcp URIs remains static, although the implementation may
   use content negotiation or similar transformations. 
   The checksum MUST be expressed
   according to {{RFC6920}}'s `alg-val` production.
@@ -324,9 +329,9 @@ the archive, without necessarily providing access to the archive.
   is an application or package name, typically as installed 
   on a device or system. 
   Implementations SHOULD assume that an unrecognized `name`
-  authority is only unique within a particular installation,  
+  authority is only unique within a particular installation,
   but MAY assume further uniqueness guarantees for names under
-  their control. 
+  their control.  
   It is RECOMMENDED that implementations creating 
   name-based authorities use DNS names under their control, 
   for instance an app installed as `app.example.com` can
@@ -334,7 +339,7 @@ the archive, without necessarily providing access to the archive.
   packaged resources, or `name,foo.app.example.com` to refer to a
   `foo` container distributed across all installations.
 
-The uniqueness properties are unspecified for app
+The uniqueness properties are unspecified for arcp
 URIs which authority do not match any of the prefixes defined in
 this specification.
 
@@ -342,23 +347,23 @@ this specification.
 Path semantics
 --------------
 
-The _path_ component of an app URI identify individual
+The _path_ component of an arcp URI identify individual
 resources within a particular archive, typically
 a *directory* or *file*.
 
 * If the _path_ is `/` - e.g.
-`app://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
-then the app URI represent the archive itself, 
+`arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
+then the arcp URI represent the archive itself, 
 typically represented as a root directory or collection.
 * If the path ends with `/` then the path represents
 a directory or collection.
 
-The app URIs can be used for uniquely identifying
+The arcp URIs can be used for uniquely identifying
 the resources independent of the location of the archive,
 such as within an information system.
 
 Assuming an appropriate resolution mechanism which have
-knowledge of the corresponding archive, an app URI
+knowledge of the corresponding archive, an arcp URI
 can also be used for resolution.
 
 Some archive formats might permit resources
@@ -370,8 +375,8 @@ Resolution protocol  {#resolution}
 -------------------
 
 This specification do not define the protocol to
-resolve resources according to the app URI scheme.
-For instance, one implementation might rewrite app URIs to
+resolve resources according to the arcp URI scheme.
+For instance, one implementation might rewrite arcp URIs to
 localized paths in a temporary directory, while
 another implementation might use an embedded HTTP server.
 
@@ -379,11 +384,11 @@ It is envisioned that an implementation will
 have extracted or opened an archive in
 advance, and assigned it an appropriate authority according
 to [Authority](#authority). Such an implementation
-can then resolve app URIs programmatically, e.g. by using
+can then resolve arcp URIs programmatically, e.g. by using
 in-memory access or mapping paths to the extracted archive on
 the local file system.
 
-Implementations that support resolving app URIs SHOULD:
+Implementations that support resolving arcp URIs SHOULD:
 
 1. Fail with the equivalent of _Not Found_ if the authority is unknown.
 2. Fail with the equivalent of _Gone_ if the authority is known, but the content of the archive is no longer available.
@@ -404,7 +409,7 @@ be determined by file extensions or magic bytes.
 
 The media type `text/uri-list` {{RFC2483}} MAY be used to represent
 a directory listing, in which case it SHOULD contain only URIs
-that start with the app URI of the directory.
+that start with the arcp URI of the directory.
 
 Some archive formats might support resources which are
 neither directories nor regular files (e.g. device files,
@@ -412,13 +417,13 @@ symbolic links). This specification does not define the
 semantics of attempting to resolve such resources.
 
 This specification does not define how to change an archive
-or its content using app URIs.
+or its content using arcp URIs.
 
 
 Resolving from a .well-known endpoint  {#well-known}
 -------------------------------------
 
-If the `authority` component of an app URI matches the `alg-val`
+If the `authority` component of an arcp URI matches the `alg-val`
 production, an application MAY attempt to resolve the authority
 from any `.well-known/ni/` endpoint {{RFC5785}} as specified in
 {{RFC6920}} section 4, in order to retrieve the complete
@@ -456,7 +461,7 @@ Interoperability considerations   {#interoperability}
 As multiple authorities are possible for the same
 archive ([Authority](#authority)), and path interpretation
 might vary, there can be interoperability challenges when
-exchanging app URIs between implementations. Some considerations:
+exchanging arcp URIs between implementations. Some considerations:
 
 1. Two implementations describe the same archive
   (e.g. stored in the same local file path), but using
@@ -488,18 +493,18 @@ Security Considerations {#security}
 =======================
 
 As when handling any content, extra care should be taken when
-consuming archives and app URIs from unknown sources.
+consuming archives and arcp URIs from unknown sources.
 
 An archive could contain compressed files that expand to
 fill all available disk space.
 
 A maliciously crafted archive could contain paths with characters
-(e.g. backspace) which could make an app URI invalid or
+(e.g. backspace) which could make an arcp URI invalid or
 misleading if used unescaped.
 
 A maliciously crafted archive could contain paths
 (e.g. combined Unicode sequences) that cause the
-app URI to be very long, causing issues in information
+arcp URI to be very long, causing issues in information
 systems propagating said URI.
 
 An archive might contain symbolic links that, if
@@ -507,17 +512,17 @@ extracted to a local file system, might address files
 outside the archive's directory structure. Implementations SHOULD
 detect such links and prevent outside access.
 
-An maliciously crafted app URI might contain `../` path segments,
+An maliciously crafted arcp URI might contain `../` path segments,
 which if naively converted to a `file:///` URI might address
 files outside the archive's directory structure. Implementations
 SHOULD perform Path Segment Normalization {{RFC3986}}
-before converting app URIs.
+before converting arcp URIs.
 
 In particular for IRIs, an archive might contain multiple
 paths with similar-looking characters or with different
 Unicode combine sequences, which could be used to mislead users.
 
-An URI hyperlink might use or guess an app URI authority
+An URI hyperlink might use or guess an arcp URI authority
 to attempt to climb into a different archive for
 malicious purposes. Applications SHOULD employ
 Same Orgin policy {{RFC6454}} checks if 
@@ -537,7 +542,7 @@ IANA Considerations  {#iana}
 This specification requests that IANA registers the following 
 URI scheme according to the provisions of {{RFC7595}}.
 
-Scheme name: app
+Scheme name: arcp
 
 Status: provisional
 
@@ -560,55 +565,55 @@ Examples  {#examples}
 Sharing using app names
 -----------------------
 
-A photo gallery application on a mobile device uses app URIs
+A photo gallery application on a mobile device uses arcp URIs
 for navigation between its UI states.
 The gallery is secured so that other applications can't normally
 access its photos.
 
-The application is installed as the package name 
-`gallery.example.org`, making the corresponding 
-name-based app URI:
+The application is installed as the app name 
+`gallery.example.org` as the vendor controls `example.org`, 
+making the corresponding name-based arcp URI:
 
-    app://name,gallery.example.org/
+    arcp://name,gallery.example.org/
 
 A user is at the application state which shows the newest photos as thumbnails:
 
-    app://name,gallery.example.org/photos/?New
+    arcp://name,gallery.example.org/photos/?New
 
 The user selects a photo, rendered with metadata overlaid:
 
-    app://name,gallery.example.org/photos/137
+    arcp://name,gallery.example.org/photos/137
 
 The user requests to "share" the photo, selecting
-`messaging.example.com` which uses the common URI 
-framework on the device.
+`messaging.example.com` which uses a common arcp
+URI framework on the device.
 
 The photo gallery registers with the device's 
-app framework that the chosen `messaging.example.com` gets
+arcp framework that the chosen `messaging.example.com` gets
 read permission to its `/photos/137` resource.
 
 The sharing function returns a URI Template {{RFC6570}}:
 
-    app://name,messaging.example.com/share{;uri}{;redirect}
+    arcp://name,messaging.example.com/share{;uri}{;redirect}
 
 Filling in the template, the gallery requests to pop up:
 
-    app://name,messaging.example.com/share
-      ;uri=app://gallery.example.org/photos/137
-      ;redirect=app://gallery.example.org/photos/%3fNew
+    arcp://name,messaging.example.com/share
+      ;uri=arcp://gallery.example.org/photos/137
+      ;redirect=arcp://gallery.example.org/photos/%3fNew
 
-The app framework checks its registration for `messaging.example.com`
+The arcp framework checks its registration for `messaging.example.com`
 and finds the installed messaging application. It performs permission
 checks that other apps are allowed to navigate to its `/share` state.
 
 The messaging app is launched and navigates to its "sharing"
 UI, asking the user for a caption.
 
-The messaging app requests the app framework to retrieve
-`app://name,gallery.example.org/photos/137`
+The messaging app requests the arcp framework to retrieve
+`arcp://name,gallery.example.org/photos/137`
 using content negotiation for an `image/jpeg` representation.
 
-The app framework finds the installed photo gallery
+The arcp framework finds the installed photo gallery
 `gallery.example.org`, and confirms the read permission.
 
 The photo gallery application returns a JPEG representation after
@@ -617,25 +622,25 @@ retrieving the photo from its internal store.
 After the messaging app has completed sharing the picture bytestream,
 it request the UI framework to navigate to:
 
-    app://name,gallery.example.org/photos/?New
+    arcp://name,gallery.example.org/photos/?New
 
 The UI returns to the original view in the photo gallery.
 
-If the messaging app had attempted to _retrieve_ the app URI
+If the messaging app had attempted to _retrieve_ the arcp URI
 
-    app://name,gallery.example.org/photos/?New
+    arcp://name,gallery.example.org/photos/?New
 
-then it would be rejected by the app framework as permission was not
+then it would be rejected by the arcp framework as permission was not
 granted.
 
 However, if such access had been granted, the gallery could
 return a `text/uri-list` of the newest photos:
 
-    app://name,gallery.example.org/photos/137
-    app://name,gallery.example.org/photos/138
-    app://name,gallery.example.org/photos/139
+    arcp://name,gallery.example.org/photos/137
+    arcp://name,gallery.example.org/photos/138
+    arcp://name,gallery.example.org/photos/139
 
-This examples show that although an app URI represents a resource, 
+This examples show that although an arcp URI represents a resource, 
 it can have different representations or UI states 
 for different apps.
 
@@ -648,7 +653,9 @@ An document store application has received a file
 
 For sandboxing purposes it generates a UUID v4
 `32a423d6-52ab-47e3-a9cd-54f418a48571` using a pseudo-random generator.
-The app base URI is thus `app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/`
+The arcp base URI is thus:
+
+    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/
 
 The archive contains the files:
 
@@ -656,13 +663,13 @@ The archive contains the files:
 * `./css/base.css`  which links to `../fonts/Coolie.woff`
 * `./fonts/Coolie.woff`
 
-The application generates the corresponding app URIs and uses those for URI resolutions to list resources and their hyperlinks:
+The application generates the corresponding arcp URIs and uses those for URI resolutions to list resources and their hyperlinks:
 
-    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
-      -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-      -> app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-    app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
+      -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+      -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 
 The application is now confident that all hyperlinked files are
 indeed present in the archive. In its database it notes which `tar.gz` file
@@ -670,7 +677,7 @@ corresponds to UUID `32a423d6-52ab-47e3-a9cd-54f418a48571`.
 
 If the application had encountered a malicious hyperlink
 `../../../outside.txt` it would first resolve it to
-the absolute URI `app://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
+the absolute URI `arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
 conclude from the "Not Found" error that the path `/outside.txt` was not
 present in the archive.
 
@@ -689,25 +696,25 @@ the URL to the zip file:
     >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
     UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
 
-Thus the location-based app URI for indexing the ZIP content is
+Thus the location-based arcp URI for indexing the ZIP content is
 
-    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
 
 Listing all directories and files in the ZIP, the crawler finds the URIs:
 
-    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
-    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
-    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
 When the application encounters `http://example.com/data.zip` some time later
-it can recalculate the same base app URI. This time the ZIP file has been
+it can recalculate the same base arcp URI. This time the ZIP file has been
 modified upstream and the crawler finds additionally:
 
-    app://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
 If files had been removed from the updated ZIP file the
 crawler can simply remove those from its database,
-as it used the same app base URI as in last crawl.
+as it used the same arcp base URI as in last crawl.
 
 Hash-based
 ----------
@@ -729,14 +736,14 @@ The corresponding `alg-val` authority is thus:
 
     sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
 
-From this the hash base app URL is:
+From this the hash base arcp URL is:
 
-    app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+    arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
 
 The crawler finds that its virus database already contain entries
 for:
 
-    app://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+    arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
 
 and flags the upload as malicious without having to scan it again.
 
@@ -759,13 +766,13 @@ the bag metadata file `/gfs/bags/scan15/bag-info.txt`
 
     External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
 
-It then generates app URIs for the files listed in the manifest:
+It then generates arcp URIs for the files listed in the manifest:
 
-    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
-    app://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
+    arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+    arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 
 When a different application on the same shared file system encounter 
-these app URIs, it can match them to the correct bag folder by 
+these arcp URIs, it can match them to the correct bag folder by 
 inspecting the `External-Identifier` metadata.
 
 
@@ -775,36 +782,36 @@ Linked Data containers which are not on the web
 An application exposes in-memory objects
 of an Address Book as a 
 Linked Data Platform container {{W3C.REC-ldp-20150226}},
-but addressing the container using app URIs instead of
+but addressing the container using arcp URIs instead of
 http to avoid network exposure.
 
-The app URIs are used in conjuction with a generic
+The arcp URIs are used in conjuction with a generic
 LDP client library (developed for http), but connected
 to the application's URI resolution mechanism.
 
 The application generates a new random UUID v4 
 `12f89f9c-e6ca-4032-ae73-46b68c2b415a` for the 
-address book, and provides the corresponding app URI
+address book, and provides the corresponding arcp URI
 to the LDP client:
 
-    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
 
 The LDP client resolves the container with content negotiation
 for the `text/turtle` media type, and receives:
 
-    @base <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+    @base <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
     @prefix ldp: <http://www.w3.org/ns/ldp#>.
     @prefix dcterms: <http://purl.org/dc/terms/>.
     
-    <app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
+    <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
       a ldp:BasicContainer;
       dcterms:title "Address book";
       ldp:contains <contact1>, <contact2>.
 
 The LDP client resolves the relative URIs to retrieve each of the contacts:
 
-    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
-    app://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
+    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
+    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
 
 Resolution of packaged resources
@@ -814,7 +821,7 @@ A virtual file system driver on a mobile operating system
 has mounted several packaged applications for resolving
 common resources. An application requests the rendering
 framework to resolve a picture from
-`app://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
+`arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
 to show it within a user interface.
 
 The framework first checks that the authority
@@ -828,24 +835,27 @@ that package, and returns an image buffer it already had
 cached in memory.
 
 
-History   {#history}
-=======
 
-This specification proposes the URI scheme `app`, which was originally
-proposed by {{W3C.NOTE-app-uri-20150723}} but never registered with IANA.
-That W3C Note evolved from {{W3C.NOTE-widgets-uri-20120313}} which
-proposed the URI scheme `widget`.
+Acknowledgements    {#acknowledgements}
+================
 
-Neither W3C Notes progressed further as Recommendation track documents.
+This specification is inspired by two original URI scheme proposals from W3C,
+`app` from {{W3C.NOTE-app-uri-20150723}}  and `widget` from
+{{W3C.NOTE-widgets-uri-20120313}}.
 
-While the focus of those W3C Notes was to specify how to resolve resources from
-within a packaged application, this specification generalize the `app` URI
-scheme to support referencing and identifying resources within any archive, and
-de-emphasize the retrieval mechanism.
+The `app` URI scheme was used by packaged web apps in Mozilla's Firefox OS
+{{FirefoxOS}} and to identify resources in 
+Research Object Bundles {{ROBundle}}, however the W3C Notes
+did not progress further as W3C Recommendation track documents, and their URI
+schemes were never formally registered with IANA.
 
-For compatibility with existing adaptations of the `app` URI scheme,
-e.g. {{ROBundle}} and {{ApacheTaverna}}, this specification reuse the same
-scheme name and remains compatible with the intentions of
-{{W3C.NOTE-app-uri-20150723}}, but renames "app" to mean
-"Application and Packaging Pointer" instead of "Application".
+While the focus of the previous proposals was to specify how to resolve
+resources from within a packaged application, this specification generalize the
+URI scheme to support referencing and identifying resources within any
+archive, package or application, and adding flexibility for how resources
+can be resolved.
+
+The authors would like to thank Graham Klyne, 
+Carsten Bormann, Roy T. Fielding, S Moonesamy and 
+Julian Reschke for valuable feedback and suggestions.
 
