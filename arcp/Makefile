@@ -4,7 +4,7 @@ TEXT=${SOURCES:.md=.txt}
 HTML=${SOURCES:.md=.html}
 
 
-all: app.html app.txt
+all: arcp.html arcp.txt
 
 text:	$(TEXT)
 html:   $(HTML)
