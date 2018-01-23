@@ -133,29 +133,29 @@ NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 {{RFC2119}}.
 
-For the purpose of this specification, an **archive** is a 
+For the purpose of this specification, an **archive** is a
 collection of sub-resources addressable by name or path.
-This definition covers typical archive file formats like 
-`.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}}, 
+This definition covers typical archive file formats like
+`.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}},
 but also non-file resource packages like
 an LDP Container {{W3C.REC-ldp-20150226}},
 an installed Web App {{W3C.WD-appmanifest-20180118}},
 or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
 
-For brevity, the term _archive_ is used throughout this 
-specification, although from the above it can also mean 
+For brevity, the term _archive_ is used throughout this
+specification, although from the above it can also mean
 a _container_, _application_ or _package_.
 
 
 Background        {#background}
 ==========
 
-Mobile and Web Applications 
+Mobile and Web Applications
 may bundle resources such as stylesheets with
-relative URI references to scripts, images and fonts. Resolving 
+relative URI references to scripts, images and fonts. Resolving
 such resources within URI handling frameworks may require
-generating absolute URIs and applying 
-Same-Origin {{RFC6454}} security policies separately for 
+generating absolute URIs and applying
+Same-Origin {{RFC6454}} security policies separately for
 each app.
 
 Applications that are accessing resources bundled inside an
@@ -236,7 +236,7 @@ these productions:
     arcp-authority = uuid | ni | name | authority
     uuid          = "uuid," UUID
     ni            = "ni," alg-val
-    name          = "name," reg-name 
+    name          = "name," reg-name
 
 1. The prefix `uuid,` combines with the `UUID` production as defined in {{RFC4122}}, e.g.
 `uuid,2a47c495-ac70-4ed1-850b-8800a57618cf`
@@ -244,24 +244,24 @@ these productions:
 2. The prefix `ni,` combines with the `alg-val` production as defined in {{RFC6920}}, e.g.
 `ni,sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
 
-3. The prefix `name,` combines with the `reg-name` production 
-as defined in {{RFC3986}}, e.g. `name,app.example.com`. 
+3. The prefix `name,` combines with the `reg-name` production
+as defined in {{RFC3986}}, e.g. `name,app.example.com`.
 
-4. The production `authority` matches its definition in {{RFC3986}}. 
-As this necessarily also match the above prefixed productions, 
+4. The production `authority` matches its definition in {{RFC3986}}.
+As this necessarily also match the above prefixed productions,
 those should be considered first before falling back to this production.
 
 
 Path  {#path}
 ----
 
-The `path-absolute` component, if present, 
-MUST match the production in {{RFC3986}} and provide 
+The `path-absolute` component, if present,
+MUST match the production in {{RFC3986}} and provide
 the absolute path of a resource
 (e.g. a file or directory) within the archive.
 
 Archive media types vary in constraints and possibilities on
-how to express paths, however implementations SHOULD use `/` as 
+how to express paths, however implementations SHOULD use `/` as
 path separator for nested folders and files.
 
 It is RECOMMENDED to include the trailing `/` if it is known
@@ -280,7 +280,7 @@ Examples of retrievable archive media types include
 `application/x-tar`, `application/x-gtar` and
 `application/x-7z-compressed`.
 
-Examples of non-file archives include 
+Examples of non-file archives include
 an LDP Container {{W3C.REC-ldp-20150226}},
 an installed Web App {{W3C.WD-appmanifest-20180118}},
 or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
@@ -289,51 +289,52 @@ or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
 Authority semantics
 -------------------
 
-The _authority_ component identifies the archive itself. 
+The _authority_ component identifies the archive itself.
 
-Implementations MAY assume that two arcp URIs with the 
-same authority component relate to resources within the same 
+Implementations MAY assume that two arcp URIs with the
+same authority component relate to resources within the same
 archive, subject to limitations explained in this section.
 
-The authority prefix, if present, helps to inform consumers 
-what uniqueness constraints have been used when identifying 
+The authority prefix, if present, helps to inform consumers
+what uniqueness constraints have been used when identifying
 the archive, without necessarily providing access to the archive.
 
 1. If the prefix is `uuid,` followed by a UUID {{RFC4122}},
   this indicates a unique archive identity.
 1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}},
-  this indicate uniqueness based on a random number generator.
-  Implementations creating random-based 
+  this indicate uniqueness based on a random number generator.  
+  Implementations creating random-based
   authorities SHOULD generate the v4 random UUID using
   a suitable random number generator {{RFC4086}}.
-2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}}, 
-  this indicates uniqueness based on an existing archive location, 
-  typically an URL. Implementations creating location-based
+2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}},
+  this indicates uniqueness based on an existing archive location,
+  typically an URL.  
+  Implementations creating location-based
   authorities from an archive's URL SHOULD generate the
-  v5 UUID using the URL 
-  namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8` 
-  and the particular URL (see {{RFC4122}} section 4.3).
+  v5 UUID using the URL
+  namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8`
+  and the particular URL (see {{RFC4122}} section 4.3).  
   Note that while implementations cannot resolve which location was
   used, they can confirm the name-based UUID if the location
-  is otherwise known. 
-3. If the prefix is `ni,` this indicates a unique archive identity 
+  is otherwise known.
+3. If the prefix is `ni,` this indicates a unique archive identity
   based on a hashing of the archive's bytestream or content.
-  Implementations can assume that resources within an 
+  Implementations can assume that resources within an
   `ni` arcp URIs remains static, although the implementation may
-  use content negotiation or similar transformations. 
+  use content negotiation or similar transformations.  
   The checksum MUST be expressed
-  according to {{RFC6920}}'s `alg-val` production.
+  according to {{RFC6920}}'s `alg-val` production.  
   Implementations creating hash-based authorities from an archive's
   bytestream SHOULD use the `sha-256` without truncation.
 4. If the prefix is `name,` this indicates that the authority
-  is an application or package name, typically as installed 
-  on a device or system. 
+  is an application or package name, typically as installed
+  on a device or system.  
   Implementations SHOULD assume that an unrecognized `name`
   authority is only unique within a particular installation,
   but MAY assume further uniqueness guarantees for names under
   their control.  
-  It is RECOMMENDED that implementations creating 
-  name-based authorities use DNS names under their control, 
+  It is RECOMMENDED that implementations creating
+  name-based authorities use DNS names under their control,
   for instance an app installed as `app.example.com` can
   make an authority `name,app.example.com` to refer to its
   packaged resources, or `name,foo.app.example.com` to refer to a
@@ -353,7 +354,7 @@ a *directory* or *file*.
 
 * If the _path_ is `/` - e.g.
 `arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
-then the arcp URI represent the archive itself, 
+then the arcp URI represent the archive itself,
 typically represented as a root directory or collection.
 * If the path ends with `/` then the path represents
 a directory or collection.
@@ -468,7 +469,7 @@ exchanging arcp URIs between implementations. Some considerations:
   different random-based UUID authorities. The implementations may
   need to detect equality of the two UUIDs out of band.
 2. Two implementations describe an archive retrieved
-  from the same URL, with the same location-based UUID authority, 
+  from the same URL, with the same location-based UUID authority,
   but retrieved at different times. The implementations might disagree
   about the content of the archive.
 3.  Two implementations describe an archive retrieved
@@ -525,7 +526,7 @@ Unicode combine sequences, which could be used to mislead users.
 An URI hyperlink might use or guess an arcp URI authority
 to attempt to climb into a different archive for
 malicious purposes. Applications SHOULD employ
-Same Orgin policy {{RFC6454}} checks if 
+Same Orgin policy {{RFC6454}} checks if
 resolving cross-references is not desired.
 
 While a UUID or hash-based authority provide some level of
@@ -539,7 +540,7 @@ instance using dictionary attacks.
 IANA Considerations  {#iana}
 ===================
 
-This specification requests that IANA registers the following 
+This specification requests that IANA registers the following
 URI scheme according to the provisions of {{RFC7595}}.
 
 Scheme name: arcp
@@ -570,8 +571,8 @@ for navigation between its UI states.
 The gallery is secured so that other applications can't normally
 access its photos.
 
-The application is installed as the app name 
-`gallery.example.org` as the vendor controls `example.org`, 
+The application is installed as the app name
+`gallery.example.org` as the vendor controls `example.org`,
 making the corresponding name-based arcp URI:
 
     arcp://name,gallery.example.org/
@@ -588,7 +589,7 @@ The user requests to "share" the photo, selecting
 `messaging.example.com` which uses a common arcp
 URI framework on the device.
 
-The photo gallery registers with the device's 
+The photo gallery registers with the device's
 arcp framework that the chosen `messaging.example.com` gets
 read permission to its `/photos/137` resource.
 
@@ -640,8 +641,8 @@ return a `text/uri-list` of the newest photos:
     arcp://name,gallery.example.org/photos/138
     arcp://name,gallery.example.org/photos/139
 
-This examples show that although an arcp URI represents a resource, 
-it can have different representations or UI states 
+This examples show that although an arcp URI represents a resource,
+it can have different representations or UI states
 for different apps.
 
 
@@ -771,8 +772,8 @@ It then generates arcp URIs for the files listed in the manifest:
     arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
     arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 
-When a different application on the same shared file system encounter 
-these arcp URIs, it can match them to the correct bag folder by 
+When a different application on the same shared file system encounter
+these arcp URIs, it can match them to the correct bag folder by
 inspecting the `External-Identifier` metadata.
 
 
@@ -780,7 +781,7 @@ Linked Data containers which are not on the web
 -----------------------------------------------
 
 An application exposes in-memory objects
-of an Address Book as a 
+of an Address Book as a
 Linked Data Platform container {{W3C.REC-ldp-20150226}},
 but addressing the container using arcp URIs instead of
 http to avoid network exposure.
@@ -789,8 +790,8 @@ The arcp URIs are used in conjuction with a generic
 LDP client library (developed for http), but connected
 to the application's URI resolution mechanism.
 
-The application generates a new random UUID v4 
-`12f89f9c-e6ca-4032-ae73-46b68c2b415a` for the 
+The application generates a new random UUID v4
+`12f89f9c-e6ca-4032-ae73-46b68c2b415a` for the
 address book, and provides the corresponding arcp URI
 to the LDP client:
 
@@ -802,7 +803,7 @@ for the `text/turtle` media type, and receives:
     @base <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
     @prefix ldp: <http://www.w3.org/ns/ldp#>.
     @prefix dcterms: <http://purl.org/dc/terms/>.
-    
+
     <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
       a ldp:BasicContainer;
       dcterms:title "Address book";
@@ -844,7 +845,7 @@ This specification is inspired by two original URI scheme proposals from W3C,
 {{W3C.NOTE-widgets-uri-20120313}}.
 
 The `app` URI scheme was used by packaged web apps in Mozilla's Firefox OS
-{{FirefoxOS}} and to identify resources in 
+{{FirefoxOS}} and to identify resources in
 Research Object Bundles {{ROBundle}}, however the W3C Notes
 did not progress further as W3C Recommendation track documents, and their URI
 schemes were never formally registered with IANA.
@@ -855,7 +856,7 @@ URI scheme to support referencing and identifying resources within any
 archive, package or application, and adding flexibility for how resources
 can be resolved.
 
-The authors would like to thank Graham Klyne, 
-Carsten Bormann, Roy T. Fielding, S Moonesamy and 
+The authors would like to thank Graham Klyne,
+Carsten Bormann, Roy T. Fielding, S Moonesamy and
 Julian Reschke for valuable feedback and suggestions.
 
