@@ -20,7 +20,9 @@ To build, try:
     make app.txt app.html
     
 
-## draft-soilandreyes-app
+## draft-soilandreyes-arcp
 
-[app](app) is the source code for [draft-soilandreyes-app](https://tools.ietf.org/html/draft-soilandreyes-app)
+[arcp](arcp) is the source code for
+[draft-soilandreyes-app](https://tools.ietf.org/html/draft-soilandreyes-arcp),
+previously at [app](app)
 
