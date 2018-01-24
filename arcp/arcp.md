@@ -103,7 +103,7 @@ informative:
 --- abstract
 
 This specification proposes the
-Application and Packaging Pointer URI scheme `arcp`.
+Application and Packaging URI scheme `arcp`.
 
 arcp URIs can be used to consume or reference hypermedia
 resources bundled inside a file archive or an
