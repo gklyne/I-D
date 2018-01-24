@@ -28,8 +28,6 @@ author:
     email: marcos@marcosc.com
 
 normative:
-  # Media types
-  RFC2046:
   # RFC keywords
   RFC2119:
   # UTF-8
@@ -52,16 +50,18 @@ normative:
   RFC6920:
   # Registration Procedures for URI Schemes
   RFC7595:
-  # file URI scheme
-  RFC8089:
-  # +zip formats
-  RFC6839:
 
 informative:
+  # Media types
+  RFC2046:
   # base64
   RFC4648:
   # URI template
   RFC6570:
+  # +zip formats
+  RFC6839:
+  # file URI scheme
+  RFC8089:
   # bagit
   I-D.draft-kunze-bagit-14:
   # w3c arcp://
