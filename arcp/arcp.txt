@@ -5,17 +5,17 @@
 Network Working Group                                   S. Soiland-Reyes
 Internet-Draft                              The University of Manchester
 Intended status: Informational                                M. Caceres
-Expires: July 27, 2018                               Mozilla Corporation
-                                                        January 23, 2018
+Expires: July 28, 2018                               Mozilla Corporation
+                                                        January 24, 2018
 
 
               The Archive and Packaging (arcp) URI scheme
-                       draft-soilandreyes-arcp-00
+                  draft-soilandreyes-arcp-01-SNAPSHOT
 
 Abstract
 
-   This specification proposes the Application and Packaging Pointer URI
-   scheme "arcp".
+   This specification proposes the Application and Packaging URI scheme
+   "arcp".
 
    arcp URIs can be used to consume or reference hypermedia resources
    bundled inside a file archive or an application package, as well as
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 27, 2018.
+   This Internet-Draft will expire on July 28, 2018.
 
 
 
 
 
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 1]
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
@@ -76,15 +76,15 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
-   2.  Background  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   4
    3.  Scheme syntax . . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.1.  Authority . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Authority . . . . . . . . . . . . . . . . . . . . . . . .   5
      3.2.  Path  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  Scheme semantics  . . . . . . . . . . . . . . . . . . . . . .   5
-     4.1.  Authority semantics . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Authority semantics . . . . . . . . . . . . . . . . . . .   6
      4.2.  Path semantics  . . . . . . . . . . . . . . . . . . . . .   7
-     4.3.  Resolution protocol . . . . . . . . . . . . . . . . . . .   7
-     4.4.  Resolving from a .well-known endpoint . . . . . . . . . .   8
+     4.3.  Resolution protocol . . . . . . . . . . . . . . . . . . .   8
+     4.4.  Resolving from a .well-known endpoint . . . . . . . . . .   9
    5.  Encoding considerations . . . . . . . . . . . . . . . . . . .   9
    6.  Interoperability considerations . . . . . . . . . . . . . . .   9
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
@@ -96,12 +96,12 @@ Table of Contents
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  14
      A.1.  Sharing using app names . . . . . . . . . . . . . . . . .  14
      A.2.  Sandboxing  . . . . . . . . . . . . . . . . . . . . . . .  16
-     A.3.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  16
+     A.3.  Origin-based  . . . . . . . . . . . . . . . . . . . . . .  17
      A.4.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  17
      A.5.  Archives that are not files . . . . . . . . . . . . . . .  18
      A.6.  Linked Data containers which are not on the web . . . . .  18
      A.7.  Resolution of packaged resources  . . . . . . . . . . . .  19
-   Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  19
+   Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  20
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
 
@@ -109,52 +109,35 @@ Table of Contents
 
 
 
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 2]
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 2]
 
 Internet-Draft                     app                      January 2018
 
 
 1.  Introduction
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [RFC2119].
-
-   For the purpose of this specification, an *archive* is a collection
-   of sub-resources addressable by name or path.  This definition covers
-   typical archive file formats like ".zip" or "tar.gz" and derived
-   "+zip" media types [RFC6839], but also non-file resource packages
-   like an LDP Container [W3C.REC-ldp-20150226], an installed Web App
-   [W3C.WD-appmanifest-20180118], or a BagIt folder structure
-   [I-D.draft-kunze-bagit-14].
-
-   For brevity, the term _archive_ is used throughout this
-   specification, although from the above it can also mean a
-   _container_, _application_ or _package_.
-
-2.  Background
-
    Mobile and Web Applications may bundle resources such as stylesheets
    with relative URI references to scripts, images and fonts.  Resolving
-   such resources within URI handling frameworks may require generating
-   absolute URIs and applying Same-Origin [RFC6454] security policies
-   separately for each app.
+   and parsing such resources within URI handling frameworks may require
+   generating absolute URIs and applying Same-Origin [RFC6454] security
+   policies separately for each app.
 
-   Applications that are accessing resources bundled inside an archive
-   (e.g. "zip" or "tar.gz" file) can struggle to consume hypermedia
-   content types that use relative URI references [RFC3986] such as
-   "../css/", as it is challenging to determine the base URI in a
-   consistent fashion.
+   Software that is accessing resources bundled inside an archive (e.g.
+   "zip" or "tar.gz" file) can struggle to consume hypermedia content
+   types that use relative URI references [RFC3986] such as "../css/",
+   as it is challenging to determine the base URI in a consistent
+   fashion.
 
-   Frequently the archive must be unpacked locally to synthesize base
-   URIs like "file:///tmp/a1b27ae03865/" to represent the root of the
+   Frequently the archive might be unpacked locally, implying base URIs
+   like "file:///tmp/a1b27ae03865/" to represent the root of the
    archive.  Such URIs are temporary, might not be globally unique, and
    could be vulnerable to attacks such as "climbing out" of the root
    directory.
 
    An archive containing multiple HTML or Linked Data resources, such as
    in a BagIt archive [I-D.draft-kunze-bagit-14], may be using relative
-   URIs to cross-reference constituent files.
+   URIs to cross-reference constituent files, making it challenging to
+   index or annotate such resources.
 
    Consumptions of archives might be performed in memory or through a
    common framework, abstracting away any local file location.
@@ -163,13 +146,6 @@ Internet-Draft                     app                      January 2018
    possible no matter from which location it was retrieved, or on which
    device it is inspected.
 
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 3]
-
-Internet-Draft                     app                      January 2018
-
-
    When consuming multiple archives from untrusted sources it would be
    beneficial to have a Same Origin policy [RFC6454] so that relative
    hyperlinks can't escape the particular archive.
@@ -177,6 +153,42 @@ Internet-Draft                     app                      January 2018
    The "file:" URI scheme [RFC8089] can be ill-suited for purposes such
    as above, where a location-independent URI scheme is more flexible,
    secure and globally unique.
+
+   This specification proposes the Archive and Packaging URI scheme
+   "arcp" as an alternative to addressing resources within an archive,
+   application or package.
+
+   For the purpose of this specification, an *archive* is a collection
+   of sub-resources addressable by name or path.  This definition covers
+   typical archive file formats like ".zip" or "tar.gz" and derived
+   "+zip" media types [RFC6839], but also non-file resource packages
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 3]
+
+Internet-Draft                     app                      January 2018
+
+
+   like an LDP Container [W3C.REC-ldp-20150226], an installed Web App
+   [W3C.WD-appmanifest-20180118], or a BagIt folder structure
+   [I-D.draft-kunze-bagit-14].
+
+   For brevity, the term _archive_ is used throughout this
+   specification, although from the above it can also mean a
+   _container_, _application_ or _package_.
+
+   The main purpose of arcp URis to provide consistent identifiers as
+   absolute URIs for nested resources.  This specification does not
+   define a new network protocol, however we suggest an abstract
+   resolution protocol that implementations can apply using existing
+   protocols or programming frameworks.
+
+2.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
 
 3.  Scheme syntax
 
@@ -204,6 +216,16 @@ Internet-Draft                     app                      January 2018
    path.  This specification does not specify how to determine the media
    type.
 
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 4]
+
+Internet-Draft                     app                      January 2018
+
+
 3.1.  Authority
 
    The purpose of the "authority" component in an arcp URI is to build a
@@ -217,14 +239,6 @@ Internet-Draft                     app                      January 2018
    uuid          = "uuid," UUID
    ni            = "ni," alg-val
    name          = "name," reg-name
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 4]
-
-Internet-Draft                     app                      January 2018
-
 
    1.  The prefix "uuid," combines with the "UUID" production as defined
        in [RFC4122], e.g.  "uuid,2a47c495-ac70-4ed1-850b-8800a57618cf"
@@ -260,6 +274,14 @@ Internet-Draft                     app                      January 2018
    _archive_, and neither does it require that the archive is
    retrievable as a single bytestream or file.
 
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 5]
+
+Internet-Draft                     app                      January 2018
+
+
    Examples of retrievable archive media types include "application/
    zip", "application/vnd.android.package-archive", "application/x-tar",
    "application/x-gtar" and "application/x-7z-compressed".
@@ -272,15 +294,6 @@ Internet-Draft                     app                      January 2018
 4.1.  Authority semantics
 
    The _authority_ component identifies the archive itself.
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 5]
-
-Internet-Draft                     app                      January 2018
-
 
    Implementations MAY assume that two arcp URIs with the same authority
    component relate to resources within the same archive, subject to
@@ -317,6 +330,14 @@ Internet-Draft                     app                      January 2018
        negotiation or similar transformations.
        The checksum MUST be expressed according to [RFC6920]'s "alg-val"
        production.
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 6]
+
+Internet-Draft                     app                      January 2018
+
+
        Implementations creating hash-based authorities from an archive's
        bytestream SHOULD use the "sha-256" without truncation.
 
@@ -330,14 +351,6 @@ Internet-Draft                     app                      January 2018
        It is RECOMMENDED that implementations creating name-based
        authorities use DNS names under their control, for instance an
        app installed as "app.example.com" can make an authority
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 6]
-
-Internet-Draft                     app                      January 2018
-
-
        "name,app.example.com" to refer to its packaged resources, or
        "name,foo.app.example.com" to refer to a "foo" container
        distributed across all installations.
@@ -351,8 +364,8 @@ Internet-Draft                     app                      January 2018
    The _path_ component of an arcp URI identify individual resources
    within a particular archive, typically a _directory_ or _file_.
 
-   o  If the _path_ is "/" - e.g.  "arcp://uuid,833ebda2-f9a8-4462-b74a-
-      4fcdc1a02d22/" - then the arcp URI represent the archive itself,
+   o  If the _path_ is "/" - e.g. <arcp://uuid,833ebda2-f9a8-4462-b74a-
+      4fcdc1a02d22/> - then the arcp URI represent the archive itself,
       typically represented as a root directory or collection.
 
    o  If the path ends with "/" then the path represents a directory or
@@ -370,6 +383,17 @@ Internet-Draft                     app                      January 2018
    path, in which case it is undefined from this specification which
    particular entry is described.
 
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 7]
+
+Internet-Draft                     app                      January 2018
+
+
 4.3.  Resolution protocol
 
    This specification do not define the protocol to resolve resources
@@ -384,15 +408,6 @@ Internet-Draft                     app                      January 2018
    paths to the extracted archive on the local file system.
 
    Implementations that support resolving arcp URIs SHOULD:
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 7]
-
-Internet-Draft                     app                      January 2018
-
 
    1.  Fail with the equivalent of _Not Found_ if the authority is
        unknown.
@@ -427,6 +442,14 @@ Internet-Draft                     app                      January 2018
 
    Some archive formats might support resources which are neither
    directories nor regular files (e.g. device files, symbolic links).
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 8]
+
+Internet-Draft                     app                      January 2018
+
+
    This specification does not define the semantics of attempting to
    resolve such resources.
 
@@ -441,14 +464,6 @@ Internet-Draft                     app                      January 2018
    section 4, in order to retrieve the complete archive.  Applications
    SHOULD verify the checksum of the retrieved archive before resolving
    the individual path.
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 8]
-
-Internet-Draft                     app                      January 2018
-
 
 5.  Encoding considerations
 
@@ -482,6 +497,15 @@ Internet-Draft                     app                      January 2018
        authorities.  The implementations may need to detect equality of
        the two UUIDs out of band.
 
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                 [Page 9]
+
+Internet-Draft                     app                      January 2018
+
+
    2.  Two implementations describe an archive retrieved from the same
        URL, with the same location-based UUID authority, but retrieved
        at different times.  The implementations might disagree about the
@@ -497,14 +521,6 @@ Internet-Draft                     app                      January 2018
        the hash-based authority, but they have used two different hash
        algorithms.  The implementations may need to negotiate to a
        common hash algorithm.
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                 [Page 9]
-
-Internet-Draft                     app                      January 2018
-
 
    5.  Two implementations access the same archive, which contain file
        paths with Unicode characters, but extracted to two different
@@ -537,6 +553,15 @@ Internet-Draft                     app                      January 2018
    An maliciously crafted arcp URI might contain "../" path segments,
    which if naively converted to a "file:///" URI might address files
    outside the archive's directory structure.  Implementations SHOULD
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 10]
+
+Internet-Draft                     app                      January 2018
+
+
    perform Path Segment Normalization [RFC3986] before converting arcp
    URIs.
 
@@ -553,15 +578,6 @@ Internet-Draft                     app                      January 2018
    information hiding of an archive's origin, this should not be relied
    upon for access control or anonymisation.  Implementors should keep
    in mind that such authority components in many cases can be
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 10]
-
-Internet-Draft                     app                      January 2018
-
-
    predictably generated by third-parties, for instance using dictionary
    attacks.
 
@@ -585,11 +601,6 @@ Internet-Draft                     app                      January 2018
 
 9.1.  Normative References
 
-   [RFC2046]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
-              Extensions (MIME) Part Two: Media Types", RFC 2046,
-              DOI 10.17487/RFC2046, November 1996, <https://www.rfc-
-              editor.org/info/rfc2046>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
@@ -598,6 +609,14 @@ Internet-Draft                     app                      January 2018
    [RFC2279]  Yergeau, F., "UTF-8, a transformation format of ISO
               10646", RFC 2279, DOI 10.17487/RFC2279, January 1998,
               <https://www.rfc-editor.org/info/rfc2279>.
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 11]
+
+Internet-Draft                     app                      January 2018
+
 
    [RFC2483]  Mealling, M. and R. Daniel, "URI Resolution Services
               Necessary for URN Resolution", RFC 2483,
@@ -608,15 +627,6 @@ Internet-Draft                     app                      January 2018
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
               <https://www.rfc-editor.org/info/rfc3986>.
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 11]
-
-Internet-Draft                     app                      January 2018
-
 
    [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
               Identifiers (IRIs)", RFC 3987, DOI 10.17487/RFC3987,
@@ -641,11 +651,6 @@ Internet-Draft                     app                      January 2018
               DOI 10.17487/RFC6454, December 2011, <https://www.rfc-
               editor.org/info/rfc6454>.
 
-   [RFC6839]  Hansen, T. and A. Melnikov, "Additional Media Type
-              Structured Syntax Suffixes", RFC 6839,
-              DOI 10.17487/RFC6839, January 2013, <https://www.rfc-
-              editor.org/info/rfc6839>.
-
    [RFC6920]  Farrell, S., Kutscher, D., Dannewitz, C., Ohlman, B.,
               Keranen, A., and P. Hallam-Baker, "Naming Things with
               Hashes", RFC 6920, DOI 10.17487/RFC6920, April 2013,
@@ -656,10 +661,6 @@ Internet-Draft                     app                      January 2018
               RFC 7595, DOI 10.17487/RFC7595, June 2015,
               <https://www.rfc-editor.org/info/rfc7595>.
 
-   [RFC8089]  Kerwin, M., "The "file" URI Scheme", RFC 8089,
-              DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
-              editor.org/info/rfc8089>.
-
 9.2.  Informative References
 
 
@@ -668,8 +669,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 12]
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
@@ -687,6 +687,11 @@ Internet-Draft                     app                      January 2018
               (V0.97)", draft-kunze-bagit-14 (work in progress), October
               2016.
 
+   [RFC2046]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
+              Extensions (MIME) Part Two: Media Types", RFC 2046,
+              DOI 10.17487/RFC2046, November 1996, <https://www.rfc-
+              editor.org/info/rfc2046>.
+
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/info/rfc4648>.
@@ -695,6 +700,15 @@ Internet-Draft                     app                      January 2018
               and D. Orchard, "URI Template", RFC 6570,
               DOI 10.17487/RFC6570, March 2012, <https://www.rfc-
               editor.org/info/rfc6570>.
+
+   [RFC6839]  Hansen, T. and A. Melnikov, "Additional Media Type
+              Structured Syntax Suffixes", RFC 6839,
+              DOI 10.17487/RFC6839, January 2013, <https://www.rfc-
+              editor.org/info/rfc6839>.
+
+   [RFC8089]  Kerwin, M., "The "file" URI Scheme", RFC 8089,
+              DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
+              editor.org/info/rfc8089>.
 
    [ROBundle]
               Soiland-Reyes, S., Gamble, M., and R. Haines, "Research
@@ -707,6 +721,15 @@ Internet-Draft                     app                      January 2018
               Consortium NOTE NOTE-app-uri-20150723, July 2015,
               <http://www.w3.org/TR/2015/NOTE-app-uri-20150723>.
 
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 13]
+
+Internet-Draft                     app                      January 2018
+
+
    [W3C.NOTE-widgets-uri-20120313]
               Caceres, M., "Widget URI scheme", World Wide Web
               Consortium NOTE NOTE-widgets-uri-20120313, March 2012,
@@ -717,18 +740,6 @@ Internet-Draft                     app                      January 2018
               Platform 1.0", World Wide Web Consortium Recommendation
               REC-ldp-20150226, February 2015,
               <http://www.w3.org/TR/2015/REC-ldp-20150226>.
-
-
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 13]
-
-Internet-Draft                     app                      January 2018
-
 
    [W3C.WD-appmanifest-20180118]
               Caceres, M., Christiansen, K., Lamouri, M., Kostiainen,
@@ -767,6 +778,14 @@ A.1.  Sharing using app names
    "messaging.example.com" which uses a common arcp URI framework on the
    device.
 
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
+
    The photo gallery registers with the device's arcp framework that the
    chosen "messaging.example.com" gets read permission to its
    "/photos/137" resource.
@@ -776,15 +795,6 @@ A.1.  Sharing using app names
    arcp://name,messaging.example.com/share{;uri}{;redirect}
 
    Filling in the template, the gallery requests to pop up:
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
 
    arcp://name,messaging.example.com/share
      ;uri=arcp://gallery.example.org/photos/137
@@ -799,7 +809,7 @@ Internet-Draft                     app                      January 2018
    asking the user for a caption.
 
    The messaging app requests the arcp framework to retrieve
-   "arcp://name,gallery.example.org/photos/137" using content
+   <arcp://name,gallery.example.org/photos/137> using content
    negotiation for an "image/jpeg" representation.
 
    The arcp framework finds the installed photo gallery
@@ -825,6 +835,13 @@ Internet-Draft                     app                      January 2018
    However, if such access had been granted, the gallery could return a
    "text/uri-list" of the newest photos:
 
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 15]
+
+Internet-Draft                     app                      January 2018
+
+
    arcp://name,gallery.example.org/photos/137
    arcp://name,gallery.example.org/photos/138
    arcp://name,gallery.example.org/photos/139
@@ -832,15 +849,6 @@ Internet-Draft                     app                      January 2018
    This examples show that although an arcp URI represents a resource,
    it can have different representations or UI states for different
    apps.
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 15]
-
-Internet-Draft                     app                      January 2018
-
 
 A.2.  Sandboxing
 
@@ -877,26 +885,27 @@ A.2.  Sandboxing
 
    If the application had encountered a malicious hyperlink
    "../../../outside.txt" it would first resolve it to the absolute URI
-   "arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt" and
+   <arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt> and
    conclude from the "Not Found" error that the path "/outside.txt" was
    not present in the archive.
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 16]
+
+Internet-Draft                     app                      January 2018
+
 
 A.3.  Origin-based
 
    A web crawler is about to index the content of the URL
-   "http://example.com/data.zip" and need to generate absolute URIs as
-   it continues crawling inside the individual resources of the archive.
+   http://example.com/data.zip and need to generate absolute URIs as it
+   continues crawling inside the individual resources of the archive.
 
    The application generates a UUID v5 based on the URL namespace
    "6ba7b811-9dad-11d1-80b4-00c04fd430c8" and the URL to the zip file:
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 16]
-
-Internet-Draft                     app                      January 2018
-
 
    >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
    UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
@@ -912,10 +921,9 @@ Internet-Draft                     app                      January 2018
    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
-   When the application encounters "http://example.com/data.zip" some
-   time later it can recalculate the same base arcp URI.  This time the
-   ZIP file has been modified upstream and the crawler finds
-   additionally:
+   When the application encounters http://example.com/data.zip some time
+   later it can recalculate the same base arcp URI.  This time the ZIP
+   file has been modified upstream and the crawler finds additionally:
 
    arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
@@ -939,6 +947,13 @@ A.4.  Hash-based
 
    F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
 
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 17]
+
+Internet-Draft                     app                      January 2018
+
+
    The corresponding "alg-val" authority is thus:
 
    sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
@@ -946,13 +961,6 @@ A.4.  Hash-based
    From this the hash base arcp URL is:
 
    arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 17]
-
-Internet-Draft                     app                      January 2018
-
 
    The crawler finds that its virus database already contain entries
    for:
@@ -995,6 +1003,13 @@ A.6.  Linked Data containers which are not on the web
    the container using arcp URIs instead of http to avoid network
    exposure.
 
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 18]
+
+Internet-Draft                     app                      January 2018
+
+
    The arcp URIs are used in conjuction with a generic LDP client
    library (developed for http), but connected to the application's URI
    resolution mechanism.
@@ -1002,13 +1017,6 @@ A.6.  Linked Data containers which are not on the web
    The application generates a new random UUID v4 "12f89f9c-e6ca-
    4032-ae73-46b68c2b415a" for the address book, and provides the
    corresponding arcp URI to the LDP client:
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 18]
-
-Internet-Draft                     app                      January 2018
-
 
    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
 
@@ -1035,7 +1043,7 @@ A.7.  Resolution of packaged resources
    A virtual file system driver on a mobile operating system has mounted
    several packaged applications for resolving common resources.  An
    application requests the rendering framework to resolve a picture
-   from "arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png"
+   from <arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png>
    to show it within a user interface.
 
    The framework first checks that the authority "uuid,eb1edec9-d2eb-
@@ -1045,6 +1053,18 @@ A.7.  Resolution of packaged resources
 
    The framework resolves "/img/logo.png" from within that package, and
    returns an image buffer it already had cached in memory.
+
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 19]
+
+Internet-Draft                     app                      January 2018
+
 
 Appendix B.  Acknowledgements
 
@@ -1057,14 +1077,6 @@ Appendix B.  Acknowledgements
    Bundles [ROBundle], however the W3C Notes did not progress further as
    W3C Recommendation track documents, and their URI schemes were never
    formally registered with IANA.
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 19]
-
-Internet-Draft                     app                      January 2018
-
 
    While the focus of the previous proposals was to specify how to
    resolve resources from within a packaged application, this
@@ -1105,16 +1117,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 27, 2018                [Page 20]
+Soiland-Reyes & Caceres   Expires July 28, 2018                [Page 20]

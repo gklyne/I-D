@@ -1,8 +1,8 @@
 ---
 title: The Archive and Packaging (arcp) URI scheme
 abbrev: app
-docname: draft-soilandreyes-arcp-00
-date: 2018-01-23
+docname: draft-soilandreyes-arcp-01-SNAPSHOT
+date: 2018-01-24
 category: info
 
 ipr: trust200902

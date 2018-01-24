@@ -375,7 +375,7 @@
 
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Background"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Requirements Language"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Scheme syntax"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Authority"/>
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Path"/>
@@ -407,10 +407,10 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-arcp-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-1-23" />
-  <meta name="dct.abstract" content="This specification proposes the Application and Packaging Pointer URI scheme " />
-  <meta name="description" content="This specification proposes the Application and Packaging Pointer URI scheme " />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-arcp-01-SNAPSHOT" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-1-24" />
+  <meta name="dct.abstract" content="This specification proposes the Application and Packaging URI scheme " />
+  <meta name="description" content="This specification proposes the Application and Packaging URI scheme " />
 
 </head>
 
@@ -432,12 +432,12 @@
   <td class="right">M. C&#225;ceres</td>
 </tr>
 <tr>
-  <td class="left">Expires: July 27, 2018</td>
+  <td class="left">Expires: July 28, 2018</td>
   <td class="right">Mozilla Corporation</td>
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">January 23, 2018</td>
+  <td class="right">January 24, 2018</td>
 </tr>
 
     	
@@ -445,12 +445,12 @@
   </table>
 
   <p class="title">The Archive and Packaging (arcp) URI scheme<br />
-  <span class="filename">draft-soilandreyes-arcp-00</span></p>
+  <span class="filename">draft-soilandreyes-arcp-01-SNAPSHOT</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This specification proposes the Application and Packaging Pointer URI scheme <samp>arcp</samp>.</p>
+<p>This specification proposes the Application and Packaging URI scheme <samp>arcp</samp>.</p>
 <p>arcp URIs can be used to consume or reference hypermedia resources bundled inside a file archive or an application package, as well as to resolve URIs for archive resources within a programmatic framework.</p>
 <p>This URI scheme provides mechanisms to generate a unique base URI to represent the root of the archive, so that relative URI references in a bundled resource can be resolved within the archive without having to extract the archive content on the local file system.</p>
 <p>An arcp URI can be used for purposes of isolation (e.g. when consuming multiple archives), security constraints (avoiding &#8220;climb out&#8221; from the archive), or for externally identiyfing sub-resources referenced by hypermedia formats.</p>
@@ -460,7 +460,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on July 27, 2018.</p>
+<p>This Internet-Draft will expire on July 28, 2018.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -473,7 +473,7 @@
   <ul class="toc">
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<li>2.   <a href="#rfc.section.2">Background</a></li>
+<li>2.   <a href="#rfc.section.2">Requirements Language</a></li>
 <li>3.   <a href="#rfc.section.3">Scheme syntax</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Authority</a></li>
 <li>3.2.   <a href="#rfc.section.3.2">Path</a></li>
@@ -504,18 +504,20 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
-<p id="rfc.section.1.p.1">The key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;,  &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
-<p id="rfc.section.1.p.2">For the purpose of this specification, an <strong>archive</strong> is a collection of sub-resources addressable by name or path.  This definition covers typical archive file formats like <samp>.zip</samp> or <samp>tar.gz</samp> and derived <samp>+zip</samp> media types <a href="#RFC6839">[RFC6839]</a>, but also non-file resource packages like an LDP Container <a href="#W3C.REC-ldp-20150226">[W3C.REC-ldp-20150226]</a>, an installed Web App <a href="#W3C.WD-appmanifest-20180118">[W3C.WD-appmanifest-20180118]</a>, or a BagIt folder structure <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>.</p>
-<p id="rfc.section.1.p.3">For brevity, the term <em>archive</em> is used throughout this specification, although from the above it can also mean a <em>container</em>, <em>application</em> or <em>package</em>.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#background" id="background">Background</a></h1>
-<p id="rfc.section.2.p.1">Mobile and Web Applications may bundle resources such as stylesheets with relative URI references to scripts, images and fonts. Resolving such resources within URI handling frameworks may require generating absolute URIs and applying Same-Origin <a href="#RFC6454">[RFC6454]</a> security policies separately for each app.</p>
-<p id="rfc.section.2.p.2">Applications that are accessing resources bundled inside an archive (e.g. <samp>zip</samp> or <samp>tar.gz</samp> file) can struggle to consume hypermedia content types that use relative URI references <a href="#RFC3986">[RFC3986]</a> such as <samp>../css/</samp>, as it is challenging to determine the base URI in a consistent fashion.</p>
-<p id="rfc.section.2.p.3">Frequently the archive must be unpacked locally to synthesize base URIs like <samp>file:///tmp/a1b27ae03865/</samp> to represent the root of the archive. Such URIs are temporary, might not be globally unique, and could be vulnerable to attacks such as &#8220;climbing out&#8221; of the root directory.</p>
-<p id="rfc.section.2.p.4">An archive containing multiple HTML or Linked Data resources, such as in a BagIt archive <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>, may be using relative URIs to cross-reference constituent files.</p>
-<p id="rfc.section.2.p.5">Consumptions of archives might be performed in memory or through a common framework, abstracting away any local file location.</p>
-<p id="rfc.section.2.p.6">Consumption of an archive with a consistent base URL should be possible no matter from which location it was retrieved, or on which device it is inspected.</p>
-<p id="rfc.section.2.p.7">When consuming multiple archives from untrusted sources it would be beneficial to have a Same Origin policy <a href="#RFC6454">[RFC6454]</a> so that relative hyperlinks can&#8217;t escape the particular archive.</p>
-<p id="rfc.section.2.p.8">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
+<p id="rfc.section.1.p.1">Mobile and Web Applications may bundle resources such as stylesheets with relative URI references to scripts, images and fonts. Resolving and parsing such resources within URI handling frameworks may require generating absolute URIs and applying Same-Origin <a href="#RFC6454">[RFC6454]</a> security policies separately for each app.</p>
+<p id="rfc.section.1.p.2">Software that is accessing resources bundled inside an archive (e.g. <samp>zip</samp> or <samp>tar.gz</samp> file) can struggle to consume hypermedia content types that use relative URI references <a href="#RFC3986">[RFC3986]</a> such as <samp>../css/</samp>, as it is challenging to determine the base URI in a consistent fashion.</p>
+<p id="rfc.section.1.p.3">Frequently the archive might be unpacked locally, implying base URIs like <samp>file:///tmp/a1b27ae03865/</samp> to represent the root of the archive. Such URIs are temporary, might not be globally unique, and could be vulnerable to attacks such as &#8220;climbing out&#8221; of the root directory.</p>
+<p id="rfc.section.1.p.4">An archive containing multiple HTML or Linked Data resources, such as in a BagIt archive <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>, may be using relative URIs to cross-reference constituent files, making it challenging to index or annotate such resources.</p>
+<p id="rfc.section.1.p.5">Consumptions of archives might be performed in memory or through a common framework, abstracting away any local file location.</p>
+<p id="rfc.section.1.p.6">Consumption of an archive with a consistent base URL should be possible no matter from which location it was retrieved, or on which device it is inspected.</p>
+<p id="rfc.section.1.p.7">When consuming multiple archives from untrusted sources it would be beneficial to have a Same Origin policy <a href="#RFC6454">[RFC6454]</a> so that relative hyperlinks can&#8217;t escape the particular archive.</p>
+<p id="rfc.section.1.p.8">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
+<p id="rfc.section.1.p.9">This specification proposes the Archive and Packaging URI scheme <samp>arcp</samp> as an alternative to addressing resources within an archive, application or package.</p>
+<p id="rfc.section.1.p.10">For the purpose of this specification, an <strong>archive</strong> is a collection of sub-resources addressable by name or path.  This definition covers typical archive file formats like <samp>.zip</samp> or <samp>tar.gz</samp> and derived <samp>+zip</samp> media types <a href="#RFC6839">[RFC6839]</a>, but also non-file resource packages like an LDP Container <a href="#W3C.REC-ldp-20150226">[W3C.REC-ldp-20150226]</a>, an installed Web App <a href="#W3C.WD-appmanifest-20180118">[W3C.WD-appmanifest-20180118]</a>, or a BagIt folder structure <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>.</p>
+<p id="rfc.section.1.p.11">For brevity, the term <em>archive</em> is used throughout this specification, although from the above it can also mean a <em>container</em>, <em>application</em> or <em>package</em>.</p>
+<p id="rfc.section.1.p.12">The main purpose of arcp URis to provide consistent identifiers as absolute URIs for nested resources. This specification does not define a new network protocol, however we suggest an abstract resolution protocol that implementations can apply using existing protocols or programming frameworks.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#requirements" id="requirements">Requirements Language</a></h1>
+<p id="rfc.section.2.p.1">The key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;,  &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#syntax" id="syntax">Scheme syntax</a></h1>
 <p id="rfc.section.3.p.1">The <samp>arcp</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following productions:</p>
 <pre>
@@ -573,7 +575,7 @@ name          = "name," reg-name
 <p/>
 
 <ul>
-  <li>If the <em>path</em> is <samp>/</samp> - e.g.  <samp>arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/</samp> - then the arcp URI represent the archive itself, typically represented as a root directory or collection.</li>
+  <li>If the <em>path</em> is <samp>/</samp> - e.g. &lt;arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/&gt; - then the arcp URI represent the archive itself, typically represented as a root directory or collection.</li>
   <li>If the path ends with <samp>/</samp> then the path represents a directory or collection.</li>
 </ul>
 <p id="rfc.section.4.2.p.3">The arcp URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
@@ -640,12 +642,6 @@ name          = "name," reg-name
   <tbody>
     <tr>
       <td class="reference">
-        <b id="RFC2046">[RFC2046]</b>
-      </td>
-      <td class="top"><a>Freed, N.</a> and <a>N. Borenstein</a>, "<a href="http://tools.ietf.org/html/rfc2046">Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types</a>", RFC 2046, DOI 10.17487/RFC2046, November 1996.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
@@ -700,12 +696,6 @@ name          = "name," reg-name
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC6839">[RFC6839]</b>
-      </td>
-      <td class="top"><a>Hansen, T.</a> and <a>A. Melnikov</a>, "<a href="http://tools.ietf.org/html/rfc6839">Additional Media Type Structured Syntax Suffixes</a>", RFC 6839, DOI 10.17487/RFC6839, January 2013.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC6920">[RFC6920]</b>
       </td>
       <td class="top"><a>Farrell, S.</a>, <a>Kutscher, D.</a>, <a>Dannewitz, C.</a>, <a>Ohlman, B.</a>, <a>Keranen, A.</a> and <a>P. Hallam-Baker</a>, "<a href="http://tools.ietf.org/html/rfc6920">Naming Things with Hashes</a>", RFC 6920, DOI 10.17487/RFC6920, April 2013.</td>
@@ -715,12 +705,6 @@ name          = "name," reg-name
         <b id="RFC7595">[RFC7595]</b>
       </td>
       <td class="top"><a>Thaler, D.</a>, <a>Hansen, T.</a> and <a>T. Hardie</a>, "<a href="http://tools.ietf.org/html/rfc7595">Guidelines and Registration Procedures for URI Schemes</a>", BCP 35, RFC 7595, DOI 10.17487/RFC7595, June 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC8089">[RFC8089]</b>
-      </td>
-      <td class="top"><a>Kerwin, M.</a>, "<a href="http://tools.ietf.org/html/rfc8089">The "file" URI Scheme</a>", RFC 8089, DOI 10.17487/RFC8089, February 2017.</td>
     </tr>
   </tbody>
 </table>
@@ -741,6 +725,12 @@ name          = "name," reg-name
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC2046">[RFC2046]</b>
+      </td>
+      <td class="top"><a>Freed, N.</a> and <a>N. Borenstein</a>, "<a href="http://tools.ietf.org/html/rfc2046">Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types</a>", RFC 2046, DOI 10.17487/RFC2046, November 1996.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC4648">[RFC4648]</b>
       </td>
       <td class="top"><a>Josefsson, S.</a>, "<a href="http://tools.ietf.org/html/rfc4648">The Base16, Base32, and Base64 Data Encodings</a>", RFC 4648, DOI 10.17487/RFC4648, October 2006.</td>
@@ -750,6 +740,18 @@ name          = "name," reg-name
         <b id="RFC6570">[RFC6570]</b>
       </td>
       <td class="top"><a>Gregorio, J.</a>, <a>Fielding, R.</a>, <a>Hadley, M.</a>, <a>Nottingham, M.</a> and <a>D. Orchard</a>, "<a href="http://tools.ietf.org/html/rfc6570">URI Template</a>", RFC 6570, DOI 10.17487/RFC6570, March 2012.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6839">[RFC6839]</b>
+      </td>
+      <td class="top"><a>Hansen, T.</a> and <a>A. Melnikov</a>, "<a href="http://tools.ietf.org/html/rfc6839">Additional Media Type Structured Syntax Suffixes</a>", RFC 6839, DOI 10.17487/RFC6839, January 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC8089">[RFC8089]</b>
+      </td>
+      <td class="top"><a>Kerwin, M.</a>, "<a href="http://tools.ietf.org/html/rfc8089">The "file" URI Scheme</a>", RFC 8089, DOI 10.17487/RFC8089, February 2017.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -812,7 +814,7 @@ arcp://name,messaging.example.com/share
 </pre>
 <p id="rfc.section.A.1.p.9">The arcp framework checks its registration for <samp>messaging.example.com</samp> and finds the installed messaging application. It performs permission checks that other apps are allowed to navigate to its <samp>/share</samp> state.</p>
 <p id="rfc.section.A.1.p.10">The messaging app is launched and navigates to its &#8220;sharing&#8221; UI, asking the user for a caption.</p>
-<p id="rfc.section.A.1.p.11">The messaging app requests the arcp framework to retrieve <samp>arcp://name,gallery.example.org/photos/137</samp> using content negotiation for an <samp>image/jpeg</samp> representation.</p>
+<p id="rfc.section.A.1.p.11">The messaging app requests the arcp framework to retrieve &lt;arcp://name,gallery.example.org/photos/137&gt; using content negotiation for an <samp>image/jpeg</samp> representation.</p>
 <p id="rfc.section.A.1.p.12">The arcp framework finds the installed photo gallery <samp>gallery.example.org</samp>, and confirms the read permission.</p>
 <p id="rfc.section.A.1.p.13">The photo gallery application returns a JPEG representation after retrieving the photo from its internal store.</p>
 <p id="rfc.section.A.1.p.14">After the messaging app has completed sharing the picture bytestream, it request the UI framework to navigate to:</p>
@@ -857,9 +859,9 @@ arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
 arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
 </pre>
 <p id="rfc.section.A.2.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which <samp>tar.gz</samp> file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
-<p id="rfc.section.A.2.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI <samp>arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt</samp> and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
+<p id="rfc.section.A.2.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI &lt;arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt&gt; and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
 <h1 id="rfc.appendix.A.3"><a href="#rfc.appendix.A.3">A.3.</a> <a href="#origin-based" id="origin-based">Origin-based</a></h1>
-<p id="rfc.section.A.3.p.1">A web crawler is about to index the content of the URL <samp>http://example.com/data.zip</samp> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
+<p id="rfc.section.A.3.p.1">A web crawler is about to index the content of the URL <a href="http://example.com/data.zip">http://example.com/data.zip</a> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
 <p id="rfc.section.A.3.p.2">The application generates a UUID v5 based on the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and the URL to the zip file:</p>
 <pre>
 &gt;&gt;&gt; uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
@@ -875,7 +877,7 @@ arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 </pre>
-<p id="rfc.section.A.3.p.5">When the application encounters <samp>http://example.com/data.zip</samp> some time later it can recalculate the same base arcp URI. This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
+<p id="rfc.section.A.3.p.5">When the application encounters <a href="http://example.com/data.zip">http://example.com/data.zip</a> some time later it can recalculate the same base arcp URI. This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
 <pre>
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 </pre>
@@ -944,7 +946,7 @@ arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
 arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 </pre>
 <h1 id="rfc.appendix.A.7"><a href="#rfc.appendix.A.7">A.7.</a> <a href="#resolution-of-packaged-resources" id="resolution-of-packaged-resources">Resolution of packaged resources</a></h1>
-<p id="rfc.section.A.7.p.1">A virtual file system driver on a mobile operating system has mounted several packaged applications for resolving common resources. An application requests the rendering framework to resolve a picture from <samp>arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png</samp> to show it within a user interface.</p>
+<p id="rfc.section.A.7.p.1">A virtual file system driver on a mobile operating system has mounted several packaged applications for resolving common resources. An application requests the rendering framework to resolve a picture from &lt;arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png&gt; to show it within a user interface.</p>
 <p id="rfc.section.A.7.p.2">The framework first checks that the authority <samp>uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e</samp> is valid to access according to the Same Origin policies or permissions of the running application. It then matches the authority to the corresponding application package.</p>
 <p id="rfc.section.A.7.p.3">The framework resolves <samp>/img/logo.png</samp> from within that package, and returns an image buffer it already had cached in memory.</p>
 <h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
