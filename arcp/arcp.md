@@ -125,48 +125,28 @@ referenced by hypermedia formats.
 
 --- middle
 
-Introduction
+
+Introduction        {#introduction}
 ============
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in
-{{RFC2119}}.
-
-For the purpose of this specification, an **archive** is a
-collection of sub-resources addressable by name or path.
-This definition covers typical archive file formats like
-`.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}},
-but also non-file resource packages like
-an LDP Container {{W3C.REC-ldp-20150226}},
-an installed Web App {{W3C.WD-appmanifest-20180118}},
-or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
-
-For brevity, the term _archive_ is used throughout this
-specification, although from the above it can also mean
-a _container_, _application_ or _package_.
-
-
-Background        {#background}
-==========
 
 Mobile and Web Applications
 may bundle resources such as stylesheets with
 relative URI references to scripts, images and fonts. Resolving
+and parsing
 such resources within URI handling frameworks may require
 generating absolute URIs and applying
 Same-Origin {{RFC6454}} security policies separately for
 each app.
 
-Applications that are accessing resources bundled inside an
+Software that is accessing resources bundled inside an
 archive (e.g. `zip` or `tar.gz` file) can struggle to consume
 hypermedia content types that use relative
 URI references {{RFC3986}} such as `../css/`,
 as it is challenging to determine the base URI
 in a consistent fashion.
 
-Frequently the archive must be unpacked locally to
-synthesize base URIs like `file:///tmp/a1b27ae03865/`
+Frequently the archive might be unpacked locally,
+implying base URIs like `file:///tmp/a1b27ae03865/`
 to represent the root of the archive. Such URIs are temporary,
 might not be globally unique, and could be vulnerable to
 attacks such as "climbing out" of the root directory.
@@ -174,7 +154,8 @@ attacks such as "climbing out" of the root directory.
 An archive containing multiple HTML or
 Linked Data resources, such as in a
 BagIt archive {{I-D.draft-kunze-bagit-14}}, may be using
-relative URIs to cross-reference constituent files.
+relative URIs to cross-reference constituent files,
+making it challenging to index or annotate such resources.
 
 Consumptions of archives might be performed
 in memory or through a common framework, abstracting
@@ -193,12 +174,46 @@ can be ill-suited for purposes such as above, where a
 location-independent URI scheme is more flexible,
 secure and globally unique.
 
+This specification proposes the 
+Archive and Packaging URI scheme `arcp` as 
+an alternative to addressing resources 
+within an archive, application or package.
+
+For the purpose of this specification, an **archive** is a
+collection of sub-resources addressable by name or path.
+This definition covers typical archive file formats like
+`.zip` or `tar.gz` and derived `+zip` media types {{RFC6839}},
+but also non-file resource packages like
+an LDP Container {{W3C.REC-ldp-20150226}},
+an installed Web App {{W3C.WD-appmanifest-20180118}},
+or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
+
+For brevity, the term _archive_ is used throughout this
+specification, although from the above it can also mean
+a _container_, _application_ or _package_.
+
+The main purpose of arcp URis to provide consistent identifiers as absolute
+URIs for nested resources. This specification does not define a new network
+protocol, however we suggest an abstract resolution protocol that
+implementations can apply using existing protocols or 
+programming frameworks.
+
+
+Requirements Language    {#requirements}
+=====================
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+{{RFC2119}}.
+
 
 Scheme syntax    {#syntax}
 =============
 
 The `arcp` URI scheme follows the {{RFC3986}} syntax for hierarchical
 URIs according to the following productions:
+
 
     URI           = scheme ":" arcp-specific [ "#" fragment ]
 
