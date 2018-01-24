@@ -675,16 +675,16 @@ The arcp base URI is thus:
 The archive contains the files:
 
 * `./doc.html`  which links to `css/base.css`
-* `./css/base.css`  which links to `../fonts/Coolie.woff`
-* `./fonts/Coolie.woff`
+* `./css/base.css`  which links to `../fonts/Foo.woff`
+* `./fonts/Foo.woff`
 
 The application generates the corresponding arcp URIs and uses those for URI resolutions to list resources and their hyperlinks:
 
     arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
       -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
     arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-      -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+      -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
+    arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
 
 The application is now confident that all hyperlinked files are
 indeed present in the archive. In its database it notes which `tar.gz` file

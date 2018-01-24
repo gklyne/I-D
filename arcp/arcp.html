@@ -845,9 +845,9 @@ arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/
 
 <ul>
   <li><samp>./doc.html</samp>  which links to <samp>css/base.css</samp></li>
-  <li><samp>./css/base.css</samp>  which links to <samp>../fonts/Coolie.woff</samp></li>
+  <li><samp>./css/base.css</samp>  which links to <samp>../fonts/Foo.woff</samp></li>
   <li>
-    <samp>./fonts/Coolie.woff</samp>
+    <samp>./fonts/Foo.woff</samp>
   </li>
 </ul>
 <p id="rfc.section.A.2.p.5">The application generates the corresponding arcp URIs and uses those for URI resolutions to list resources and their hyperlinks:</p>
@@ -855,8 +855,8 @@ arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/
 arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
   -&gt; arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
 arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-  -&gt; arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
-arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Coolie.woff
+  -&gt; arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
+arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
 </pre>
 <p id="rfc.section.A.2.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which <samp>tar.gz</samp> file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
 <p id="rfc.section.A.2.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI &lt;arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt&gt; and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
