@@ -352,8 +352,7 @@ The _path_ component of an arcp URI identify individual
 resources within a particular archive, typically
 a *directory* or *file*.
 
-* If the _path_ is `/` - e.g.
-`arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/` -
+* If the _path_ is `/` - e.g. <arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/> -
 then the arcp URI represent the archive itself,
 typically represented as a root directory or collection.
 * If the path ends with `/` then the path represents
@@ -611,7 +610,7 @@ The messaging app is launched and navigates to its "sharing"
 UI, asking the user for a caption.
 
 The messaging app requests the arcp framework to retrieve
-`arcp://name,gallery.example.org/photos/137`
+<arcp://name,gallery.example.org/photos/137>
 using content negotiation for an `image/jpeg` representation.
 
 The arcp framework finds the installed photo gallery
@@ -678,7 +677,7 @@ corresponds to UUID `32a423d6-52ab-47e3-a9cd-54f418a48571`.
 
 If the application had encountered a malicious hyperlink
 `../../../outside.txt` it would first resolve it to
-the absolute URI `arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt` and
+the absolute URI <arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt> and
 conclude from the "Not Found" error that the path `/outside.txt` was not
 present in the archive.
 
@@ -687,7 +686,7 @@ Origin-based
 ------------
 
 A web crawler is about to index the content of the URL
-`http://example.com/data.zip` and need to generate absolute URIs
+<http://example.com/data.zip> and need to generate absolute URIs
 as it continues crawling inside the individual resources of the archive.
 
 The application generates a UUID v5 based on the
@@ -707,7 +706,7 @@ Listing all directories and files in the ZIP, the crawler finds the URIs:
     arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
     arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
-When the application encounters `http://example.com/data.zip` some time later
+When the application encounters <http://example.com/data.zip> some time later
 it can recalculate the same base arcp URI. This time the ZIP file has been
 modified upstream and the crawler finds additionally:
 
@@ -822,7 +821,7 @@ A virtual file system driver on a mobile operating system
 has mounted several packaged applications for resolving
 common resources. An application requests the rendering
 framework to resolve a picture from
-`arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png`
+<arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png>
 to show it within a user interface.
 
 The framework first checks that the authority
