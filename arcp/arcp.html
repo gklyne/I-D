@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>The Archive and Packaging (arcp) URI scheme</title>
+  <title>The Archive and Package (arcp) URI scheme</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -409,8 +409,8 @@
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-arcp-01-SNAPSHOT" />
   <meta name="dct.issued" scheme="ISO8601" content="2018-1-24" />
-  <meta name="dct.abstract" content="This specification proposes the Application and Packaging URI scheme " />
-  <meta name="description" content="This specification proposes the Application and Packaging URI scheme " />
+  <meta name="dct.abstract" content="This specification proposes the Archive and Package URI scheme " />
+  <meta name="description" content="This specification proposes the Archive and Package URI scheme " />
 
 </head>
 
@@ -444,13 +444,13 @@
     </tbody>
   </table>
 
-  <p class="title">The Archive and Packaging (arcp) URI scheme<br />
+  <p class="title">The Archive and Package (arcp) URI scheme<br />
   <span class="filename">draft-soilandreyes-arcp-01-SNAPSHOT</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This specification proposes the Application and Packaging URI scheme <samp>arcp</samp>.</p>
+<p>This specification proposes the Archive and Package URI scheme <samp>arcp</samp>.</p>
 <p>arcp URIs can be used to consume or reference hypermedia resources bundled inside a file archive or an application package, as well as to resolve URIs for archive resources within a programmatic framework.</p>
 <p>This URI scheme provides mechanisms to generate a unique base URI to represent the root of the archive, so that relative URI references in a bundled resource can be resolved within the archive without having to extract the archive content on the local file system.</p>
 <p>An arcp URI can be used for purposes of isolation (e.g. when consuming multiple archives), security constraints (avoiding &#8220;climb out&#8221; from the archive), or for externally identiyfing sub-resources referenced by hypermedia formats.</p>
@@ -512,7 +512,7 @@
 <p id="rfc.section.1.p.6">Consumption of an archive with a consistent base URL should be possible no matter from which location it was retrieved, or on which device it is inspected.</p>
 <p id="rfc.section.1.p.7">When consuming multiple archives from untrusted sources it would be beneficial to have a Same Origin policy <a href="#RFC6454">[RFC6454]</a> so that relative hyperlinks can&#8217;t escape the particular archive.</p>
 <p id="rfc.section.1.p.8">The <samp>file:</samp> URI scheme <a href="#RFC8089">[RFC8089]</a> can be ill-suited for purposes such as above, where a location-independent URI scheme is more flexible, secure and globally unique.</p>
-<p id="rfc.section.1.p.9">This specification proposes the Archive and Packaging URI scheme <samp>arcp</samp> as an alternative to addressing resources within an archive, application or package.</p>
+<p id="rfc.section.1.p.9">This specification proposes the Archive and Package URI scheme <samp>arcp</samp> as an alternative to addressing resources within an archive, application or package.</p>
 <p id="rfc.section.1.p.10">For the purpose of this specification, an <strong>archive</strong> is a collection of sub-resources addressable by name or path.  This definition covers typical archive file formats like <samp>.zip</samp> or <samp>tar.gz</samp> and derived <samp>+zip</samp> media types <a href="#RFC6839">[RFC6839]</a>, but also non-file resource packages like an LDP Container <a href="#W3C.REC-ldp-20150226">[W3C.REC-ldp-20150226]</a>, an installed Web App <a href="#W3C.WD-appmanifest-20180118">[W3C.WD-appmanifest-20180118]</a>, or a BagIt folder structure <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a>.</p>
 <p id="rfc.section.1.p.11">For brevity, the term <em>archive</em> is used throughout this specification, although from the above it can also mean a <em>container</em>, <em>application</em> or <em>package</em>.</p>
 <p id="rfc.section.1.p.12">The main purpose of arcp URis to provide consistent identifiers as absolute URIs for nested resources. This specification does not define a new network protocol, however we suggest an abstract resolution protocol that implementations can apply using existing protocols or programming frameworks.</p>

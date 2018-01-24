@@ -9,12 +9,12 @@ Expires: July 28, 2018                               Mozilla Corporation
                                                         January 24, 2018
 
 
-              The Archive and Packaging (arcp) URI scheme
+               The Archive and Package (arcp) URI scheme
                   draft-soilandreyes-arcp-01-SNAPSHOT
 
 Abstract
 
-   This specification proposes the Application and Packaging URI scheme
+   This specification proposes the Archive and Package URI scheme
    "arcp".
 
    arcp URIs can be used to consume or reference hypermedia resources
@@ -154,8 +154,8 @@ Internet-Draft                     app                      January 2018
    as above, where a location-independent URI scheme is more flexible,
    secure and globally unique.
 
-   This specification proposes the Archive and Packaging URI scheme
-   "arcp" as an alternative to addressing resources within an archive,
+   This specification proposes the Archive and Package URI scheme "arcp"
+   as an alternative to addressing resources within an archive,
    application or package.
 
    For the purpose of this specification, an *archive* is a collection

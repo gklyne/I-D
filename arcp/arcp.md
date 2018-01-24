@@ -1,5 +1,5 @@
 ---
-title: The Archive and Packaging (arcp) URI scheme
+title: The Archive and Package (arcp) URI scheme
 abbrev: app
 docname: draft-soilandreyes-arcp-01-SNAPSHOT
 date: 2018-01-24
@@ -103,7 +103,7 @@ informative:
 --- abstract
 
 This specification proposes the
-Application and Packaging URI scheme `arcp`.
+Archive and Package URI scheme `arcp`.
 
 arcp URIs can be used to consume or reference hypermedia
 resources bundled inside a file archive or an
@@ -175,7 +175,7 @@ location-independent URI scheme is more flexible,
 secure and globally unique.
 
 This specification proposes the 
-Archive and Packaging URI scheme `arcp` as 
+Archive and Package URI scheme `arcp` as 
 an alternative to addressing resources 
 within an archive, application or package.
 
