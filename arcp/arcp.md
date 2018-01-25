@@ -1,8 +1,8 @@
 ---
 title: The Archive and Package (arcp) URI scheme
 abbrev: app
-docname: draft-soilandreyes-arcp-01-SNAPSHOT
-date: 2018-01-24
+docname: draft-soilandreyes-arcp-02-SNAPSHOT
+date: 2018-01-25
 category: info
 
 ipr: trust200902
@@ -131,7 +131,9 @@ Introduction        {#introduction}
 
 Mobile and Web Applications
 may bundle resources such as stylesheets with
-relative URI references to scripts, images and fonts. Resolving
+_relative URI references_ {{RFC3986}} 
+([section 4.2](https://tools.ietf.org/html/rfc3986#section-4.2))
+to scripts, images and fonts. Resolving
 and parsing
 such resources within URI handling frameworks may require
 generating absolute URIs and applying
@@ -141,8 +143,10 @@ each app.
 Software that is accessing resources bundled inside an
 archive (e.g. `zip` or `tar.gz` file) can struggle to consume
 hypermedia content types that use relative
-URI references {{RFC3986}} such as `../css/`,
-as it is challenging to determine the base URI
+URI references such as `../css/`,
+as it is challenging to establishing the _base URI_
+{{RFC3986}} 
+([section 5.1](https://tools.ietf.org/html/rfc3986#section-5.1))
 in a consistent fashion.
 
 Frequently the archive might be unpacked locally,
@@ -192,7 +196,7 @@ For brevity, the term _archive_ is used throughout this
 specification, although from the above it can also mean
 a _container_, _application_ or _package_.
 
-The main purpose of arcp URis to provide consistent identifiers as absolute
+The main purpose of arcp URIs is to provide consistent identifiers as absolute
 URIs for nested resources. This specification does not define a new network
 protocol, however we suggest an abstract resolution protocol that
 implementations can apply using existing protocols or 
@@ -301,7 +305,7 @@ an installed Web App {{W3C.WD-appmanifest-20180118}},
 or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
 
 
-Authority semantics
+Authority semantics   {#authority-semantics}
 -------------------
 
 The _authority_ component identifies the archive itself.
@@ -316,19 +320,21 @@ the archive, without necessarily providing access to the archive.
 
 1. If the prefix is `uuid,` followed by a UUID {{RFC4122}},
   this indicates a unique archive identity.
-1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}},
+1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}}
+  ([section 4.4](https://tools.ietf.org/html/rfc4122#section-4.4)),
   this indicate uniqueness based on a random number generator.  
   Implementations creating random-based
   authorities SHOULD generate the v4 random UUID using
   a suitable random number generator {{RFC4086}}.
-2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}},
+2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}}
+  ([section 4.3](https://tools.ietf.org/html/rfc4122#section-4.3)),
   this indicates uniqueness based on an existing archive location,
   typically an URL.  
   Implementations creating location-based
   authorities from an archive's URL SHOULD generate the
   v5 UUID using the URL
   namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8`
-  and the particular URL (see {{RFC4122}} section 4.3).  
+  and the particular URL.
   Note that while implementations cannot resolve which location was
   used, they can confirm the name-based UUID if the location
   is otherwise known.
@@ -338,13 +344,14 @@ the archive, without necessarily providing access to the archive.
   `ni` arcp URIs remains static, although the implementation may
   use content negotiation or similar transformations.  
   The checksum MUST be expressed
-  according to {{RFC6920}}'s `alg-val` production.  
+  according to the `alg-val` production in {{RFC6920}} 
+  ([section 3](https://tools.ietf.org/search/rfc6920#section-3)).
   Implementations creating hash-based authorities from an archive's
-  bytestream SHOULD use the `sha-256` without truncation.
+  bytestream SHOULD use the hash method `sha-256` without truncation.
 4. If the prefix is `name,` this indicates that the authority
   is an application or package name, typically as installed
   on a device or system.  
-  Implementations SHOULD assume that an unrecognized `name`
+  Implementations SHOULD assume that an unrecognised `name`
   authority is only unique within a particular installation,
   but MAY assume further uniqueness guarantees for names under
   their control.  
@@ -360,7 +367,7 @@ URIs which authority do not match any of the prefixes defined in
 this specification.
 
 
-Path semantics
+Path semantics   {#path-semantics}
 --------------
 
 The _path_ component of an arcp URI identify individual
@@ -399,7 +406,7 @@ It is envisioned that an implementation will
 have extracted or opened an archive in
 advance, and assigned it an appropriate authority according
 to [Authority](#authority). Such an implementation
-can then resolve arcp URIs programmatically, e.g. by using
+can then resolve arcp URIs, e.g. by using
 in-memory access or mapping paths to the extracted archive on
 the local file system.
 
@@ -441,7 +448,9 @@ Resolving from a .well-known endpoint  {#well-known}
 If the `authority` component of an arcp URI matches the `alg-val`
 production, an application MAY attempt to resolve the authority
 from any `.well-known/ni/` endpoint {{RFC5785}} as specified in
-{{RFC6920}} section 4, in order to retrieve the complete
+{{RFC6920}} 
+[section 4](https://tools.ietf.org/html/rfc6920#section-4), 
+in order to retrieve the complete
 archive. Applications SHOULD verify the checksum of the
 retrieved archive before resolving the individual path.
 
@@ -577,7 +586,7 @@ Change controller: Stian Soiland-Reyes
 Examples  {#examples}
 ========
 
-Sharing using app names
+Sharing using app names   {#app-names}
 -----------------------
 
 A photo gallery application on a mobile device uses arcp URIs
@@ -660,8 +669,8 @@ it can have different representations or UI states
 for different apps.
 
 
-Sandboxing
-----------
+Sandboxing base URI   {#sandboxing}
+-------------------
 
 An document store application has received a file
 `document.tar.gz` which content will be checked for consistency.
@@ -697,8 +706,8 @@ conclude from the "Not Found" error that the path `/outside.txt` was not
 present in the archive.
 
 
-Origin-based
-------------
+Location-based  {#location-based}
+--------------
 
 A web crawler is about to index the content of the URL
 <http://example.com/data.zip> and need to generate absolute URIs
@@ -731,7 +740,7 @@ If files had been removed from the updated ZIP file the
 crawler can simply remove those from its database,
 as it used the same arcp base URI as in last crawl.
 
-Hash-based
+Hash-based  {#hash-based}
 ----------
 
 An application where users can upload software distributions
@@ -763,12 +772,12 @@ for:
 and flags the upload as malicious without having to scan it again.
 
 
-Archives that are not files
+Archives that are not files   {#bagit}
 ---------------------------
 
 An application is relating BagIt archives
 {{I-D.draft-kunze-bagit-14}} on a shared file system, using structured
-folders and manifests rather than individual archive files.
+"bag" folders and manifests rather than individual archive files.
 
 The BagIt payload manifest `/gfs/bags/scan15/manifest-md5.txt` lists the files:
 
@@ -776,10 +785,10 @@ The BagIt payload manifest `/gfs/bags/scan15/manifest-md5.txt` lists the files:
     408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
 
 The application generates a random UUID v4
-`ff2d5a82-7142-4d3f-b8cc-3e662d6de756` which it adds to
-the bag metadata file `/gfs/bags/scan15/bag-info.txt`
+`ff2d5a82-7142-4d3f-b8cc-3e662d6de756` and adds the corresponding
+arcp URI to the bag metadata file `/gfs/bags/scan15/bag-info.txt`
 
-    External-Identifier: ff2d5a82-7142-4d3f-b8cc-3e662d6de756
+    External-Identifier: arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
 
 It then generates arcp URIs for the files listed in the manifest:
 
@@ -791,7 +800,7 @@ these arcp URIs, it can match them to the correct bag folder by
 inspecting the `External-Identifier` metadata.
 
 
-Linked Data containers which are not on the web
+Linked Data containers which are not on the web  {#ldp}
 -----------------------------------------------
 
 An application exposes in-memory objects
@@ -829,7 +838,7 @@ The LDP client resolves the relative URIs to retrieve each of the contacts:
     arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
 
-Resolution of packaged resources
+Resolution of packaged resources   {#packaged}
 --------------------------------
 
 A virtual file system driver on a mobile operating system
@@ -871,6 +880,7 @@ archive, package or application, and adding flexibility for how resources
 can be resolved.
 
 The authors would like to thank Graham Klyne,
-Carsten Bormann, Roy T. Fielding, S Moonesamy and
-Julian Reschke for valuable feedback and suggestions.
+Carsten Bormann, Roy T. Fielding, S Moonesamy,
+Julian Reschke and Frank Ellermann 
+for valuable feedback and suggestions.
 
