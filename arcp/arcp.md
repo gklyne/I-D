@@ -194,7 +194,7 @@ or a BagIt folder structure {{I-D.draft-kunze-bagit-14}}.
 
 For brevity, the term _archive_ is used throughout this
 specification, although from the above it can also mean
-a _container_, _application_ or _package_.
+a _container_, _application_, _aggregation_ or _package_.
 
 The main purpose of arcp URIs is to provide consistent identifiers as absolute
 URIs for nested resources. This specification does not define a new network
