@@ -1,8 +1,8 @@
 ---
 title: The Archive and Package (arcp) URI scheme
 abbrev: app
-docname: draft-soilandreyes-arcp-02-SNAPSHOT
-date: 2018-01-25
+docname: draft-soilandreyes-arcp-03-SNAPSHOT
+date: 2018-01-27
 category: info
 
 ipr: trust200902
@@ -586,88 +586,6 @@ Change controller: Stian Soiland-Reyes
 Examples  {#examples}
 ========
 
-Sharing using app names   {#app-names}
------------------------
-
-A photo gallery application on a mobile device uses arcp URIs
-for navigation between its UI states.
-The gallery is secured so that other applications can't normally
-access its photos.
-
-The application is installed as the app name
-`gallery.example.org` as the vendor controls `example.org`,
-making the corresponding name-based arcp URI:
-
-    arcp://name,gallery.example.org/
-
-A user is at the application state which shows the newest photos as thumbnails:
-
-    arcp://name,gallery.example.org/photos/?New
-
-The user selects a photo, rendered with metadata overlaid:
-
-    arcp://name,gallery.example.org/photos/137
-
-The user requests to "share" the photo, selecting
-`messaging.example.com` which uses a common arcp
-URI framework on the device.
-
-The photo gallery registers with the device's
-arcp framework that the chosen `messaging.example.com` gets
-read permission to its `/photos/137` resource.
-
-The sharing function returns a URI Template {{RFC6570}}:
-
-    arcp://name,messaging.example.com/share{;uri}{;redirect}
-
-Filling in the template, the gallery requests to pop up:
-
-    arcp://name,messaging.example.com/share
-      ;uri=arcp://gallery.example.org/photos/137
-      ;redirect=arcp://gallery.example.org/photos/%3fNew
-
-The arcp framework checks its registration for `messaging.example.com`
-and finds the installed messaging application. It performs permission
-checks that other apps are allowed to navigate to its `/share` state.
-
-The messaging app is launched and navigates to its "sharing"
-UI, asking the user for a caption.
-
-The messaging app requests the arcp framework to retrieve
-<arcp://name,gallery.example.org/photos/137>
-using content negotiation for an `image/jpeg` representation.
-
-The arcp framework finds the installed photo gallery
-`gallery.example.org`, and confirms the read permission.
-
-The photo gallery application returns a JPEG representation after
-retrieving the photo from its internal store.
-
-After the messaging app has completed sharing the picture bytestream,
-it request the UI framework to navigate to:
-
-    arcp://name,gallery.example.org/photos/?New
-
-The UI returns to the original view in the photo gallery.
-
-If the messaging app had attempted to _retrieve_ the arcp URI
-
-    arcp://name,gallery.example.org/photos/?New
-
-then it would be rejected by the arcp framework as permission was not
-granted.
-
-However, if such access had been granted, the gallery could
-return a `text/uri-list` of the newest photos:
-
-    arcp://name,gallery.example.org/photos/137
-    arcp://name,gallery.example.org/photos/138
-    arcp://name,gallery.example.org/photos/139
-
-This examples show that although an arcp URI represents a resource,
-it can have different representations or UI states
-for different apps.
-
 
 Sandboxing base URI   {#sandboxing}
 -------------------
@@ -857,6 +775,90 @@ authority to the corresponding application package.
 The framework resolves `/img/logo.png` from within
 that package, and returns an image buffer it already had
 cached in memory.
+
+
+Sharing using app names   {#app-names}
+-----------------------
+
+A photo gallery application on a mobile device uses arcp URIs
+for navigation between its UI states.
+The gallery is secured so that other applications can't normally
+access its photos.
+
+The application is installed as the app name
+`gallery.example.org` as the vendor controls `example.org`,
+making the corresponding name-based arcp URI:
+
+    arcp://name,gallery.example.org/
+
+A user is at the application state which shows the newest photos as thumbnails:
+
+    arcp://name,gallery.example.org/photos/?New
+
+The user selects a photo, rendered with metadata overlaid:
+
+    arcp://name,gallery.example.org/photos/137
+
+The user requests to "share" the photo, selecting
+`messaging.example.com` which uses a common arcp
+URI framework on the device.
+
+The photo gallery registers with the device's
+arcp framework that the chosen `messaging.example.com` gets
+read permission to its `/photos/137` resource.
+
+The sharing function returns a URI Template {{RFC6570}}:
+
+    arcp://name,messaging.example.com/share{;uri}{;redirect}
+
+Filling in the template, the gallery requests to pop up:
+
+    arcp://name,messaging.example.com/share
+      ;uri=arcp://gallery.example.org/photos/137
+      ;redirect=arcp://gallery.example.org/photos/%3fNew
+
+The arcp framework checks its registration for `messaging.example.com`
+and finds the installed messaging application. It performs permission
+checks that other apps are allowed to navigate to its `/share` state.
+
+The messaging app is launched and navigates to its "sharing"
+UI, asking the user for a caption.
+
+The messaging app requests the arcp framework to retrieve
+<arcp://name,gallery.example.org/photos/137>
+using content negotiation for an `image/jpeg` representation.
+
+The arcp framework finds the installed photo gallery
+`gallery.example.org`, and confirms the read permission.
+
+The photo gallery application returns a JPEG representation after
+retrieving the photo from its internal store.
+
+After the messaging app has completed sharing the picture bytestream,
+it request the UI framework to navigate to:
+
+    arcp://name,gallery.example.org/photos/?New
+
+The UI returns to the original view in the photo gallery.
+
+If the messaging app had attempted to _retrieve_ the arcp URI
+
+    arcp://name,gallery.example.org/photos/?New
+
+then it would be rejected by the arcp framework as permission was not
+granted.
+
+However, if such access had been granted, the gallery could
+return a `text/uri-list` of the newest photos:
+
+    arcp://name,gallery.example.org/photos/137
+    arcp://name,gallery.example.org/photos/138
+    arcp://name,gallery.example.org/photos/139
+
+This examples show that although an arcp URI represents a resource,
+it can have different representations or UI states
+for different apps.
+
 
 
 

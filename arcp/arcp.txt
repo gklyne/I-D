@@ -5,12 +5,12 @@
 Network Working Group                                   S. Soiland-Reyes
 Internet-Draft                              The University of Manchester
 Intended status: Informational                                M. Caceres
-Expires: July 29, 2018                               Mozilla Corporation
-                                                        January 25, 2018
+Expires: July 31, 2018                               Mozilla Corporation
+                                                        January 27, 2018
 
 
                The Archive and Package (arcp) URI scheme
-                  draft-soilandreyes-arcp-02-SNAPSHOT
+                  draft-soilandreyes-arcp-03-SNAPSHOT
 
 Abstract
 
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 29, 2018.
+   This Internet-Draft will expire on July 31, 2018.
 
 
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 1]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 1]
 
 Internet-Draft                     app                      January 2018
 
@@ -94,13 +94,13 @@ Table of Contents
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
      9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  14
-     A.1.  Sharing using app names . . . . . . . . . . . . . . . . .  14
-     A.2.  Sandboxing base URI . . . . . . . . . . . . . . . . . . .  16
-     A.3.  Location-based  . . . . . . . . . . . . . . . . . . . . .  17
-     A.4.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  18
-     A.5.  Archives that are not files . . . . . . . . . . . . . . .  18
-     A.6.  Linked Data containers which are not on the web . . . . .  19
-     A.7.  Resolution of packaged resources  . . . . . . . . . . . .  20
+     A.1.  Sandboxing base URI . . . . . . . . . . . . . . . . . . .  14
+     A.2.  Location-based  . . . . . . . . . . . . . . . . . . . . .  15
+     A.3.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  16
+     A.4.  Archives that are not files . . . . . . . . . . . . . . .  16
+     A.5.  Linked Data containers which are not on the web . . . . .  17
+     A.6.  Resolution of packaged resources  . . . . . . . . . . . .  18
+     A.7.  Sharing using app names . . . . . . . . . . . . . . . . .  18
    Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  20
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 2]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 2]
 
 Internet-Draft                     app                      January 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 3]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 3]
 
 Internet-Draft                     app                      January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 4]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 4]
 
 Internet-Draft                     app                      January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 5]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 5]
 
 Internet-Draft                     app                      January 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 6]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 6]
 
 Internet-Draft                     app                      January 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 7]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 7]
 
 Internet-Draft                     app                      January 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 8]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 8]
 
 Internet-Draft                     app                      January 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                 [Page 9]
+Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 9]
 
 Internet-Draft                     app                      January 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 10]
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 10]
 
 Internet-Draft                     app                      January 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 11]
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 11]
 
 Internet-Draft                     app                      January 2018
 
@@ -669,7 +669,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 12]
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 12]
 
 Internet-Draft                     app                      January 2018
 
@@ -725,7 +725,7 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 13]
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 13]
 
 Internet-Draft                     app                      January 2018
 
@@ -765,7 +765,227 @@ Internet-Draft                     app                      January 2018
 
 Appendix A.  Examples
 
-A.1.  Sharing using app names
+A.1.  Sandboxing base URI
+
+   An document store application has received a file "document.tar.gz"
+   which content will be checked for consistency.
+
+   For sandboxing purposes it generates a UUID v4 "32a423d6-52ab-47e3-
+   a9cd-54f418a48571" using a pseudo-random generator.  The arcp base
+   URI is thus:
+
+   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/
+
+   The archive contains the files:
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 14]
+
+Internet-Draft                     app                      January 2018
+
+
+   o  "./doc.html" which links to "css/base.css"
+
+   o  "./css/base.css" which links to "../fonts/Foo.woff"
+
+   o  "./fonts/Foo.woff"
+
+   The application generates the corresponding arcp URIs and uses those
+   for URI resolutions to list resources and their hyperlinks:
+
+   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
+     -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
+     -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
+   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
+
+   The application is now confident that all hyperlinked files are
+   indeed present in the archive.  In its database it notes which
+   "tar.gz" file corresponds to UUID "32a423d6-52ab-47e3-a9cd-
+   54f418a48571".
+
+   If the application had encountered a malicious hyperlink
+   "../../../outside.txt" it would first resolve it to the absolute URI
+   <arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt> and
+   conclude from the "Not Found" error that the path "/outside.txt" was
+   not present in the archive.
+
+A.2.  Location-based
+
+   A web crawler is about to index the content of the URL
+   http://example.com/data.zip and need to generate absolute URIs as it
+   continues crawling inside the individual resources of the archive.
+
+   The application generates a UUID v5 based on the URL namespace
+   "6ba7b811-9dad-11d1-80b4-00c04fd430c8" and the URL to the zip file:
+
+   >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
+   UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
+
+   Thus the location-based arcp URI for indexing the ZIP content is
+
+   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+
+   Listing all directories and files in the ZIP, the crawler finds the
+   URIs:
+
+   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
+   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
+   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 15]
+
+Internet-Draft                     app                      January 2018
+
+
+   When the application encounters http://example.com/data.zip some time
+   later it can recalculate the same base arcp URI.  This time the ZIP
+   file has been modified upstream and the crawler finds additionally:
+
+   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
+
+   If files had been removed from the updated ZIP file the crawler can
+   simply remove those from its database, as it used the same arcp base
+   URI as in last crawl.
+
+A.3.  Hash-based
+
+   An application where users can upload software distributions for
+   virus checking needs to avoid duplication as users tend to upload
+   "foo-1.2.tar" multiple times.
+
+   The application calculates the "sha-256" checksum of the uploaded
+   file to be in hexadecimal:
+
+   17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+
+   The "base64url" encoding [RFC4648] of the binary version of the
+   checksum is:
+
+   F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+
+   The corresponding "alg-val" authority is thus:
+
+   sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+
+   From this the hash base arcp URL is:
+
+   arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+
+   The crawler finds that its virus database already contain entries
+   for:
+
+  arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+
+   and flags the upload as malicious without having to scan it again.
+
+A.4.  Archives that are not files
+
+   An application is relating BagIt archives [I-D.draft-kunze-bagit-14]
+   on a shared file system, using structured "bag" folders and manifests
+   rather than individual archive files.
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 16]
+
+Internet-Draft                     app                      January 2018
+
+
+   The BagIt payload manifest "/gfs/bags/scan15/manifest-md5.txt" lists
+   the files:
+
+   49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
+   408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
+
+   The application generates a random UUID v4 "ff2d5a82-7142-4d3f-b8cc-
+   3e662d6de756" and adds the corresponding arcp URI to the bag metadata
+   file "/gfs/bags/scan15/bag-info.txt"
+
+  External-Identifier: arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
+
+   It then generates arcp URIs for the files listed in the manifest:
+
+  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
+
+   When a different application on the same shared file system encounter
+   these arcp URIs, it can match them to the correct bag folder by
+   inspecting the "External-Identifier" metadata.
+
+A.5.  Linked Data containers which are not on the web
+
+   An application exposes in-memory objects of an Address Book as a
+   Linked Data Platform container [W3C.REC-ldp-20150226], but addressing
+   the container using arcp URIs instead of http to avoid network
+   exposure.
+
+   The arcp URIs are used in conjuction with a generic LDP client
+   library (developed for http), but connected to the application's URI
+   resolution mechanism.
+
+   The application generates a new random UUID v4 "12f89f9c-e6ca-
+   4032-ae73-46b68c2b415a" for the address book, and provides the
+   corresponding arcp URI to the LDP client:
+
+   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
+
+   The LDP client resolves the container with content negotiation for
+   the "text/turtle" media type, and receives:
+
+
+
+
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 17]
+
+Internet-Draft                     app                      January 2018
+
+
+   @base <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
+   @prefix ldp: <http://www.w3.org/ns/ldp#>.
+   @prefix dcterms: <http://purl.org/dc/terms/>.
+
+   <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
+     a ldp:BasicContainer;
+     dcterms:title "Address book";
+     ldp:contains <contact1>, <contact2>.
+
+   The LDP client resolves the relative URIs to retrieve each of the
+   contacts:
+
+   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
+   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
+
+A.6.  Resolution of packaged resources
+
+   A virtual file system driver on a mobile operating system has mounted
+   several packaged applications for resolving common resources.  An
+   application requests the rendering framework to resolve a picture
+   from <arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png>
+   to show it within a user interface.
+
+   The framework first checks that the authority "uuid,eb1edec9-d2eb-
+   4736-a875-eb97b37c690e" is valid to access according to the Same
+   Origin policies or permissions of the running application.  It then
+   matches the authority to the corresponding application package.
+
+   The framework resolves "/img/logo.png" from within that package, and
+   returns an image buffer it already had cached in memory.
+
+A.7.  Sharing using app names
 
    A photo gallery application on a mobile device uses arcp URIs for
    navigation between its UI states.  The gallery is secured so that
@@ -777,19 +997,18 @@ A.1.  Sharing using app names
 
    arcp://name,gallery.example.org/
 
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 14]
-
-Internet-Draft                     app                      January 2018
-
-
    A user is at the application state which shows the newest photos as
    thumbnails:
 
    arcp://name,gallery.example.org/photos/?New
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 18]
+
+Internet-Draft                     app                      January 2018
+
 
    The user selects a photo, rendered with metadata overlaid:
 
@@ -834,19 +1053,18 @@ Internet-Draft                     app                      January 2018
    After the messaging app has completed sharing the picture bytestream,
    it request the UI framework to navigate to:
 
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 15]
-
-Internet-Draft                     app                      January 2018
-
-
    arcp://name,gallery.example.org/photos/?New
 
    The UI returns to the original view in the photo gallery.
 
    If the messaging app had attempted to _retrieve_ the arcp URI
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 19]
+
+Internet-Draft                     app                      January 2018
+
 
    arcp://name,gallery.example.org/photos/?New
 
@@ -863,227 +1081,6 @@ Internet-Draft                     app                      January 2018
    This examples show that although an arcp URI represents a resource,
    it can have different representations or UI states for different
    apps.
-
-A.2.  Sandboxing base URI
-
-   An document store application has received a file "document.tar.gz"
-   which content will be checked for consistency.
-
-   For sandboxing purposes it generates a UUID v4 "32a423d6-52ab-47e3-
-   a9cd-54f418a48571" using a pseudo-random generator.  The arcp base
-   URI is thus:
-
-   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/
-
-   The archive contains the files:
-
-   o  "./doc.html" which links to "css/base.css"
-
-   o  "./css/base.css" which links to "../fonts/Foo.woff"
-
-   o  "./fonts/Foo.woff"
-
-   The application generates the corresponding arcp URIs and uses those
-   for URI resolutions to list resources and their hyperlinks:
-
-
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 16]
-
-Internet-Draft                     app                      January 2018
-
-
-   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/doc.html
-     -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/css/base.css
-     -> arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
-   arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
-
-   The application is now confident that all hyperlinked files are
-   indeed present in the archive.  In its database it notes which
-   "tar.gz" file corresponds to UUID "32a423d6-52ab-47e3-a9cd-
-   54f418a48571".
-
-   If the application had encountered a malicious hyperlink
-   "../../../outside.txt" it would first resolve it to the absolute URI
-   <arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt> and
-   conclude from the "Not Found" error that the path "/outside.txt" was
-   not present in the archive.
-
-A.3.  Location-based
-
-   A web crawler is about to index the content of the URL
-   http://example.com/data.zip and need to generate absolute URIs as it
-   continues crawling inside the individual resources of the archive.
-
-   The application generates a UUID v5 based on the URL namespace
-   "6ba7b811-9dad-11d1-80b4-00c04fd430c8" and the URL to the zip file:
-
-   >>> uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
-   UUID('b7749d0b-0e47-5fc4-999d-f154abe68065')
-
-   Thus the location-based arcp URI for indexing the ZIP content is
-
-   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
-
-   Listing all directories and files in the ZIP, the crawler finds the
-   URIs:
-
-   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
-   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
-   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
-
-   When the application encounters http://example.com/data.zip some time
-   later it can recalculate the same base arcp URI.  This time the ZIP
-   file has been modified upstream and the crawler finds additionally:
-
-   arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 17]
-
-Internet-Draft                     app                      January 2018
-
-
-   If files had been removed from the updated ZIP file the crawler can
-   simply remove those from its database, as it used the same arcp base
-   URI as in last crawl.
-
-A.4.  Hash-based
-
-   An application where users can upload software distributions for
-   virus checking needs to avoid duplication as users tend to upload
-   "foo-1.2.tar" multiple times.
-
-   The application calculates the "sha-256" checksum of the uploaded
-   file to be in hexadecimal:
-
-   17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
-
-   The "base64url" encoding [RFC4648] of the binary version of the
-   checksum is:
-
-   F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
-
-   The corresponding "alg-val" authority is thus:
-
-   sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
-
-   From this the hash base arcp URL is:
-
-   arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
-
-   The crawler finds that its virus database already contain entries
-   for:
-
-  arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
-
-   and flags the upload as malicious without having to scan it again.
-
-A.5.  Archives that are not files
-
-   An application is relating BagIt archives [I-D.draft-kunze-bagit-14]
-   on a shared file system, using structured "bag" folders and manifests
-   rather than individual archive files.
-
-   The BagIt payload manifest "/gfs/bags/scan15/manifest-md5.txt" lists
-   the files:
-
-   49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
-   408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 18]
-
-Internet-Draft                     app                      January 2018
-
-
-   The application generates a random UUID v4 "ff2d5a82-7142-4d3f-b8cc-
-   3e662d6de756" and adds the corresponding arcp URI to the bag metadata
-   file "/gfs/bags/scan15/bag-info.txt"
-
-  External-Identifier: arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
-
-   It then generates arcp URIs for the files listed in the manifest:
-
-  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
-  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
-
-   When a different application on the same shared file system encounter
-   these arcp URIs, it can match them to the correct bag folder by
-   inspecting the "External-Identifier" metadata.
-
-A.6.  Linked Data containers which are not on the web
-
-   An application exposes in-memory objects of an Address Book as a
-   Linked Data Platform container [W3C.REC-ldp-20150226], but addressing
-   the container using arcp URIs instead of http to avoid network
-   exposure.
-
-   The arcp URIs are used in conjuction with a generic LDP client
-   library (developed for http), but connected to the application's URI
-   resolution mechanism.
-
-   The application generates a new random UUID v4 "12f89f9c-e6ca-
-   4032-ae73-46b68c2b415a" for the address book, and provides the
-   corresponding arcp URI to the LDP client:
-
-   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/
-
-   The LDP client resolves the container with content negotiation for
-   the "text/turtle" media type, and receives:
-
-   @base <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
-   @prefix ldp: <http://www.w3.org/ns/ldp#>.
-   @prefix dcterms: <http://purl.org/dc/terms/>.
-
-   <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>
-     a ldp:BasicContainer;
-     dcterms:title "Address book";
-     ldp:contains <contact1>, <contact2>.
-
-   The LDP client resolves the relative URIs to retrieve each of the
-   contacts:
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 19]
-
-Internet-Draft                     app                      January 2018
-
-
-   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
-   arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
-
-A.7.  Resolution of packaged resources
-
-   A virtual file system driver on a mobile operating system has mounted
-   several packaged applications for resolving common resources.  An
-   application requests the rendering framework to resolve a picture
-   from <arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png>
-   to show it within a user interface.
-
-   The framework first checks that the authority "uuid,eb1edec9-d2eb-
-   4736-a875-eb97b37c690e" is valid to access according to the Same
-   Origin policies or permissions of the running application.  It then
-   matches the authority to the corresponding application package.
-
-   The framework resolves "/img/logo.png" from within that package, and
-   returns an image buffer it already had cached in memory.
 
 Appendix B.  Acknowledgements
 
@@ -1109,19 +1106,6 @@ Appendix B.  Acknowledgements
 
 Authors' Addresses
 
-
-
-
-
-
-
-
-
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 20]
-
-Internet-Draft                     app                      January 2018
-
-
    Stian Soiland-Reyes
    The University of Manchester
    Oxford Road
@@ -1129,6 +1113,13 @@ Internet-Draft                     app                      January 2018
    United Kingdom
 
    Email: stain@apache.org
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 20]
+
+Internet-Draft                     app                      January 2018
 
 
    Marcos Caceres
@@ -1173,4 +1164,13 @@ Internet-Draft                     app                      January 2018
 
 
 
-Soiland-Reyes & Caceres   Expires July 29, 2018                [Page 21]
+
+
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 21]
