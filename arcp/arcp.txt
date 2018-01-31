@@ -1024,7 +1024,7 @@ Internet-Draft                     app                      January 2018
 
    The sharing function returns a URI Template [RFC6570]:
 
-   arcp://name,messaging.example.com/share{;uri}{;redirect}
+   arcp://name,messaging.example.com/share;+{uri};{+redirect}
 
    Filling in the template, the gallery requests to pop up:
 

@@ -919,7 +919,7 @@ arcp://name,gallery.example.org/photos/137
 <p id="rfc.section.A.7.p.6">The photo gallery registers with the device&#8217;s arcp framework that the chosen <samp>messaging.example.com</samp> gets read permission to its <samp>/photos/137</samp> resource.</p>
 <p id="rfc.section.A.7.p.7">The sharing function returns a URI Template <a href="#RFC6570">[RFC6570]</a>:</p>
 <pre>
-arcp://name,messaging.example.com/share{;uri}{;redirect}
+arcp://name,messaging.example.com/share;+{uri};{+redirect}
 </pre>
 <p id="rfc.section.A.7.p.8">Filling in the template, the gallery requests to pop up:</p>
 <pre>

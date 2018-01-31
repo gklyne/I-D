@@ -809,7 +809,7 @@ read permission to its `/photos/137` resource.
 
 The sharing function returns a URI Template {{RFC6570}}:
 
-    arcp://name,messaging.example.com/share{;uri}{;redirect}
+    arcp://name,messaging.example.com/share;+{uri};{+redirect}
 
 Filling in the template, the gallery requests to pop up:
 
