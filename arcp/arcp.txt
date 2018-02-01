@@ -55,7 +55,7 @@ Status of This Memo
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 1]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
 Copyright Notice
@@ -111,7 +111,7 @@ Table of Contents
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 2]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
 1.  Introduction
@@ -167,7 +167,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 3]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    "+zip" media types [RFC6839], but also non-file resource packages
@@ -223,7 +223,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 4]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
 3.1.  Authority
@@ -279,7 +279,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 5]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    Examples of retrievable archive media types include "application/
@@ -335,7 +335,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 6]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
        creating hash-based authorities from an archive's bytestream
@@ -391,7 +391,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 7]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
 4.3.  Resolution protocol
@@ -447,7 +447,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 8]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    This specification does not define the semantics of attempting to
@@ -461,9 +461,9 @@ Internet-Draft                     app                      January 2018
    If the "authority" component of an arcp URI matches the "alg-val"
    production, an application MAY attempt to resolve the authority from
    any ".well-known/ni/" endpoint [RFC5785] as specified in [RFC6920]
-   section 4 [6], in order to retrieve the complete archive.
-   Applications SHOULD verify the checksum of the retrieved archive
-   before resolving the individual path.
+   section 4 [6] with the corresponding "ni:///" URI, to retrieve the
+   complete archive.  Applications SHOULD verify the checksum of the
+   retrieved archive before resolving the individual path.
 
 5.  Encoding considerations
 
@@ -503,7 +503,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                 [Page 9]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    2.  Two implementations describe an archive retrieved from the same
@@ -559,7 +559,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 10]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    perform Path Segment Normalization [RFC3986] before converting arcp
@@ -615,7 +615,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 11]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    [RFC2483]  Mealling, M. and R. Daniel, "URI Resolution Services
@@ -671,7 +671,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 12]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    [FirefoxOS]
@@ -727,7 +727,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 13]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    [W3C.NOTE-widgets-uri-20120313]
@@ -783,7 +783,7 @@ A.1.  Sandboxing base URI
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 14]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    o  "./doc.html" which links to "css/base.css"
@@ -839,7 +839,7 @@ A.2.  Location-based
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 15]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    When the application encounters http://example.com/data.zip some time
@@ -861,25 +861,25 @@ A.3.  Hash-based
    The application calculates the "sha-256" checksum of the uploaded
    file to be in hexadecimal:
 
-   17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+   7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
 
    The "base64url" encoding [RFC4648] of the binary version of the
    checksum is:
 
-   F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+   f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
-   The corresponding "alg-val" authority is thus:
+   The corresponding "alg-val" authority [RFC6920] is thus:
 
-   sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+   sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
    From this the hash base arcp URL is:
 
-   arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+   arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
 
    The crawler finds that its virus database already contain entries
    for:
 
-  arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+  arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/bin/evil
 
    and flags the upload as malicious without having to scan it again.
 
@@ -895,7 +895,7 @@ A.4.  Archives that are not files
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 16]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    The BagIt payload manifest "/gfs/bags/scan15/manifest-md5.txt" lists
@@ -951,7 +951,7 @@ A.5.  Linked Data containers which are not on the web
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 17]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    @base <arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/>.
@@ -1007,7 +1007,7 @@ A.7.  Sharing using app names
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 18]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    The user selects a photo, rendered with metadata overlaid:
@@ -1063,7 +1063,7 @@ Internet-Draft                     app                      January 2018
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 19]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    arcp://name,gallery.example.org/photos/?New
@@ -1119,7 +1119,7 @@ Authors' Addresses
 
 Soiland-Reyes & Caceres   Expires July 31, 2018                [Page 20]
 
-Internet-Draft                     app                      January 2018
+Internet-Draft                    arcp                      January 2018
 
 
    Marcos Caceres

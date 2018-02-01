@@ -601,7 +601,7 @@ name          = "name," reg-name
 <p id="rfc.section.4.3.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This specification does not define the semantics of attempting to resolve such resources.</p>
 <p id="rfc.section.4.3.p.9">This specification does not define how to change an archive or its content using arcp URIs.</p>
 <h1 id="rfc.section.4.4"><a href="#rfc.section.4.4">4.4.</a> <a href="#well-known" id="well-known">Resolving from a .well-known endpoint</a></h1>
-<p id="rfc.section.4.4.p.1">If the <samp>authority</samp> component of an arcp URI matches the <samp>alg-val</samp> production, an application MAY attempt to resolve the authority from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> <a href="https://tools.ietf.org/html/rfc6920#section-4">section 4</a>, in order to retrieve the complete archive. Applications SHOULD verify the checksum of the retrieved archive before resolving the individual path.</p>
+<p id="rfc.section.4.4.p.1">If the <samp>authority</samp> component of an arcp URI matches the <samp>alg-val</samp> production, an application MAY attempt to resolve the authority from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> <a href="https://tools.ietf.org/html/rfc6920#section-4">section 4</a> with the corresponding <samp>ni:///</samp> URI, to retrieve the complete archive. Applications SHOULD verify the checksum of the retrieved archive before resolving the individual path.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#encoding" id="encoding">Encoding considerations</a></h1>
 <p id="rfc.section.5.p.1">The productions for <samp>UUID</samp> and <samp>alg-val</samp> are restricted to URI safe ASCII and should not require any encoding considerations.</p>
 <p id="rfc.section.5.p.2">Care should be taken to %-encode the directory and file segments of <samp>path-absolute</samp> according to <a href="#RFC3986">[RFC3986]</a> (for URIs) or <a href="#RFC3987">[RFC3987]</a> (for IRIs).</p>
@@ -838,23 +838,23 @@ arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 <p id="rfc.section.A.3.p.1">An application where users can upload software distributions for virus checking needs to avoid duplication as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
 <p id="rfc.section.A.3.p.2">The application calculates the <samp>sha-256</samp> checksum of the uploaded file to be in hexadecimal:</p>
 <pre>
-17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
 </pre>
 <p id="rfc.section.A.3.p.3">The <samp>base64url</samp> encoding <a href="#RFC4648">[RFC4648]</a> of the binary version of the checksum is:</p>
 <pre>
-F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 </pre>
-<p id="rfc.section.A.3.p.4">The corresponding <samp>alg-val</samp> authority is thus:</p>
+<p id="rfc.section.A.3.p.4">The corresponding <samp>alg-val</samp> authority <a href="#RFC6920">[RFC6920]</a> is thus:</p>
 <pre>
-sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 </pre>
 <p id="rfc.section.A.3.p.5">From this the hash base arcp URL is:</p>
 <pre>
-arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
 </pre>
 <p id="rfc.section.A.3.p.6">The crawler finds that its virus database already contain entries for:</p>
 <pre>
-arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/bin/evil
 </pre>
 <p id="rfc.section.A.3.p.7">and flags the upload as malicious without having to scan it again.</p>
 <h1 id="rfc.appendix.A.4"><a href="#rfc.appendix.A.4">A.4.</a> <a href="#bagit" id="bagit">Archives that are not files</a></h1>

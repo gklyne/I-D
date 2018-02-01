@@ -1,6 +1,6 @@
 ---
 title: The Archive and Package (arcp) URI scheme
-abbrev: app
+abbrev: arcp
 docname: draft-soilandreyes-arcp-03-SNAPSHOT
 date: 2018-01-27
 category: info
@@ -449,8 +449,8 @@ If the `authority` component of an arcp URI matches the `alg-val`
 production, an application MAY attempt to resolve the authority
 from any `.well-known/ni/` endpoint {{RFC5785}} as specified in
 {{RFC6920}} 
-[section 4](https://tools.ietf.org/html/rfc6920#section-4), 
-in order to retrieve the complete
+[section 4](https://tools.ietf.org/html/rfc6920#section-4) 
+with the corresponding `ni:///` URI, to retrieve the complete
 archive. Applications SHOULD verify the checksum of the
 retrieved archive before resolving the individual path.
 
@@ -668,27 +668,26 @@ tend to upload `foo-1.2.tar` multiple times.
 The application calculates the `sha-256` checksum of the uploaded
 file to be in hexadecimal:
 
-    17edf80f84d478e7c6d2c7a5cfb4442910e8e1778f91ec0f79062d8cbdef42cd
+    7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
 
 The `base64url` encoding {{RFC4648}} of the binary version of the checksum is:
 
-    F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+    f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
-The corresponding `alg-val` authority is thus:
+The corresponding `alg-val` authority {{RFC6920}} is thus:
 
-    sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0
+    sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
 From this the hash base arcp URL is:
 
-    arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/
+    arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
 
 The crawler finds that its virus database already contain entries
 for:
 
-    arcp://ni,sha-256;F-34D4TUeOfG0selz7REKRDo4XePkewPeQYtjL3vQs0/bin/evil
+    arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/bin/evil
 
 and flags the upload as malicious without having to scan it again.
-
 
 Archives that are not files   {#bagit}
 ---------------------------
