@@ -1113,7 +1113,7 @@ Authors' Addresses
    United Kingdom
 
    Email: stain@apache.org
-
+   URI:   http://orcid.org/0000-0001-9842-9718
 
 
 
@@ -1126,7 +1126,7 @@ Internet-Draft                    arcp                      January 2018
    Mozilla Corporation
 
    Email: marcos@marcosc.com
-
+   URI:   http://marcosc.com/
 
 
 

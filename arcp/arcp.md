@@ -21,11 +21,13 @@ author:
     city: Manchester
     country: United Kingdom
     email: stain@apache.org
+    uri: http://orcid.org/0000-0001-9842-9718
  -
     ins: M. Cáceres
     name: Marcos Cáceres
     organization: Mozilla Corporation
     email: marcos@marcosc.com
+    uri: http://marcosc.com/
 
 normative:
   # RFC keywords
