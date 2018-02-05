@@ -104,7 +104,7 @@ informative:
 
 --- abstract
 
-This specification proposes the
+This specification define the
 Archive and Package URI scheme `arcp`.
 
 arcp URIs can be used to consume or reference hypermedia
@@ -134,7 +134,7 @@ Introduction        {#introduction}
 Mobile and Web Applications
 may bundle resources such as stylesheets with
 _relative URI references_ {{RFC3986}} 
-([section 4.2](https://tools.ietf.org/html/rfc3986#section-4.2))
+([4.2](https://tools.ietf.org/html/rfc3986#section-4.2))
 to scripts, images and fonts. Resolving
 and parsing
 such resources within URI handling frameworks may require
@@ -148,7 +148,7 @@ hypermedia content types that use relative
 URI references such as `../css/`,
 as it is challenging to establishing the _base URI_
 {{RFC3986}} 
-([section 5.1](https://tools.ietf.org/html/rfc3986#section-5.1))
+([5.1](https://tools.ietf.org/html/rfc3986#section-5.1))
 in a consistent fashion.
 
 Frequently the archive might be unpacked locally,
@@ -163,24 +163,21 @@ BagIt archive {{I-D.draft-kunze-bagit-14}}, may be using
 relative URIs to cross-reference constituent files,
 making it challenging to index or annotate such resources.
 
-Consumptions of archives might be performed
-in memory or through a common framework, abstracting
-away any local file location.
-
 Consumption of an archive with a consistent base URL
 should be possible no matter from which location it was retrieved,
-or on which device it is inspected.
+on which device it is inspected, and with which 
+mechanism the archive is accessed (e.g. virtual file system).
 
 When consuming multiple archives from untrusted sources
 it would be beneficial to have a Same Origin policy {{RFC6454}}
 so that relative hyperlinks can't escape the particular archive.
 
 The `file:` URI scheme {{RFC8089}}
-can be ill-suited for purposes such as above, where a
-location-independent URI scheme is more flexible,
+can be ill-suited for purposes such as above, while a
+location-independent URI scheme can be more flexible,
 secure and globally unique.
 
-This specification proposes the 
+This specification define the 
 Archive and Package URI scheme `arcp` as 
 an alternative to addressing resources 
 within an archive, application or package.
@@ -200,7 +197,7 @@ a _container_, _application_, _aggregation_ or _package_.
 
 The main purpose of arcp URIs is to provide consistent identifiers as absolute
 URIs for nested resources. This specification does not define a new network
-protocol, however we suggest an abstract resolution protocol that
+protocol, however it suggests an abstract resolution protocol that
 implementations can apply using existing protocols or 
 programming frameworks.
 
@@ -221,9 +218,9 @@ The `arcp` URI scheme follows the {{RFC3986}} syntax for hierarchical
 URIs according to the following productions:
 
 
-    URI           = scheme ":" arcp-specific [ "#" fragment ]
+    arcp-URI       = arcp-scheme ":" arcp-specific [ "#" fragment ]
 
-    scheme        = "arcp"
+    arcp-scheme    = "arcp"
 
     arcp-specific  = "//" arcp-authority [ path-absolute ] [ "?" query ]
 
@@ -246,10 +243,9 @@ Authority  {#authority}
 ---------
 
 The purpose of the `authority` component in an arcp URI is
-to build a unique base URI for a particular archive. The
+to build a unique identifier for a particular archive. The
 authority is NOT intended to be resolvable without former
 knowledge of the archive.
-
 
 The authority of an arcp URI MUST be valid according to
 these productions:
@@ -277,7 +273,7 @@ Path  {#path}
 ----
 
 The `path-absolute` component, if present,
-MUST match the production in {{RFC3986}} and provide
+MUST match the production in {{RFC3986}}. This provide
 the absolute path of a resource
 (e.g. a file or directory) within the archive.
 
@@ -286,7 +282,7 @@ how to express paths, however implementations SHOULD use `/` as
 path separator for nested folders and files.
 
 It is RECOMMENDED to include the trailing `/` if it is known
-the path represents a directory.
+that the path represents a directory.
 
 
 Scheme semantics    {#semantics}
@@ -323,13 +319,13 @@ the archive, without necessarily providing access to the archive.
 1. If the prefix is `uuid,` followed by a UUID {{RFC4122}},
   this indicates a unique archive identity.
 1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}}
-  ([section 4.4](https://tools.ietf.org/html/rfc4122#section-4.4)),
+  ([4.4](https://tools.ietf.org/html/rfc4122#section-4.4)),
   this indicate uniqueness based on a random number generator.  
   Implementations creating random-based
   authorities SHOULD generate the v4 random UUID using
   a suitable random number generator {{RFC4086}}.
 2. If the prefix is `uuid,` followed by a v5 name-based UUID {{RFC4122}}
-  ([section 4.3](https://tools.ietf.org/html/rfc4122#section-4.3)),
+  ([4.3](https://tools.ietf.org/html/rfc4122#section-4.3)),
   this indicates uniqueness based on an existing archive location,
   typically an URL.  
   Implementations creating location-based
@@ -347,7 +343,7 @@ the archive, without necessarily providing access to the archive.
   use content negotiation or similar transformations.  
   The checksum MUST be expressed
   according to the `alg-val` production in {{RFC6920}} 
-  ([section 3](https://tools.ietf.org/search/rfc6920#section-3)).
+  ([3](https://tools.ietf.org/search/rfc6920#section-3)).
   Implementations creating hash-based authorities from an archive's
   bytestream SHOULD use the hash method `sha-256` without truncation.
 4. If the prefix is `name,` this indicates that the authority
@@ -451,7 +447,7 @@ If the `authority` component of an arcp URI matches the `alg-val`
 production, an application MAY attempt to resolve the authority
 from any `.well-known/ni/` endpoint {{RFC5785}} as specified in
 {{RFC6920}} 
-[section 4](https://tools.ietf.org/html/rfc6920#section-4) 
+([4](https://tools.ietf.org/html/rfc6920#section-4)) 
 with the corresponding `ni:///` URI, to retrieve the complete
 archive. Applications SHOULD verify the checksum of the
 retrieved archive before resolving the individual path.
