@@ -2,7 +2,7 @@
 title: The Archive and Package (arcp) URI scheme
 abbrev: arcp
 docname: draft-soilandreyes-arcp-03-SNAPSHOT
-date: 2018-01-27
+date: 2018-02-05
 category: info
 
 ipr: trust200902
@@ -262,18 +262,21 @@ these productions:
 `ni,sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8`
 
 3. The prefix `name,` combines with the `reg-name` production
-as defined in {{RFC3986}}, e.g. `name,app.example.com`.
+as defined in {{RFC3986}}, e.g. `name,app.example.com`. For arcp 
+IRIs {{RFC3987}}, its `ireg-name` production applies instead of `reg-name`.
 
-4. The production `authority` matches its definition in {{RFC3986}}.
-As this necessarily also match the above prefixed productions,
-those should be considered first before falling back to this production.
+4. The production `authority` matches its definition in {{RFC3986}}, or
+`iauthority` for arcp IRIs {{RFC3987}}. As this necessarily also match 
+the above prefixed productions, those should be considered first before 
+falling back to this production.
 
 
 Path  {#path}
 ----
 
 The `path-absolute` component, if present,
-MUST match the production in {{RFC3986}}. This provide
+MUST match the production in {{RFC3986}}, 
+or `ipath-absolute` for arcp IRIs {{RFC3987}}. This provide
 the absolute path of a resource
 (e.g. a file or directory) within the archive.
 
@@ -317,7 +320,9 @@ what uniqueness constraints have been used when identifying
 the archive, without necessarily providing access to the archive.
 
 1. If the prefix is `uuid,` followed by a UUID {{RFC4122}},
-  this indicates a unique archive identity.
+  this indicates a unique archive identity. Applications MAY 
+  assume that the corresponding `urn:uuid:` URI 
+  identifies the archive.
 1. If the prefix is `uuid,` followed by a v4 UUID {{RFC4122}}
   ([4.4](https://tools.ietf.org/html/rfc4122#section-4.4)),
   this indicate uniqueness based on a random number generator.  
@@ -329,16 +334,16 @@ the archive, without necessarily providing access to the archive.
   this indicates uniqueness based on an existing archive location,
   typically an URL.  
   Implementations creating location-based
-  authorities from an archive's URL SHOULD generate the
+  authorities SHOULD generate the
   v5 UUID using the URL
   namespace `6ba7b811-9dad-11d1-80b4-00c04fd430c8`
-  and the particular URL.
+  and an retrievable archive URL.
   Note that while implementations cannot resolve which location was
   used, they can confirm the name-based UUID if the location
   is otherwise known.
 3. If the prefix is `ni,` this indicates a unique archive identity
   based on a hashing of the archive's bytestream or content.
-  Implementations can assume that resources within an
+  Implementations MAY assume that resources within an
   `ni` arcp URIs remains static, although the implementation may
   use content negotiation or similar transformations.  
   The checksum MUST be expressed
@@ -346,6 +351,8 @@ the archive, without necessarily providing access to the archive.
   ([3](https://tools.ietf.org/search/rfc6920#section-3)).
   Implementations creating hash-based authorities from an archive's
   bytestream SHOULD use the hash method `sha-256` without truncation.
+  Implementations MAY assume that the corresponding `ni:` URI
+  identifies the archive.
 4. If the prefix is `name,` this indicates that the authority
   is an application or package name, typically as installed
   on a device or system.  
@@ -357,10 +364,10 @@ the archive, without necessarily providing access to the archive.
   name-based authorities use DNS names under their control,
   for instance an app installed as `app.example.com` can
   make an authority `name,app.example.com` to refer to its
-  packaged resources, or `name,foo.app.example.com` to refer to a
-  `foo` container distributed across all installations.
+  packaged resources, or `name,foo.app.example.com` to refer to
+  its dynamic container of `foo` resources.
 
-The uniqueness properties are unspecified for arcp
+The uniqueness properties are **unspecified** for arcp
 URIs which authority do not match any of the prefixes defined in
 this specification.
 
@@ -379,10 +386,10 @@ typically represented as a root directory or collection.
 a directory or collection.
 
 The arcp URIs can be used for uniquely identifying
-the resources independent of the location of the archive,
-such as within an information system.
+resources within an archive, such as in
+an information system considering multiple archives.
 
-Assuming an appropriate resolution mechanism which have
+Assuming an appropriate mechanism which have
 knowledge of the corresponding archive, an arcp URI
 can also be used for resolution.
 
@@ -394,28 +401,31 @@ this specification which particular entry is described.
 Resolution protocol  {#resolution}
 -------------------
 
-This specification do not define the protocol to
+This specification do not define a network protocol to
 resolve resources according to the arcp URI scheme.
 For instance, one implementation might rewrite arcp URIs to
 localized paths in a temporary directory, while
 another implementation might use an embedded HTTP server.
 
 It is envisioned that an implementation will
-have extracted or opened an archive in
-advance, and assigned it an appropriate authority according
+have accessed an archive in advance, and assigned it an 
+appropriate authority according
 to [Authority](#authority). Such an implementation
 can then resolve arcp URIs, e.g. by using
-in-memory access or mapping paths to the extracted archive on
+in-memory archive access or mapping arcp paths to the
 the local file system.
 
 Implementations that support resolving arcp URIs SHOULD:
 
 1. Fail with the equivalent of _Not Found_ if the authority is unknown.
 2. Fail with the equivalent of _Gone_ if the authority is known, but the content of the archive is no longer available.
-3. Fail with the equivalent of _Not Found_ if the path does not map to a file or directory within the archive.
+3. Fail with the equivalent of _Not Found_ if the path does not map to a resource within the archive.
 4. Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.
 5. Return an appropriate directory listing if the path maps to a directory within the archive.
 6. Return an appropriate directory listing of the archive's root directory if the path is `/`.
+
+Implementations MAY support other ways to resolve arcp URIs, e.g.
+query parameters or content negotiation.
 
 Not all archive formats or implementations will have the
 concept of a directory listing, in which case
@@ -423,13 +433,13 @@ the implementation MAY fail such resolutions with the
 equivalent of "Not Implemented".
 
 It is not undefined by this specification how an implementation
-can determine the media type of a file within an archive. This could
-be expressed in secondary resources (such as a manifest),
+can determine the media type of a file within an archive. 
+This could be expressed in secondary resources (such as a manifest),
 be determined by file extensions or magic bytes.
 
 The media type `text/uri-list` {{RFC2483}} MAY be used to represent
 a directory listing, in which case it SHOULD contain only URIs
-that start with the arcp URI of the directory.
+with the arcp URI of the directory as a common base.
 
 Some archive formats might support resources which are
 neither directories nor regular files (e.g. device files,
@@ -444,27 +454,32 @@ Resolving from a .well-known endpoint  {#well-known}
 -------------------------------------
 
 If the `authority` component of an arcp URI matches the `alg-val`
-production, an application MAY attempt to resolve the authority
-from any `.well-known/ni/` endpoint {{RFC5785}} as specified in
-{{RFC6920}} 
-([4](https://tools.ietf.org/html/rfc6920#section-4)) 
-with the corresponding `ni:///` URI, to retrieve the complete
-archive. Applications SHOULD verify the checksum of the
-retrieved archive before resolving the individual path.
+production, an application MAY assume corresponding 
+`ni:///` or `nih:` URIs {{RFC6920}} identify the archive 
+bytestream or content.
+
+Applications MAY attempt to retrieve the corresponding 
+archive from any `.well-known/ni/` endpoint {{RFC5785}} 
+as specified in {{RFC6920}} 
+([4](https://tools.ietf.org/html/rfc6920#section-4)).
+Applications SHOULD verify the checksum of the
+retrieved archive before resolving individual arcp paths.
 
 
 Encoding considerations   {#encoding}
 =======================
 
-The productions for `UUID` and `alg-val` are restricted to
-URI safe ASCII and should not require any encoding considerations.
+The productions for `uuid` and `ni` are restricted to
+URI safe ASCII and should not require any 
+encoding considerations.
+
+When arcp is used in IRIs {{RFC3987}}, the `name` production 
+permit Unicode characters corresponding to its `ireg-name`
+production.
 
 Care should be taken to %-encode the directory and file segments
-of `path-absolute` according to {{RFC3986}} (for URIs) or
-{{RFC3987}} (for IRIs).
-
-When used as part an IRI, paths SHOULD be expressed using
-international Unicode characters instead of %-encoding as ASCII.
+of `path-absolute` according to {{RFC3986}} for URIs or
+`ipath-absolute` {{RFC3987}} for IRIs.
 
 Not all archive formats have an explicit
 character encoding specified for their paths.
@@ -496,7 +511,7 @@ exchanging arcp URIs between implementations. Some considerations:
 3.  Two implementations describe an archive retrieved
   from the same URL, with the same location-based UUID authority, but retrieved
   using different content negotiation resulting in different
-  archive representations. The implementations may disagree
+  archive formats. The implementations may disagree
   about path encoding, file name casing or hierarchy.
 4. Two implementations describe the same archive bytestream
   using the hash-based authority, but they have used
@@ -515,7 +530,10 @@ Security Considerations {#security}
 =======================
 
 As when handling any content, extra care should be taken when
-consuming archives and arcp URIs from unknown sources.
+consuming archives and arcp URIs from unknown sources. 
+
+Archives might contain malicious or inappropriate content or
+file paths.
 
 An archive could contain compressed files that expand to
 fill all available disk space.
@@ -524,10 +542,11 @@ A maliciously crafted archive could contain paths with characters
 (e.g. backspace) which could make an arcp URI invalid or
 misleading if used unescaped.
 
-A maliciously crafted archive could contain paths
-(e.g. combined Unicode sequences) that cause the
-arcp URI to be very long, causing issues in information
-systems propagating said URI.
+A maliciously crafted archive could contain paths with
+character combinations (e.g. combined Unicode sequences,
+text orientation change) that cause the arcp URI to be
+very long or disruptive when rendered in an
+user interface.
 
 An archive might contain symbolic links that, if
 extracted to a local file system, might address files
@@ -626,7 +645,7 @@ Location-based  {#location-based}
 --------------
 
 A web crawler is about to index the content of the URL
-<http://example.com/data.zip> and need to generate absolute URIs
+`http://example.com/data.zip` and need to generate absolute URIs
 as it continues crawling inside the individual resources of the archive.
 
 The application generates a UUID v5 based on the
@@ -646,9 +665,10 @@ Listing all directories and files in the ZIP, the crawler finds the URIs:
     arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
     arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 
-When the application encounters <http://example.com/data.zip> some time later
-it can recalculate the same base arcp URI. This time the ZIP file has been
-modified upstream and the crawler finds additionally:
+When the application encounters `http://example.com/data.zip` 
+some time later it can recalculate the same base arcp URI.
+This time the ZIP file has been modified upstream and the crawler 
+finds additionally:
 
     arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 
@@ -659,11 +679,12 @@ as it used the same arcp base URI as in last crawl.
 Hash-based  {#hash-based}
 ----------
 
-An application where users can upload software distributions
-for virus checking needs to avoid duplication as users
-tend to upload `foo-1.2.tar` multiple times.
+A repository where users can annotate
+content of open source software distributions 
+needs to avoid duplication, as users tend to 
+upload `foo-1.2.tar` multiple times.
 
-The application calculates the `sha-256` checksum of the uploaded
+The repository calculates the `sha-256` checksum of the uploaded
 file to be in hexadecimal:
 
     7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
@@ -676,21 +697,36 @@ The corresponding `alg-val` authority {{RFC6920}} is thus:
 
     sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
-From this the hash base arcp URL is:
+From this the hash-based arcp base URL is:
 
     arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
 
-The crawler finds that its virus database already contain entries
-for:
+The repository adds annotations for
+detected source code files within the archive.
 
-    arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/bin/evil
+A client is browsing the annotations and discovers:
 
-and flags the upload as malicious without having to scan it again.
+    arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/src/luhn.c
+
+The client constructs the corresponding `ni` URI {{RFC6920}}:
+
+    ni:///sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
+
+To retrieve the archive from `repo.example.com`, 
+the client resolve the corresponding `.well-known` URI {{RFC5785}}:
+
+    http://repo.example.com/.well-known/
+        ni/sha-256/f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
+
+After the client verifies the corresponding `sha-256` 
+checksum it reads the path `/src/luhn.c` from the retrieved
+archive.
+
 
 Archives that are not files   {#bagit}
 ---------------------------
 
-An application is relating BagIt archives
+An application is storing BagIt archives
 {{I-D.draft-kunze-bagit-14}} on a shared file system, using structured
 "bag" folders and manifests rather than individual archive files.
 
@@ -701,9 +737,9 @@ The BagIt payload manifest `/gfs/bags/scan15/manifest-md5.txt` lists the files:
 
 The application generates a random UUID v4
 `ff2d5a82-7142-4d3f-b8cc-3e662d6de756` and adds the corresponding
-arcp URI to the bag metadata file `/gfs/bags/scan15/bag-info.txt`
+`urn:uuid` UUID to the bag metadata file `/gfs/bags/scan15/bag-info.txt`
 
-    External-Identifier: arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
+    External-Identifier: urn:uuid:ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
 
 It then generates arcp URIs for the files listed in the manifest:
 
@@ -759,15 +795,17 @@ Resolution of packaged resources   {#packaged}
 A virtual file system driver on a mobile operating system
 has mounted several packaged applications for resolving
 common resources. An application requests the rendering
-framework to resolve a picture from
-<arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png>
-to show it within a user interface.
+framework to resolve a picture to show 
+it within a user interface:
+    
+    <img src="arcp://name,app.example.com/img/logo.png"
+             alt="App" />
 
-The framework first checks that the authority
-`uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e` is valid to access
+The framework finds the corresponding application
+package, installed as `app.example.com`. It then checks 
+that the authority `name,app.example.com` is valid to access
 according to the Same Origin policies or permissions of the
-running application. It then matches the
-authority to the corresponding application package.
+running application. 
 
 The framework resolves `/img/logo.png` from within
 that package, and returns an image buffer it already had
@@ -801,8 +839,8 @@ The user requests to "share" the photo, selecting
 URI framework on the device.
 
 The photo gallery registers with the device's
-arcp framework that the chosen `messaging.example.com` gets
-read permission to its `/photos/137` resource.
+arcp framework that the chosen `messaging.example.com` 
+should get read permission to its `/photos/137` resource.
 
 The sharing function returns a URI Template {{RFC6570}}:
 
@@ -822,40 +860,26 @@ The messaging app is launched and navigates to its "sharing"
 UI, asking the user for a caption.
 
 The messaging app requests the arcp framework to retrieve
-<arcp://name,gallery.example.org/photos/137>
+the `uri` <arcp://name,gallery.example.org/photos/137>
 using content negotiation for an `image/jpeg` representation.
 
 The arcp framework finds the installed photo gallery
 `gallery.example.org`, and confirms the read permission.
 
-The photo gallery application returns a JPEG representation after
-retrieving the photo from its internal store.
+The photo gallery application returns a scaled down 
+JPEG representation after retrieving the photo
+from its internal store.
 
 After the messaging app has completed sharing the picture bytestream,
-it request the UI framework to navigate to:
+it request the UI framework to navigate to the `redirect` state:
 
     arcp://name,gallery.example.org/photos/?New
 
 The UI returns to the original view in the photo gallery.
 
-If the messaging app had attempted to _retrieve_ the arcp URI
-
-    arcp://name,gallery.example.org/photos/?New
-
-then it would be rejected by the arcp framework as permission was not
-granted.
-
-However, if such access had been granted, the gallery could
-return a `text/uri-list` of the newest photos:
-
-    arcp://name,gallery.example.org/photos/137
-    arcp://name,gallery.example.org/photos/138
-    arcp://name,gallery.example.org/photos/139
-
-This examples show that although an arcp URI represents a resource,
-it can have different representations or UI states
-for different apps.
-
+This example shows that although an arcp URI represents a resource,
+it can have different representations or views in
+different apps.
 
 
 

@@ -408,7 +408,7 @@
 
   <meta name="dct.creator" content="Soiland-Reyes, S. and M. C&#225;ceres" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-soilandreyes-arcp-03-SNAPSHOT" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-1-27" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-2-05" />
   <meta name="dct.abstract" content="This specification define the Archive and Package URI scheme " />
   <meta name="description" content="This specification define the Archive and Package URI scheme " />
 
@@ -432,12 +432,12 @@
   <td class="right">M. C&#225;ceres</td>
 </tr>
 <tr>
-  <td class="left">Expires: July 31, 2018</td>
+  <td class="left">Expires: August 9, 2018</td>
   <td class="right">Mozilla Corporation</td>
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">January 27, 2018</td>
+  <td class="right">February 05, 2018</td>
 </tr>
 
     	
@@ -460,7 +460,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on July 31, 2018.</p>
+<p>This Internet-Draft will expire on August 9, 2018.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -544,11 +544,11 @@ name          = "name," reg-name
 <ol>
   <li>The prefix <samp>uuid,</samp> combines with the <samp>UUID</samp> production as defined in <a href="#RFC4122">[RFC4122]</a>, e.g.  <samp>uuid,2a47c495-ac70-4ed1-850b-8800a57618cf</samp></li>
   <li>The prefix <samp>ni,</samp> combines with the <samp>alg-val</samp> production as defined in <a href="#RFC6920">[RFC6920]</a>, e.g.  <samp>ni,sha-256;JCS7yveugE3UaZiHCs1XpRVfSHaewxAKka0o5q2osg8</samp></li>
-  <li>The prefix <samp>name,</samp> combines with the <samp>reg-name</samp> production as defined in <a href="#RFC3986">[RFC3986]</a>, e.g. <samp>name,app.example.com</samp>.</li>
-  <li>The production <samp>authority</samp> matches its definition in <a href="#RFC3986">[RFC3986]</a>.  As this necessarily also match the above prefixed productions, those should be considered first before falling back to this production.</li>
+  <li>The prefix <samp>name,</samp> combines with the <samp>reg-name</samp> production as defined in <a href="#RFC3986">[RFC3986]</a>, e.g. <samp>name,app.example.com</samp>. For arcp IRIs <a href="#RFC3987">[RFC3987]</a>, its <samp>ireg-name</samp> production applies instead of <samp>reg-name</samp>.</li>
+  <li>The production <samp>authority</samp> matches its definition in <a href="#RFC3986">[RFC3986]</a>, or <samp>iauthority</samp> for arcp IRIs <a href="#RFC3987">[RFC3987]</a>. As this necessarily also match the above prefixed productions, those should be considered first before falling back to this production.</li>
 </ol>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#path" id="path">Path</a></h1>
-<p id="rfc.section.3.2.p.1">The <samp>path-absolute</samp> component, if present, MUST match the production in <a href="#RFC3986">[RFC3986]</a>. This provide the absolute path of a resource (e.g. a file or directory) within the archive.</p>
+<p id="rfc.section.3.2.p.1">The <samp>path-absolute</samp> component, if present, MUST match the production in <a href="#RFC3986">[RFC3986]</a>, or <samp>ipath-absolute</samp> for arcp IRIs <a href="#RFC3987">[RFC3987]</a>. This provide the absolute path of a resource (e.g. a file or directory) within the archive.</p>
 <p id="rfc.section.3.2.p.2">Archive media types vary in constraints and possibilities on how to express paths, however implementations SHOULD use <samp>/</samp> as path separator for nested folders and files.</p>
 <p id="rfc.section.3.2.p.3">It is RECOMMENDED to include the trailing <samp>/</samp> if it is known that the path represents a directory.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#semantics" id="semantics">Scheme semantics</a></h1>
@@ -562,13 +562,13 @@ name          = "name," reg-name
 <p/>
 
 <ol>
-  <li>If the prefix is <samp>uuid,</samp> followed by a UUID <a href="#RFC4122">[RFC4122]</a>, this indicates a unique archive identity.</li>
+  <li>If the prefix is <samp>uuid,</samp> followed by a UUID <a href="#RFC4122">[RFC4122]</a>, this indicates a unique archive identity. Applications MAY assume that the corresponding <samp>urn:uuid:</samp> URI identifies the archive.</li>
   <li>If the prefix is <samp>uuid,</samp> followed by a v4 UUID <a href="#RFC4122">[RFC4122]</a> (<a href="https://tools.ietf.org/html/rfc4122#section-4.4">4.4</a>), this indicate uniqueness based on a random number generator.<br/> Implementations creating random-based authorities SHOULD generate the v4 random UUID using a suitable random number generator <a href="#RFC4086">[RFC4086]</a>.</li>
-  <li>If the prefix is <samp>uuid,</samp> followed by a v5 name-based UUID <a href="#RFC4122">[RFC4122]</a> (<a href="https://tools.ietf.org/html/rfc4122#section-4.3">4.3</a>), this indicates uniqueness based on an existing archive location, typically an URL.<br/> Implementations creating location-based authorities from an archive&#8217;s URL SHOULD generate the v5 UUID using the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and the particular URL.  Note that while implementations cannot resolve which location was used, they can confirm the name-based UUID if the location is otherwise known.</li>
-  <li>If the prefix is <samp>ni,</samp> this indicates a unique archive identity based on a hashing of the archive&#8217;s bytestream or content.  Implementations can assume that resources within an <samp>ni</samp> arcp URIs remains static, although the implementation may use content negotiation or similar transformations.<br/> The checksum MUST be expressed according to the <samp>alg-val</samp> production in <a href="#RFC6920">[RFC6920]</a> (<a href="https://tools.ietf.org/search/rfc6920#section-3">3</a>).  Implementations creating hash-based authorities from an archive&#8217;s bytestream SHOULD use the hash method <samp>sha-256</samp> without truncation.</li>
-  <li>If the prefix is <samp>name,</samp> this indicates that the authority is an application or package name, typically as installed on a device or system.<br/> Implementations SHOULD assume that an unrecognised <samp>name</samp> authority is only unique within a particular installation, but MAY assume further uniqueness guarantees for names under their control.<br/> It is RECOMMENDED that implementations creating name-based authorities use DNS names under their control, for instance an app installed as <samp>app.example.com</samp> can make an authority <samp>name,app.example.com</samp> to refer to its packaged resources, or <samp>name,foo.app.example.com</samp> to refer to a <samp>foo</samp> container distributed across all installations.</li>
+  <li>If the prefix is <samp>uuid,</samp> followed by a v5 name-based UUID <a href="#RFC4122">[RFC4122]</a> (<a href="https://tools.ietf.org/html/rfc4122#section-4.3">4.3</a>), this indicates uniqueness based on an existing archive location, typically an URL.<br/> Implementations creating location-based authorities SHOULD generate the v5 UUID using the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and an retrievable archive URL.  Note that while implementations cannot resolve which location was used, they can confirm the name-based UUID if the location is otherwise known.</li>
+  <li>If the prefix is <samp>ni,</samp> this indicates a unique archive identity based on a hashing of the archive&#8217;s bytestream or content.  Implementations MAY assume that resources within an <samp>ni</samp> arcp URIs remains static, although the implementation may use content negotiation or similar transformations.<br/> The checksum MUST be expressed according to the <samp>alg-val</samp> production in <a href="#RFC6920">[RFC6920]</a> (<a href="https://tools.ietf.org/search/rfc6920#section-3">3</a>).  Implementations creating hash-based authorities from an archive&#8217;s bytestream SHOULD use the hash method <samp>sha-256</samp> without truncation.  Implementations MAY assume that the corresponding <samp>ni:</samp> URI identifies the archive.</li>
+  <li>If the prefix is <samp>name,</samp> this indicates that the authority is an application or package name, typically as installed on a device or system.<br/> Implementations SHOULD assume that an unrecognised <samp>name</samp> authority is only unique within a particular installation, but MAY assume further uniqueness guarantees for names under their control.<br/> It is RECOMMENDED that implementations creating name-based authorities use DNS names under their control, for instance an app installed as <samp>app.example.com</samp> can make an authority <samp>name,app.example.com</samp> to refer to its packaged resources, or <samp>name,foo.app.example.com</samp> to refer to its dynamic container of <samp>foo</samp> resources.</li>
 </ol>
-<p id="rfc.section.4.1.p.5">The uniqueness properties are unspecified for arcp URIs which authority do not match any of the prefixes defined in this specification.</p>
+<p id="rfc.section.4.1.p.5">The uniqueness properties are <strong>unspecified</strong> for arcp URIs which authority do not match any of the prefixes defined in this specification.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#path-semantics" id="path-semantics">Path semantics</a></h1>
 <p id="rfc.section.4.2.p.1">The <em>path</em> component of an arcp URI identify individual resources within a particular archive, typically a <em>directory</em> or <em>file</em>.</p>
 <p/>
@@ -577,34 +577,36 @@ name          = "name," reg-name
   <li>If the <em>path</em> is <samp>/</samp> - e.g. &lt;arcp://uuid,833ebda2-f9a8-4462-b74a-4fcdc1a02d22/&gt; - then the arcp URI represent the archive itself, typically represented as a root directory or collection.</li>
   <li>If the path ends with <samp>/</samp> then the path represents a directory or collection.</li>
 </ul>
-<p id="rfc.section.4.2.p.3">The arcp URIs can be used for uniquely identifying the resources independent of the location of the archive, such as within an information system.</p>
-<p id="rfc.section.4.2.p.4">Assuming an appropriate resolution mechanism which have knowledge of the corresponding archive, an arcp URI can also be used for resolution.</p>
+<p id="rfc.section.4.2.p.3">The arcp URIs can be used for uniquely identifying resources within an archive, such as in an information system considering multiple archives.</p>
+<p id="rfc.section.4.2.p.4">Assuming an appropriate mechanism which have knowledge of the corresponding archive, an arcp URI can also be used for resolution.</p>
 <p id="rfc.section.4.2.p.5">Some archive formats might permit resources with the same (duplicate) path, in which case it is undefined from this specification which particular entry is described.</p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#resolution" id="resolution">Resolution protocol</a></h1>
-<p id="rfc.section.4.3.p.1">This specification do not define the protocol to resolve resources according to the arcp URI scheme.  For instance, one implementation might rewrite arcp URIs to localized paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
-<p id="rfc.section.4.3.p.2">It is envisioned that an implementation will have extracted or opened an archive in advance, and assigned it an appropriate authority according to <a href="#authority">Section 3.1</a>. Such an implementation can then resolve arcp URIs, e.g. by using in-memory access or mapping paths to the extracted archive on the local file system.</p>
+<p id="rfc.section.4.3.p.1">This specification do not define a network protocol to resolve resources according to the arcp URI scheme.  For instance, one implementation might rewrite arcp URIs to localized paths in a temporary directory, while another implementation might use an embedded HTTP server.</p>
+<p id="rfc.section.4.3.p.2">It is envisioned that an implementation will have accessed an archive in advance, and assigned it an appropriate authority according to <a href="#authority">Section 3.1</a>. Such an implementation can then resolve arcp URIs, e.g. by using in-memory archive access or mapping arcp paths to the the local file system.</p>
 <p id="rfc.section.4.3.p.3">Implementations that support resolving arcp URIs SHOULD:</p>
 <p/>
 
 <ol>
   <li>Fail with the equivalent of <em>Not Found</em> if the authority is unknown.</li>
   <li>Fail with the equivalent of <em>Gone</em> if the authority is known, but the content of the archive is no longer available.</li>
-  <li>Fail with the equivalent of <em>Not Found</em> if the path does not map to a file or directory within the archive.</li>
+  <li>Fail with the equivalent of <em>Not Found</em> if the path does not map to a resource within the archive.</li>
   <li>Return the corresponding (potentially uncompressed) bytestream if the path maps to a file within the archive.</li>
   <li>Return an appropriate directory listing if the path maps to a directory within the archive.</li>
   <li>Return an appropriate directory listing of the archive&#8217;s root directory if the path is <samp>/</samp>.</li>
 </ol>
-<p id="rfc.section.4.3.p.5">Not all archive formats or implementations will have the concept of a directory listing, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
-<p id="rfc.section.4.3.p.6">It is not undefined by this specification how an implementation can determine the media type of a file within an archive. This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
-<p id="rfc.section.4.3.p.7">The media type <samp>text/uri-list</samp> <a href="#RFC2483">[RFC2483]</a> MAY be used to represent a directory listing, in which case it SHOULD contain only URIs that start with the arcp URI of the directory.</p>
-<p id="rfc.section.4.3.p.8">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This specification does not define the semantics of attempting to resolve such resources.</p>
-<p id="rfc.section.4.3.p.9">This specification does not define how to change an archive or its content using arcp URIs.</p>
+<p id="rfc.section.4.3.p.5">Implementations MAY support other ways to resolve arcp URIs, e.g.  query parameters or content negotiation.</p>
+<p id="rfc.section.4.3.p.6">Not all archive formats or implementations will have the concept of a directory listing, in which case the implementation MAY fail such resolutions with the equivalent of &#8220;Not Implemented&#8221;.</p>
+<p id="rfc.section.4.3.p.7">It is not undefined by this specification how an implementation can determine the media type of a file within an archive.  This could be expressed in secondary resources (such as a manifest), be determined by file extensions or magic bytes.</p>
+<p id="rfc.section.4.3.p.8">The media type <samp>text/uri-list</samp> <a href="#RFC2483">[RFC2483]</a> MAY be used to represent a directory listing, in which case it SHOULD contain only URIs with the arcp URI of the directory as a common base.</p>
+<p id="rfc.section.4.3.p.9">Some archive formats might support resources which are neither directories nor regular files (e.g. device files, symbolic links). This specification does not define the semantics of attempting to resolve such resources.</p>
+<p id="rfc.section.4.3.p.10">This specification does not define how to change an archive or its content using arcp URIs.</p>
 <h1 id="rfc.section.4.4"><a href="#rfc.section.4.4">4.4.</a> <a href="#well-known" id="well-known">Resolving from a .well-known endpoint</a></h1>
-<p id="rfc.section.4.4.p.1">If the <samp>authority</samp> component of an arcp URI matches the <samp>alg-val</samp> production, an application MAY attempt to resolve the authority from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> (<a href="https://tools.ietf.org/html/rfc6920#section-4">4</a>) with the corresponding <samp>ni:///</samp> URI, to retrieve the complete archive. Applications SHOULD verify the checksum of the retrieved archive before resolving the individual path.</p>
+<p id="rfc.section.4.4.p.1">If the <samp>authority</samp> component of an arcp URI matches the <samp>alg-val</samp> production, an application MAY assume corresponding <samp>ni:///</samp> or <samp>nih:</samp> URIs <a href="#RFC6920">[RFC6920]</a> identify the archive bytestream or content.</p>
+<p id="rfc.section.4.4.p.2">Applications MAY attempt to retrieve the corresponding archive from any <samp>.well-known/ni/</samp> endpoint <a href="#RFC5785">[RFC5785]</a> as specified in <a href="#RFC6920">[RFC6920]</a> (<a href="https://tools.ietf.org/html/rfc6920#section-4">4</a>).  Applications SHOULD verify the checksum of the retrieved archive before resolving individual arcp paths.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#encoding" id="encoding">Encoding considerations</a></h1>
-<p id="rfc.section.5.p.1">The productions for <samp>UUID</samp> and <samp>alg-val</samp> are restricted to URI safe ASCII and should not require any encoding considerations.</p>
-<p id="rfc.section.5.p.2">Care should be taken to %-encode the directory and file segments of <samp>path-absolute</samp> according to <a href="#RFC3986">[RFC3986]</a> (for URIs) or <a href="#RFC3987">[RFC3987]</a> (for IRIs).</p>
-<p id="rfc.section.5.p.3">When used as part an IRI, paths SHOULD be expressed using international Unicode characters instead of %-encoding as ASCII.</p>
+<p id="rfc.section.5.p.1">The productions for <samp>uuid</samp> and <samp>ni</samp> are restricted to URI safe ASCII and should not require any encoding considerations.</p>
+<p id="rfc.section.5.p.2">When arcp is used in IRIs <a href="#RFC3987">[RFC3987]</a>, the <samp>name</samp> production permit Unicode characters corresponding to its <samp>ireg-name</samp> production.</p>
+<p id="rfc.section.5.p.3">Care should be taken to %-encode the directory and file segments of <samp>path-absolute</samp> according to <a href="#RFC3986">[RFC3986]</a> for URIs or <samp>ipath-absolute</samp> <a href="#RFC3987">[RFC3987]</a> for IRIs.</p>
 <p id="rfc.section.5.p.4">Not all archive formats have an explicit character encoding specified for their paths.  If no such information is available for the archive format, implementations MAY assume that the path component is encoded with UTF-8 <a href="#RFC2279">[RFC2279]</a>.</p>
 <p id="rfc.section.5.p.5">Some archive formats have case-insensitive paths, in which cases it is RECOMMENDED to preserve the casing as expressed in the archive.</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#interoperability" id="interoperability">Interoperability considerations</a></h1>
@@ -614,20 +616,21 @@ name          = "name," reg-name
 <ol>
   <li>Two implementations describe the same archive (e.g. stored in the same local file path), but using different random-based UUID authorities. The implementations may need to detect equality of the two UUIDs out of band.</li>
   <li>Two implementations describe an archive retrieved from the same URL, with the same location-based UUID authority, but retrieved at different times. The implementations might disagree about the content of the archive.</li>
-  <li>Two implementations describe an archive retrieved from the same URL, with the same location-based UUID authority, but retrieved using different content negotiation resulting in different archive representations. The implementations may disagree about path encoding, file name casing or hierarchy.</li>
+  <li>Two implementations describe an archive retrieved from the same URL, with the same location-based UUID authority, but retrieved using different content negotiation resulting in different archive formats. The implementations may disagree about path encoding, file name casing or hierarchy.</li>
   <li>Two implementations describe the same archive bytestream using the hash-based authority, but they have used two different hash algorithms. The implementations may need to negotiate to a common hash algorithm.</li>
   <li>Two implementations access the same archive, which contain file paths with Unicode characters, but extracted to two different file systems. Limitations and conventions for file names in the local file system (such as Unicode normalization, case insensitivity, total path length) may result in the implementations having inconsistent or inaccessible paths.</li>
 </ol>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#security" id="security">Security Considerations</a></h1>
 <p id="rfc.section.7.p.1">As when handling any content, extra care should be taken when consuming archives and arcp URIs from unknown sources.</p>
-<p id="rfc.section.7.p.2">An archive could contain compressed files that expand to fill all available disk space.</p>
-<p id="rfc.section.7.p.3">A maliciously crafted archive could contain paths with characters (e.g. backspace) which could make an arcp URI invalid or misleading if used unescaped.</p>
-<p id="rfc.section.7.p.4">A maliciously crafted archive could contain paths (e.g. combined Unicode sequences) that cause the arcp URI to be very long, causing issues in information systems propagating said URI.</p>
-<p id="rfc.section.7.p.5">An archive might contain symbolic links that, if extracted to a local file system, might address files outside the archive&#8217;s directory structure. Implementations SHOULD detect such links and prevent outside access.</p>
-<p id="rfc.section.7.p.6">An maliciously crafted arcp URI might contain <samp>../</samp> path segments, which if naively converted to a <samp>file:///</samp> URI might address files outside the archive&#8217;s directory structure. Implementations SHOULD perform Path Segment Normalization <a href="#RFC3986">[RFC3986]</a> before converting arcp URIs.</p>
-<p id="rfc.section.7.p.7">In particular for IRIs, an archive might contain multiple paths with similar-looking characters or with different Unicode combine sequences, which could be used to mislead users.</p>
-<p id="rfc.section.7.p.8">An URI hyperlink might use or guess an arcp URI authority to attempt to climb into a different archive for malicious purposes. Applications SHOULD employ Same Orgin policy <a href="#RFC6454">[RFC6454]</a> checks if resolving cross-references is not desired.</p>
-<p id="rfc.section.7.p.9">While a UUID or hash-based authority provide some level of information hiding of an archive&#8217;s origin, this should not be relied upon for access control or anonymisation. Implementors should keep in mind that such authority components in many cases can be predictably generated by third-parties, for instance using dictionary attacks.</p>
+<p id="rfc.section.7.p.2">Archives might contain malicious or inappropriate content or file paths.</p>
+<p id="rfc.section.7.p.3">An archive could contain compressed files that expand to fill all available disk space.</p>
+<p id="rfc.section.7.p.4">A maliciously crafted archive could contain paths with characters (e.g. backspace) which could make an arcp URI invalid or misleading if used unescaped.</p>
+<p id="rfc.section.7.p.5">A maliciously crafted archive could contain paths with character combinations (e.g. combined Unicode sequences, text orientation change) that cause the arcp URI to be very long or disruptive when rendered in an user interface.</p>
+<p id="rfc.section.7.p.6">An archive might contain symbolic links that, if extracted to a local file system, might address files outside the archive&#8217;s directory structure. Implementations SHOULD detect such links and prevent outside access.</p>
+<p id="rfc.section.7.p.7">An maliciously crafted arcp URI might contain <samp>../</samp> path segments, which if naively converted to a <samp>file:///</samp> URI might address files outside the archive&#8217;s directory structure. Implementations SHOULD perform Path Segment Normalization <a href="#RFC3986">[RFC3986]</a> before converting arcp URIs.</p>
+<p id="rfc.section.7.p.8">In particular for IRIs, an archive might contain multiple paths with similar-looking characters or with different Unicode combine sequences, which could be used to mislead users.</p>
+<p id="rfc.section.7.p.9">An URI hyperlink might use or guess an arcp URI authority to attempt to climb into a different archive for malicious purposes. Applications SHOULD employ Same Orgin policy <a href="#RFC6454">[RFC6454]</a> checks if resolving cross-references is not desired.</p>
+<p id="rfc.section.7.p.10">While a UUID or hash-based authority provide some level of information hiding of an archive&#8217;s origin, this should not be relied upon for access control or anonymisation. Implementors should keep in mind that such authority components in many cases can be predictably generated by third-parties, for instance using dictionary attacks.</p>
 <h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#iana" id="iana">IANA Considerations</a></h1>
 <p id="rfc.section.8.p.1">This specification requests that IANA registers the following URI scheme according to the provisions of <a href="#RFC7595">[RFC7595]</a>.</p>
 <p id="rfc.section.8.p.2">Scheme name: arcp</p>
@@ -812,7 +815,7 @@ arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/fonts/Foo.woff
 <p id="rfc.section.A.1.p.6">The application is now confident that all hyperlinked files are indeed present in the archive. In its database it notes which <samp>tar.gz</samp> file corresponds to UUID <samp>32a423d6-52ab-47e3-a9cd-54f418a48571</samp>.</p>
 <p id="rfc.section.A.1.p.7">If the application had encountered a malicious hyperlink <samp>../../../outside.txt</samp> it would first resolve it to the absolute URI &lt;arcp://uuid,32a423d6-52ab-47e3-a9cd-54f418a48571/outside.txt&gt; and conclude from the &#8220;Not Found&#8221; error that the path <samp>/outside.txt</samp> was not present in the archive.</p>
 <h1 id="rfc.appendix.A.2"><a href="#rfc.appendix.A.2">A.2.</a> <a href="#location-based" id="location-based">Location-based</a></h1>
-<p id="rfc.section.A.2.p.1">A web crawler is about to index the content of the URL <a href="http://example.com/data.zip">http://example.com/data.zip</a> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
+<p id="rfc.section.A.2.p.1">A web crawler is about to index the content of the URL <samp>http://example.com/data.zip</samp> and need to generate absolute URIs as it continues crawling inside the individual resources of the archive.</p>
 <p id="rfc.section.A.2.p.2">The application generates a UUID v5 based on the URL namespace <samp>6ba7b811-9dad-11d1-80b4-00c04fd430c8</samp> and the URL to the zip file:</p>
 <pre>
 &gt;&gt;&gt; uuid.uuid5(uuid.NAMESPACE_URL, "http://example.com/data.zip")
@@ -828,14 +831,14 @@ arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/flower.jpeg
 </pre>
-<p id="rfc.section.A.2.p.5">When the application encounters <a href="http://example.com/data.zip">http://example.com/data.zip</a> some time later it can recalculate the same base arcp URI. This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
+<p id="rfc.section.A.2.p.5">When the application encounters <samp>http://example.com/data.zip</samp> some time later it can recalculate the same base arcp URI.  This time the ZIP file has been modified upstream and the crawler finds additionally:</p>
 <pre>
 arcp://uuid,b7749d0b-0e47-5fc4-999d-f154abe68065/pics/cloud.jpeg
 </pre>
 <p id="rfc.section.A.2.p.6">If files had been removed from the updated ZIP file the crawler can simply remove those from its database, as it used the same arcp base URI as in last crawl.</p>
 <h1 id="rfc.appendix.A.3"><a href="#rfc.appendix.A.3">A.3.</a> <a href="#hash-based" id="hash-based">Hash-based</a></h1>
-<p id="rfc.section.A.3.p.1">An application where users can upload software distributions for virus checking needs to avoid duplication as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
-<p id="rfc.section.A.3.p.2">The application calculates the <samp>sha-256</samp> checksum of the uploaded file to be in hexadecimal:</p>
+<p id="rfc.section.A.3.p.1">A repository where users can annotate content of open source software distributions needs to avoid duplication, as users tend to upload <samp>foo-1.2.tar</samp> multiple times.</p>
+<p id="rfc.section.A.3.p.2">The repository calculates the <samp>sha-256</samp> checksum of the uploaded file to be in hexadecimal:</p>
 <pre>
 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
 </pre>
@@ -847,25 +850,35 @@ f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 <pre>
 sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 </pre>
-<p id="rfc.section.A.3.p.5">From this the hash base arcp URL is:</p>
+<p id="rfc.section.A.3.p.5">From this the hash-based arcp base URL is:</p>
 <pre>
 arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
 </pre>
-<p id="rfc.section.A.3.p.6">The crawler finds that its virus database already contain entries for:</p>
+<p id="rfc.section.A.3.p.6">The repository adds annotations for detected source code files within the archive.</p>
+<p id="rfc.section.A.3.p.7">A client is browsing the annotations and discovers:</p>
 <pre>
-arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/bin/evil
+arcp://ni,sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/src/luhn.c
 </pre>
-<p id="rfc.section.A.3.p.7">and flags the upload as malicious without having to scan it again.</p>
+<p id="rfc.section.A.3.p.8">The client constructs the corresponding <samp>ni</samp> URI <a href="#RFC6920">[RFC6920]</a>:</p>
+<pre>
+ni:///sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
+</pre>
+<p id="rfc.section.A.3.p.9">To retrieve the archive from <samp>repo.example.com</samp>, the client resolve the corresponding <samp>.well-known</samp> URI <a href="#RFC5785">[RFC5785]</a>:</p>
+<pre>
+http://repo.example.com/.well-known/
+    ni/sha-256/f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk/
+</pre>
+<p id="rfc.section.A.3.p.10">After the client verifies the corresponding <samp>sha-256</samp> checksum it reads the path <samp>/src/luhn.c</samp> from the retrieved archive.</p>
 <h1 id="rfc.appendix.A.4"><a href="#rfc.appendix.A.4">A.4.</a> <a href="#bagit" id="bagit">Archives that are not files</a></h1>
-<p id="rfc.section.A.4.p.1">An application is relating BagIt archives <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a> on a shared file system, using structured &#8220;bag&#8221; folders and manifests rather than individual archive files.</p>
+<p id="rfc.section.A.4.p.1">An application is storing BagIt archives <a href="#I-D.draft-kunze-bagit-14">[I-D.draft-kunze-bagit-14]</a> on a shared file system, using structured &#8220;bag&#8221; folders and manifests rather than individual archive files.</p>
 <p id="rfc.section.A.4.p.2">The BagIt payload manifest <samp>/gfs/bags/scan15/manifest-md5.txt</samp> lists the files:</p>
 <pre>
 49afbd86a1ca9f34b677a3f09655eae9 data/27613-h/q172.png
 408ad21d50cef31da4df6d9ed81b01a7 data/27613-h/q172.txt
 </pre>
-<p id="rfc.section.A.4.p.3">The application generates a random UUID v4 <samp>ff2d5a82-7142-4d3f-b8cc-3e662d6de756</samp> and adds the corresponding arcp URI to the bag metadata file <samp>/gfs/bags/scan15/bag-info.txt</samp></p>
+<p id="rfc.section.A.4.p.3">The application generates a random UUID v4 <samp>ff2d5a82-7142-4d3f-b8cc-3e662d6de756</samp> and adds the corresponding <samp>urn:uuid</samp> UUID to the bag metadata file <samp>/gfs/bags/scan15/bag-info.txt</samp></p>
 <pre>
-External-Identifier: arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
+External-Identifier: urn:uuid:ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
 </pre>
 <p id="rfc.section.A.4.p.4">It then generates arcp URIs for the files listed in the manifest:</p>
 <pre>
@@ -897,8 +910,12 @@ arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
 arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 </pre>
 <h1 id="rfc.appendix.A.6"><a href="#rfc.appendix.A.6">A.6.</a> <a href="#packaged" id="packaged">Resolution of packaged resources</a></h1>
-<p id="rfc.section.A.6.p.1">A virtual file system driver on a mobile operating system has mounted several packaged applications for resolving common resources. An application requests the rendering framework to resolve a picture from &lt;arcp://uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e/img/logo.png&gt; to show it within a user interface.</p>
-<p id="rfc.section.A.6.p.2">The framework first checks that the authority <samp>uuid,eb1edec9-d2eb-4736-a875-eb97b37c690e</samp> is valid to access according to the Same Origin policies or permissions of the running application. It then matches the authority to the corresponding application package.</p>
+<p id="rfc.section.A.6.p.1">A virtual file system driver on a mobile operating system has mounted several packaged applications for resolving common resources. An application requests the rendering framework to resolve a picture to show it within a user interface:</p>
+<pre>
+&lt;img src="arcp://name,app.example.com/img/logo.png"
+         alt="App" /&gt;
+</pre>
+<p id="rfc.section.A.6.p.2">The framework finds the corresponding application package, installed as <samp>app.example.com</samp>. It then checks that the authority <samp>name,app.example.com</samp> is valid to access according to the Same Origin policies or permissions of the running application.</p>
 <p id="rfc.section.A.6.p.3">The framework resolves <samp>/img/logo.png</samp> from within that package, and returns an image buffer it already had cached in memory.</p>
 <h1 id="rfc.appendix.A.7"><a href="#rfc.appendix.A.7">A.7.</a> <a href="#app-names" id="app-names">Sharing using app names</a></h1>
 <p id="rfc.section.A.7.p.1">A photo gallery application on a mobile device uses arcp URIs for navigation between its UI states.  The gallery is secured so that other applications can&#8217;t normally access its photos.</p>
@@ -915,7 +932,7 @@ arcp://name,gallery.example.org/photos/?New
 arcp://name,gallery.example.org/photos/137
 </pre>
 <p id="rfc.section.A.7.p.5">The user requests to &#8220;share&#8221; the photo, selecting <samp>messaging.example.com</samp> which uses a common arcp URI framework on the device.</p>
-<p id="rfc.section.A.7.p.6">The photo gallery registers with the device&#8217;s arcp framework that the chosen <samp>messaging.example.com</samp> gets read permission to its <samp>/photos/137</samp> resource.</p>
+<p id="rfc.section.A.7.p.6">The photo gallery registers with the device&#8217;s arcp framework that the chosen <samp>messaging.example.com</samp> should get read permission to its <samp>/photos/137</samp> resource.</p>
 <p id="rfc.section.A.7.p.7">The sharing function returns a URI Template <a href="#RFC6570">[RFC6570]</a>:</p>
 <pre>
 arcp://name,messaging.example.com/share;+{uri};{+redirect}
@@ -928,26 +945,15 @@ arcp://name,messaging.example.com/share
 </pre>
 <p id="rfc.section.A.7.p.9">The arcp framework checks its registration for <samp>messaging.example.com</samp> and finds the installed messaging application. It performs permission checks that other apps are allowed to navigate to its <samp>/share</samp> state.</p>
 <p id="rfc.section.A.7.p.10">The messaging app is launched and navigates to its &#8220;sharing&#8221; UI, asking the user for a caption.</p>
-<p id="rfc.section.A.7.p.11">The messaging app requests the arcp framework to retrieve &lt;arcp://name,gallery.example.org/photos/137&gt; using content negotiation for an <samp>image/jpeg</samp> representation.</p>
+<p id="rfc.section.A.7.p.11">The messaging app requests the arcp framework to retrieve the <samp>uri</samp> &lt;arcp://name,gallery.example.org/photos/137&gt; using content negotiation for an <samp>image/jpeg</samp> representation.</p>
 <p id="rfc.section.A.7.p.12">The arcp framework finds the installed photo gallery <samp>gallery.example.org</samp>, and confirms the read permission.</p>
-<p id="rfc.section.A.7.p.13">The photo gallery application returns a JPEG representation after retrieving the photo from its internal store.</p>
-<p id="rfc.section.A.7.p.14">After the messaging app has completed sharing the picture bytestream, it request the UI framework to navigate to:</p>
+<p id="rfc.section.A.7.p.13">The photo gallery application returns a scaled down JPEG representation after retrieving the photo from its internal store.</p>
+<p id="rfc.section.A.7.p.14">After the messaging app has completed sharing the picture bytestream, it request the UI framework to navigate to the <samp>redirect</samp> state:</p>
 <pre>
 arcp://name,gallery.example.org/photos/?New
 </pre>
 <p id="rfc.section.A.7.p.15">The UI returns to the original view in the photo gallery.</p>
-<p id="rfc.section.A.7.p.16">If the messaging app had attempted to <em>retrieve</em> the arcp URI</p>
-<pre>
-arcp://name,gallery.example.org/photos/?New
-</pre>
-<p id="rfc.section.A.7.p.17">then it would be rejected by the arcp framework as permission was not granted.</p>
-<p id="rfc.section.A.7.p.18">However, if such access had been granted, the gallery could return a <samp>text/uri-list</samp> of the newest photos:</p>
-<pre>
-arcp://name,gallery.example.org/photos/137
-arcp://name,gallery.example.org/photos/138
-arcp://name,gallery.example.org/photos/139
-</pre>
-<p id="rfc.section.A.7.p.19">This examples show that although an arcp URI represents a resource, it can have different representations or UI states for different apps.</p>
+<p id="rfc.section.A.7.p.16">This example shows that although an arcp URI represents a resource, it can have different representations or views in different apps.</p>
 <h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
 <p id="rfc.section.B.p.1">This specification is inspired by two original URI scheme proposals from W3C, <samp>app</samp> from <a href="#W3C.NOTE-app-uri-20150723">[W3C.NOTE-app-uri-20150723]</a>  and <samp>widget</samp> from <a href="#W3C.NOTE-widgets-uri-20120313">[W3C.NOTE-widgets-uri-20120313]</a>.</p>
 <p id="rfc.section.B.p.2">The <samp>app</samp> URI scheme was used by packaged web apps in Mozilla&#8217;s Firefox OS <a href="#FirefoxOS">[FirefoxOS]</a> and to identify resources in Research Object Bundles <a href="#ROBundle">[ROBundle]</a>, however the W3C Notes did not progress further as W3C Recommendation track documents, and their URI schemes were never formally registered with IANA.</p>
