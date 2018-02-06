@@ -95,11 +95,11 @@ Table of Contents
      9.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  15
      A.1.  Sandboxing base URI . . . . . . . . . . . . . . . . . . .  15
-     A.2.  Location-based  . . . . . . . . . . . . . . . . . . . . .  15
+     A.2.  Location-based  . . . . . . . . . . . . . . . . . . . . .  16
      A.3.  Hash-based  . . . . . . . . . . . . . . . . . . . . . . .  16
      A.4.  Archives that are not files . . . . . . . . . . . . . . .  17
      A.5.  Linked Data containers which are not on the web . . . . .  18
-     A.6.  Resolution of packaged resources  . . . . . . . . . . . .  18
+     A.6.  Resolution of packaged resources  . . . . . . . . . . . .  19
      A.7.  Sharing using app names . . . . . . . . . . . . . . . . .  19
    Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  20
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
@@ -192,7 +192,7 @@ Internet-Draft                    arcp                     February 2018
 3.  Scheme syntax
 
    The "arcp" URI scheme follows the [RFC3986] syntax for hierarchical
-   URIs according to the following productions:
+   URIs according to the following ABNF [RFC5234] productions:
 
    arcp-URI       = arcp-scheme ":" arcp-specific [ "#" fragment ]
 
@@ -236,9 +236,9 @@ Internet-Draft                    arcp                     February 2018
    productions:
 
    arcp-authority = uuid | ni | name | authority
-   uuid          = "uuid," UUID
-   ni            = "ni," alg-val
-   name          = "name," reg-name
+   uuid           = "uuid," UUID
+   ni             = "ni," alg-val
+   name           = "name," reg-name
 
    1.  The prefix "uuid," combines with the "UUID" production as defined
        in [RFC4122], e.g.  "uuid,2a47c495-ac70-4ed1-850b-8800a57618cf"
@@ -659,10 +659,10 @@ Internet-Draft                    arcp                     February 2018
               DOI 10.17487/RFC4122, July 2005, <https://www.rfc-
               editor.org/info/rfc4122>.
 
-   [RFC5785]  Nottingham, M. and E. Hammer-Lahav, "Defining Well-Known
-              Uniform Resource Identifiers (URIs)", RFC 5785,
-              DOI 10.17487/RFC5785, April 2010, <https://www.rfc-
-              editor.org/info/rfc5785>.
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234,
+              DOI 10.17487/RFC5234, January 2008, <https://www.rfc-
+              editor.org/info/rfc5234>.
 
 
 
@@ -673,6 +673,11 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 12]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   [RFC5785]  Nottingham, M. and E. Hammer-Lahav, "Defining Well-Known
+              Uniform Resource Identifiers (URIs)", RFC 5785,
+              DOI 10.17487/RFC5785, April 2010, <https://www.rfc-
+              editor.org/info/rfc5785>.
 
    [RFC6454]  Barth, A., "The Web Origin Concept", RFC 6454,
               DOI 10.17487/RFC6454, December 2011, <https://www.rfc-
@@ -717,11 +722,6 @@ Internet-Draft                    arcp                     February 2018
               DOI 10.17487/RFC6570, March 2012, <https://www.rfc-
               editor.org/info/rfc6570>.
 
-   [RFC6839]  Hansen, T. and A. Melnikov, "Additional Media Type
-              Structured Syntax Suffixes", RFC 6839,
-              DOI 10.17487/RFC6839, January 2013, <https://www.rfc-
-              editor.org/info/rfc6839>.
-
 
 
 
@@ -729,6 +729,11 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 13]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   [RFC6839]  Hansen, T. and A. Melnikov, "Additional Media Type
+              Structured Syntax Suffixes", RFC 6839,
+              DOI 10.17487/RFC6839, January 2013, <https://www.rfc-
+              editor.org/info/rfc6839>.
 
    [RFC8089]  Kerwin, M., "The "file" URI Scheme", RFC 8089,
               DOI 10.17487/RFC8089, February 2017, <https://www.rfc-
@@ -774,17 +779,16 @@ Internet-Draft                    arcp                     February 2018
 
    [5] https://tools.ietf.org/search/rfc6920#section-3
 
-   [6] https://tools.ietf.org/html/rfc6920#section-4
-
-   [7] mailto:stain@apache.org
-
-
 
 
 Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 14]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   [6] https://tools.ietf.org/html/rfc6920#section-4
+
+   [7] mailto:stain@apache.org
 
 Appendix A.  Examples
 
@@ -827,11 +831,7 @@ A.1.  Sandboxing base URI
    conclude from the "Not Found" error that the path "/outside.txt" was
    not present in the archive.
 
-A.2.  Location-based
 
-   A web crawler is about to index the content of the URL
-   "http://example.com/data.zip" and need to generate absolute URIs as
-   it continues crawling inside the individual resources of the archive.
 
 
 
@@ -841,6 +841,12 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 15]
 
 Internet-Draft                    arcp                     February 2018
 
+
+A.2.  Location-based
+
+   A web crawler is about to index the content of the URL
+   "http://example.com/data.zip" and need to generate absolute URIs as
+   it continues crawling inside the individual resources of the archive.
 
    The application generates a UUID v5 based on the URL namespace
    "6ba7b811-9dad-11d1-80b4-00c04fd430c8" and the URL to the zip file:
@@ -884,12 +890,6 @@ A.3.  Hash-based
    The "base64url" encoding [RFC4648] of the binary version of the
    checksum is:
 
-   f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
-
-   The corresponding "alg-val" authority [RFC6920] is thus:
-
-   sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
-
 
 
 
@@ -897,6 +897,12 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 16]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
+
+   The corresponding "alg-val" authority [RFC6920] is thus:
+
+   sha-256;f4OxZX_x_FO5LcGBSKHWXfwtSx-j1ncoSt3SABJtkGk
 
    From this the hash-based arcp base URL is:
 
@@ -940,12 +946,6 @@ A.4.  Archives that are not files
 
    External-Identifier: urn:uuid:ff2d5a82-7142-4d3f-b8cc-3e662d6de756/
 
-   It then generates arcp URIs for the files listed in the manifest:
-
-  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
-  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
-
-
 
 
 
@@ -953,6 +953,11 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 17]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   It then generates arcp URIs for the files listed in the manifest:
+
+  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.png
+  arcp://uuid,ff2d5a82-7142-4d3f-b8cc-3e662d6de756/data/27613-h/q172.txt
 
    When a different application on the same shared file system encounter
    these arcp URIs, it can match them to the correct bag folder by
@@ -993,6 +998,18 @@ A.5.  Linked Data containers which are not on the web
    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact1
    arcp://uuid,12f89f9c-e6ca-4032-ae73-46b68c2b415a/contact2
 
+
+
+
+
+
+
+
+Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 18]
+
+Internet-Draft                    arcp                     February 2018
+
+
 A.6.  Resolution of packaged resources
 
    A virtual file system driver on a mobile operating system has mounted
@@ -1002,13 +1019,6 @@ A.6.  Resolution of packaged resources
 
    <img src="arcp://name,app.example.com/img/logo.png"
             alt="App" />
-
-
-
-Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 18]
-
-Internet-Draft                    arcp                     February 2018
-
 
    The framework finds the corresponding application package, installed
    as "app.example.com".  It then checks that the authority
@@ -1049,6 +1059,13 @@ A.7.  Sharing using app names
 
    The sharing function returns a URI Template [RFC6570]:
 
+
+
+Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 19]
+
+Internet-Draft                    arcp                     February 2018
+
+
    arcp://name,messaging.example.com/share;+{uri};{+redirect}
 
    Filling in the template, the gallery requests to pop up:
@@ -1056,15 +1073,6 @@ A.7.  Sharing using app names
    arcp://name,messaging.example.com/share
      ;uri=arcp://gallery.example.org/photos/137
      ;redirect=arcp://gallery.example.org/photos/%3fNew
-
-
-
-
-
-Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 19]
-
-Internet-Draft                    arcp                     February 2018
-
 
    The arcp framework checks its registration for
    "messaging.example.com" and finds the installed messaging
@@ -1106,14 +1114,6 @@ Appendix B.  Acknowledgements
    W3C Recommendation track documents, and their URI schemes were never
    formally registered with IANA.
 
-   While the focus of the previous proposals was to specify how to
-   resolve resources from within a packaged application, this
-   specification generalize the URI scheme to support referencing and
-   identifying resources within any archive, package or application, and
-   adding flexibility for how resources can be resolved.
-
-
-
 
 
 
@@ -1121,6 +1121,12 @@ Soiland-Reyes & Caceres  Expires August 10, 2018               [Page 20]
 
 Internet-Draft                    arcp                     February 2018
 
+
+   While the focus of the previous proposals was to specify how to
+   resolve resources from within a packaged application, this
+   specification generalize the URI scheme to support referencing and
+   identifying resources within any archive, package or application, and
+   adding flexibility for how resources can be resolved.
 
    The authors would like to thank Graham Klyne, Carsten Bormann, Roy T.
    Fielding, S Moonesamy, Julian Reschke and Frank Ellermann for
@@ -1143,12 +1149,6 @@ Authors' Addresses
 
    Email: marcos@marcosc.com
    URI:   http://marcosc.com/
-
-
-
-
-
-
 
 
 

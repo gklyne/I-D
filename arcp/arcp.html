@@ -518,7 +518,7 @@
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#requirements" id="requirements">Requirements Language</a></h1>
 <p id="rfc.section.2.p.1">The key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;,  &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#syntax" id="syntax">Scheme syntax</a></h1>
-<p id="rfc.section.3.p.1">The <samp>arcp</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following productions:</p>
+<p id="rfc.section.3.p.1">The <samp>arcp</samp> URI scheme follows the <a href="#RFC3986">[RFC3986]</a> syntax for hierarchical URIs according to the following ABNF <a href="#RFC5234">[RFC5234]</a> productions:</p>
 <pre>
 arcp-URI       = arcp-scheme ":" arcp-specific [ "#" fragment ]
 
@@ -535,9 +535,9 @@ arcp-specific  = "//" arcp-authority [ path-absolute ] [ "?" query ]
 <p id="rfc.section.3.1.p.2">The authority of an arcp URI MUST be valid according to these productions:</p>
 <pre>
 arcp-authority = uuid | ni | name | authority
-uuid          = "uuid," UUID
-ni            = "ni," alg-val
-name          = "name," reg-name
+uuid           = "uuid," UUID
+ni             = "ni," alg-val
+name           = "name," reg-name
 </pre>
 <p/>
 
@@ -683,6 +683,12 @@ name          = "name," reg-name
         <b id="RFC4122">[RFC4122]</b>
       </td>
       <td class="top"><a>Leach, P.</a>, <a>Mealling, M.</a> and <a>R. Salz</a>, "<a href="http://tools.ietf.org/html/rfc4122">A Universally Unique IDentifier (UUID) URN Namespace</a>", RFC 4122, DOI 10.17487/RFC4122, July 2005.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5234">[RFC5234]</b>
+      </td>
+      <td class="top"><a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
     </tr>
     <tr>
       <td class="reference">

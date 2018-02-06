@@ -44,6 +44,8 @@ normative:
   RFC4086:
   # UUID
   RFC4122:
+  # ABNF
+  RFC5234:
   # .well-known
   RFC5785:
   # Same origin
@@ -215,7 +217,7 @@ Scheme syntax    {#syntax}
 =============
 
 The `arcp` URI scheme follows the {{RFC3986}} syntax for hierarchical
-URIs according to the following productions:
+URIs according to the following ABNF {{RFC5234}} productions:
 
 
     arcp-URI       = arcp-scheme ":" arcp-specific [ "#" fragment ]
@@ -251,9 +253,9 @@ The authority of an arcp URI MUST be valid according to
 these productions:
 
     arcp-authority = uuid | ni | name | authority
-    uuid          = "uuid," UUID
-    ni            = "ni," alg-val
-    name          = "name," reg-name
+    uuid           = "uuid," UUID
+    ni             = "ni," alg-val
+    name           = "name," reg-name
 
 1. The prefix `uuid,` combines with the `UUID` production as defined in {{RFC4122}}, e.g.
 `uuid,2a47c495-ac70-4ed1-850b-8800a57618cf`
